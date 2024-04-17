@@ -7,6 +7,8 @@ Current version: 1.1 (2024-04-16)
 
 Version history
 ---------------
+1.2 (2024-04-17) · Added transparency of the second (orange) array on the graph overlay
+                 · Clarified README.md and added figures
 1.1 (2024-04-16) · Added find_delays
                  · Created _create_figure containing all the plotting-related code
                  · Modified the graph plot when the max correlation is below threshold
@@ -693,7 +695,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
 
         resampled_timestamps_array2 = np.arange(0, len(array_2)) / freq_array_2 + delay / rate
         resampled_timestamps_array2 = resampled_timestamps_array2[:len(array_2)]
-        ax[i // 2][i % 2].plot(resampled_timestamps_array2, array_2, color="orange", linewidth=2)
+        ax[i // 2][i % 2].plot(resampled_timestamps_array2, array_2, color="#ffa500aa", linewidth=2)
 
         if plot_figure:
             if verbosity > 0:
