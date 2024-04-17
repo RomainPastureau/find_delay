@@ -3,7 +3,7 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 1.1 (2024-04-16)
+Current version: 1.2 (2024-04-17)
 
 Version history
 ---------------
