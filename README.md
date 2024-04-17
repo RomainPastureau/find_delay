@@ -79,3 +79,7 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
                  · Modified the graph plot when the max correlation is below threshold
                  · Minor corrections in docstrings
 1.0 (2024-04-12) · Initial release
+
+If you detect any bug, please contact me following [this link](mailto:r.pastureau@bcbl.eu).
+
+Thanks :)
