@@ -1,4 +1,4 @@
-# ** find_delay 1.1 **
+# find_delay 1.1
 
 Author: Romain Pastureau
 
@@ -27,7 +27,7 @@ You can also run find_delay.py to get four examples (in that case, you will need
 * **Scipy** for loading the wav files, performing the resampling, calculating the envelope and applying a band-pass filter.
 
 ## Examples
-1. Delay between two numerical time series
+### Delay between two numerical time series
 ```    
 array_1 = [24, 70, 28, 59, 13, 97, 63, 30, 89, 4, 8, 15, 16, 23, 42, 37, 70, 18, 59, 48, 41, 83, 99, 6, 24, 86]
 array_2 = [4, 8, 15, 16, 23, 42]
@@ -37,7 +37,7 @@ find_delay(array_1, array_2, 1, 1, compute_envelope=False, resampling_rate=None,
 
 ![Delay between two numerical time series](https://github.com/RomainPastureau/find_delay/blob/main/figure_1.png?raw=true)
 
-2. Delay between a sine function and a portion of it, different frequencies
+### Delay between a sine function and a portion of it, different frequencies
 ```
 timestamps_1 = np.linspace(0, np.pi * 2, 200001)
 array_1 = np.sin(timestamps_1)
@@ -51,7 +51,7 @@ find_delay(array_1, array_2, 100000 / np.pi, 6000 / (np.pi / 4),
 
 ![Delay between a sine function and a portion of it, different frequencies](https://github.com/RomainPastureau/find_delay/blob/main/figure_2.png?raw=true)
 
-3. Delay between an audio file and an excerpt from it
+### Delay between an audio file and an excerpt from it
 ```
 audio_path = "i_have_a_dream_full.wav"
 audio_wav = wavfile.read(audio_path)
