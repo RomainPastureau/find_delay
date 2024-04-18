@@ -72,13 +72,18 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 ![Delay between an audio file and an excerpt from it](https://github.com/RomainPastureau/find_delay/blob/main/figure_3.png?raw=true)
 
 ### Version history
-1.2 (2024-04-17) · Added transparency of the second (orange) array on the graph overlay
-                 · Clarified README.md and added figures  
-1.1 (2024-04-16) · Added `find_delays`
-                 · Created `_create_figure` containing all the plotting-related code
-                 · Modified the graph plot when the max correlation is below threshold
-                 · Minor corrections in docstrings
-1.0 (2024-04-12) · Initial release
+**1.2 (2024-04-17)**
+* Added transparency of the second (orange) array on the graph overlay        
+* Clarified README.md and added figures
+
+**1.1 (2024-04-16)**
+* Added `find_delay
+* Created `_create_figure` containing all the plotting-related code                
+* Modified the graph plot when the max correlation is below threshold
+* Minor corrections in docstrings
+
+**1.0 (2024-04-12)**
+* Initial release
 
 If you detect any bug, please contact me following [this link](mailto:r.pastureau@bcbl.eu).
 
