@@ -3,13 +3,14 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 1.2 (2024-04-17)
+Current version: 1.3 (2024-04-18)
 
 Version history
 ---------------
+1.3 (2024-04-18) · Removed unused function `_get_number_of_windows`
 1.2 (2024-04-17) · Added transparency of the second (orange) array on the graph overlay
                  · Clarified README.md and added figures
-1.1 (2024-04-16) · Added find_delays
+1.1 (2024-04-16) · Added `find_delays`
                  · Created _create_figure containing all the plotting-related code
                  · Modified the graph plot when the max correlation is below threshold
                  · Minor corrections in docstrings
@@ -86,49 +87,6 @@ def _filter_frequencies(array, frequency, filter_below=None, filter_over=None, v
         filtered_array = array
 
     return filtered_array
-
-
-def _get_number_of_windows(array_length_or_array, window_size, overlap=0, add_incomplete_window=True):
-    """Given an array, calculates how many windows from the defined `window_size` can be created, with or
-    without overlap.
-
-    Parameters
-    ----------
-    array_length_or_array: list, np.ndarray or int
-        An array of numerical values, or its length.
-    window_size: int
-        The number of array elements in each window.
-    overlap: int
-        The number of array elements overlapping in each window.
-    add_incomplete_window: bool
-        If set on ``True``, the last window will be included even if its size is smaller than ``window_size``.
-        Otherwise, it will be ignored.
-
-    Returns
-    -------
-    int
-        The number of windows than can be created from the array.
-    """
-
-    if not isinstance(array_length_or_array, int):
-        array_length = len(array_length_or_array)
-    else:
-        array_length = array_length_or_array
-
-    if overlap >= window_size:
-        raise Exception("The size of the overlap (" + str(overlap) + ") cannot be bigger than or equal to the size " +
-                        "of the window (" + str(window_size) + ").")
-    if overlap > array_length or window_size > array_length:
-        raise Exception("The size of the window (" + str(window_size) + ") or the overlap (" + str(overlap) + ") " +
-                        "cannot be bigger than the size of the array (" + str(array_length) + ").")
-
-    number_of_windows = (array_length - overlap) / (window_size - overlap)
-
-    if add_incomplete_window and array_length + (overlap * (window_size - 1)) % window_size != 0:
-        return int(np.ceil(number_of_windows))
-
-    else:
-        return int(number_of_windows)
 
 
 def _get_window_length(array_length_or_array, number_of_windows, overlap_ratio):
