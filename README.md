@@ -1,4 +1,4 @@
-# find_delay 1.3
+# find_delay 2.0
 
 Author: Romain Pastureau
 
@@ -32,7 +32,8 @@ You can also run find_delay.py to get four examples (in that case, you will need
 array_1 = [24, 70, 28, 59, 13, 97, 63, 30, 89, 4, 8, 15, 16, 23, 42, 37, 70, 18, 59, 48, 41, 83, 99, 6, 24, 86]
 array_2 = [4, 8, 15, 16, 23, 42]
 
-find_delay(array_1, array_2, 1, 1, compute_envelope=False, resampling_rate=None, plot_figure=True,plot_intermediate_steps=True)
+find_delay(array_1, array_2, 1, 1, compute_envelope=False, resampling_rate=None, plot_figure=True,
+           path_figure="figure_1.png", plot_intermediate_steps=True)
 ```
 
 ![Delay between two numerical time series](https://github.com/RomainPastureau/find_delay/blob/main/figure_1.png?raw=true)
@@ -45,8 +46,9 @@ timestamps_2 = np.linspace(np.pi * 0.5, np.pi * 0.75, 6001)
 array_2 = np.sin(timestamps_2)
 
 find_delay(array_1, array_2, 100000 / np.pi, 6000 / (np.pi / 4),
-           compute_envelope=False, resampling_rate=1000, number_of_windows_res=10, overlap_ratio_res=0.5,
-           resampling_mode="cubic", plot_figure=True, plot_intermediate_steps=True, verbosity=1)
+           compute_envelope=False, resampling_rate=1000, window_size_res=20000, overlap_ratio_res=0.5,
+           resampling_mode="cubic", plot_figure=True, path_figure="figure_2.png", plot_intermediate_steps=True,
+           verbosity=1)
 ```
 
 ![Delay between a sine function and a portion of it, different frequencies](https://github.com/RomainPastureau/find_delay/blob/main/figure_2.png?raw=true)
@@ -64,14 +66,24 @@ excerpt_frequency = excerpt_wav[0]
 excerpt_array = excerpt_wav[1][:, 0]  # Turn to mono
 
 find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
-           compute_envelope=True, number_of_windows_env=100, overlap_ratio_env=0.5,
-           resampling_rate=1000, number_of_windows_res=10, overlap_ratio_res=0.5, return_delay_format="timedelta",
-           resampling_mode="cubic", plot_figure=True, plot_intermediate_steps=True, verbosity=1)
+           compute_envelope=True, window_size_env=1e6, overlap_ratio_env=0.5,
+           resampling_rate=1000, window_size_res=1e7, overlap_ratio_res=0.5, return_delay_format="timedelta",
+           resampling_mode="cubic", plot_figure=True, path_figure="figure_3.png", plot_intermediate_steps=True,
+           verbosity=1)
 ```
 
 ![Delay between an audio file and an excerpt from it](https://github.com/RomainPastureau/find_delay/blob/main/figure_3.png?raw=true)
 
 ### Version history
+**2.0 (2024-04-24)**
+* Changed the parameter asking for a number of windows by a parameter asking for a window size instead
+* Clarified the docstrings in the documentation of the functions
+* Modified `find_delays` so that saving the figures would iterate the filenames instead of overwriting
+* Modified `_get_envelope` and `_resample` so that a number of windows inferior to 1 would be set at 1
+* Added documentation for `_create_figure` and simplified unused parameters
+* Corrected broken figure saving
+* Added figure saving for the 3 first examples
+
 **1.3 (2024-04-18)**
 * Removed unused function `_get_number_of_windows`
 
