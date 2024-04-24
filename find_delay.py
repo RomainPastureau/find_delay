@@ -619,8 +619,8 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     path_figure: str or None
         If set, saves the figure at the given path.
     name_figure: str or None
-        If set, considers that `path_figure` is the directory where to save the figure, and name_figure is the name
-        file.
+        If set, considers that `path_figure` is the directory where to save the figure, and `name_figure` is the name
+        of the file.
     plot_intermediate_steps: bool
         If set on `True`, plots the original audio clips, the envelopes and the resampled arrays (if calculated) besides
         the cross-correlation.
