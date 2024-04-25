@@ -3,10 +3,11 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.0 (2024-04-24)
+Current version: 2.1 (2024-04-25)
 
 Version history
 ---------------
+2.1 (2024-04-25) · Modified the overall functions so that it takes a window size instead of a number of windows.
 2.0 (2024-04-24) · Changed the parameter asking for a number of windows by a parameter asking for a window size instead
                  · Clarified the docstrings in the documentation of the functions
                  · Modified `find_delays` so that saving the figures would iterate the filenames instead of overwriting
@@ -96,24 +97,26 @@ def _filter_frequencies(array, frequency, filter_below=None, filter_over=None, v
     return filtered_array
 
 
-def _get_window_length(array_length_or_array, number_of_windows, overlap_ratio):
-    """Given an array to be split in a given overlapping number of windows, calculates the number of elements in each
-    window.
+def _get_number_of_windows(array_length_or_array, window_size, overlap_ratio=0, add_incomplete_window=True):
+    """Given an array, calculates how many windows from the defined `window_size` can be created, with or
+    without overlap.
 
     Parameters
     ----------
-    array_length_or_array: list, np.ndarray or int
+    array_length_or_array: list(int or float) or np.array(int or float) or int
         An array of numerical values, or its length.
-    number_of_windows: int
-        The number of windows to split the array in.
-    overlap_ratio: float
-        The ratio of overlapping elements between each window.
+    window_size: int
+        The number of array elements in each window.
+    overlap_ratio: int
+        The ratio of array elements overlapping between each window and the next.
+    add_incomplete_window: bool
+        If set on ``True``, the last window will be included even if its size is smaller than ``window_size``.
+        Otherwise, it will be ignored.
 
     Returns
     -------
     int
-        The number of elements in each window. Note: the last window may have fewer elements than the others if the
-        number of windows does not divide the result of :math:`array_length + (number_of_windows - 1) × overlap`.
+        The number of windows than can be created from the array.
     """
 
     if not isinstance(array_length_or_array, int):
@@ -121,15 +124,24 @@ def _get_window_length(array_length_or_array, number_of_windows, overlap_ratio):
     else:
         array_length = array_length_or_array
 
-    if overlap_ratio >= 1 or overlap_ratio < 0:
-        raise Exception("The size of the overlap ratio (" + str(overlap_ratio) + ") must be superior or equal to 0, " +
-                        "and strictly inferior to 1.")
+    overlap = int(np.ceil(overlap_ratio * window_size))
 
-    return array_length / (number_of_windows + overlap_ratio - number_of_windows * overlap_ratio)
+    if overlap_ratio >= 1:
+        raise Exception("The size of the overlap (" + str(overlap) + ") cannot be bigger than or equal to the size " +
+                        "of the window (" + str(window_size) + ").")
+    if window_size > array_length:
+        window_size = array_length
+
+    number_of_windows = (array_length - overlap) / (window_size - overlap)
+
+    if add_incomplete_window and array_length + (overlap * (window_size - 1)) % window_size != 0:
+        return int(np.ceil(number_of_windows))
+
+    return int(number_of_windows)
 
 
-def _get_envelope(array, frequency, number_of_windows=100, overlap_ratio=0.5, filter_below=None, filter_over=None,
-                 verbosity=1):
+def _get_envelope(array, frequency, window_size=1e6, overlap_ratio=0.5, filter_below=None, filter_over=None,
+                  verbosity=1):
     """Calculates the envelope of an array, and returns it. The function can also optionally perform a band-pass
     filtering, if the corresponding parameters are provided.
 
@@ -141,11 +153,12 @@ def _get_envelope(array, frequency, number_of_windows=100, overlap_ratio=0.5, fi
     frequency: int or float
         The sampling frequency of the array, in Hz.
 
-    number_of_windows: int or None, optional
-        The number of windows in which to cut the original array. The lower this parameter is, the more
-        resources the computation will need. If this parameter is set on `None`, or is equal to or inferior to 1,
-        the window size will be set on the number of samples. Note that this number has to be inferior to 2 times the
-        number of samples in the array; otherwise, at least some windows would only contain one sample.
+    window_size: int or None, optional
+        The size of the windows (in samples) in which to cut the array to calculate the envelope. Cutting large arrays
+        into windows allows to speed up the computation. If this parameter is set on `None`, the window size will be set
+        on the number of samples. A good value for this parameter is generally 1 million. If this parameter is set on 0,
+        on None or on a number of samples bigger than the amount of elements in the array, the window size is set on
+        the length of the samples.
 
     overlap_ratio: float or None, optional
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
@@ -178,25 +191,22 @@ def _get_envelope(array, frequency, number_of_windows=100, overlap_ratio=0.5, fi
     time_before = dt.datetime.now()
 
     # Settings
-    if number_of_windows is None or number_of_windows < 1:
-        number_of_windows = 1
+    if window_size == 0 or window_size > len(array) or window_size is None:
+        window_size = len(array)
 
     if overlap_ratio is None:
         overlap_ratio = 0
 
-    if number_of_windows > 2 * len(array):
-        raise Exception("The number of windows is too big, and will lead to windows having only one sample." +
-                        " Please consider using a lower number of windows.")
-
-    window = int(_get_window_length(len(array), number_of_windows, overlap_ratio))
-    overlap = int(np.ceil(overlap_ratio * window))
+    window_size = int(window_size)
+    overlap = int(np.ceil(overlap_ratio * window_size))
+    number_of_windows = _get_number_of_windows(len(array), window_size, overlap_ratio, True)
 
     # Hilbert transform
-    if verbosity > 0:
+    if verbosity == 0:
         print("\tGetting the Hilbert transform...", end=" ")
     elif verbosity > 1:
         print("\tGetting the Hilbert transform...")
-        print("\t\tDividing the samples in " + str(number_of_windows) + " window(s) of " + str(window) +
+        print("\t\tDividing the samples in " + str(number_of_windows) + " window(s) of " + str(window_size) +
               " samples, with an overlap of " + str(overlap) + " samples.")
 
     envelope = np.zeros(len(array))
@@ -211,8 +221,8 @@ def _get_envelope(array, frequency, number_of_windows=100, overlap_ratio=0.5, fi
                 next_percentage += 10
 
         # Get the Hilbert transform of the window
-        array_start = i * (window - overlap)
-        array_end = np.min([(i + 1) * window - i * overlap, len(array)])
+        array_start = i * (window_size - overlap)
+        array_end = np.min([(i + 1) * window_size - i * overlap, len(array)])
         if verbosity > 1:
             print("\t\t\tGetting samples from window " + str(i + 1) + "/" + str(number_of_windows) + ": samples " +
                   str(array_start) + " to " + str(array_end) + "... ", end=" ")
@@ -227,7 +237,7 @@ def _get_envelope(array, frequency, number_of_windows=100, overlap_ratio=0.5, fi
         if i == number_of_windows - 1:
             slice_end = len(hilbert_window)
         else:
-            slice_end = window - int(np.ceil(overlap / 2))
+            slice_end = window_size - int(np.ceil(overlap / 2))
 
         if verbosity > 1:
             print("\n\t\t\tKeeping the samples from " + str(slice_start) + " to " + str(slice_end) + " in the " +
@@ -356,7 +366,7 @@ def _resample_window(array, original_timestamps, resampled_timestamps, index_sta
         raise Exception("Invalid resampling method: " + str(method) + ".")
 
 
-def _resample(array, original_frequency, resampling_frequency, number_of_windows=100, overlap_ratio=0.5,
+def _resample(array, original_frequency, resampling_frequency, window_size=1e7, overlap_ratio=0.5,
              method="cubic", verbosity=1):
     """Resamples an array to the `resampling_frequency` parameter. It first creates a new set of timestamps at the
     desired frequency, and then interpolates the original data to the new timestamps.
@@ -373,11 +383,12 @@ def _resample(array, original_frequency, resampling_frequency, number_of_windows
         The frequency at which you want to resample the array, in Hz. A frequency of 4 will return samples
         at 0.25 s intervals.
 
-    number_of_windows: int or None, optional
-        The number of windows in which to cut the original array. The lower this parameter is, the more
-        resources the computation will need. If this parameter is set on `None`, or is equal to or inferior to 1, the
-        window size will be set on the number of samples. Note that this number has to be inferior to 2 times the
-        number of samples in the array; otherwise, at least some windows would only contain one sample.
+    window_size: int or None, optional
+        The size of the windows (in samples) in which to cut the array before resampling. Cutting large arrays
+        into windows allows to speed up the computation. If this parameter is set on `None`, the window size will be set
+        on the number of samples. A good value for this parameter is generally 10 million. If this parameter is set on
+        0, on None or on a number of samples bigger than the amount of elements in the array, the window size is set on
+        the length of the samples.
 
     overlap_ratio: float or None, optional
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
@@ -473,21 +484,18 @@ def _resample(array, original_frequency, resampling_frequency, number_of_windows
             resampled_timestamps = resampled_timestamps[:-1]
 
         # Settings
-        if number_of_windows is None or number_of_windows < 1:
-            number_of_windows = 1
+        if window_size == 0 or window_size > len(array) or window_size is None:
+            window_size = len(array)
 
         if overlap_ratio is None:
             overlap_ratio = 0
 
-        if number_of_windows > 2 * len(array):
-            raise Exception("The number of windows is too big, and will lead to windows having only one sample." +
-                            " Please consider using a number of windows lower than " + str(2 * len(array)) + ".")
-
-        window = int(_get_window_length(len(array), number_of_windows, overlap_ratio))
-        overlap = int(np.ceil(overlap_ratio * window))
+        window_size = int(window_size)
+        overlap = int(np.ceil(overlap_ratio * window_size))
+        number_of_windows = _get_number_of_windows(len(array), window_size, overlap_ratio, True)
 
         if verbosity > 1 and number_of_windows != 1:
-            print("\t\t\tCreating " + str(number_of_windows) + " window(s), each containing " + str(window) +
+            print("\t\t\tCreating " + str(number_of_windows) + " window(s), each containing " + str(window_size) +
                   " samples, with a " + str(round(overlap_ratio * 100, 2)) + " % overlap (" + str(overlap) +
                   " samples).")
 
@@ -497,8 +505,8 @@ def _resample(array, original_frequency, resampling_frequency, number_of_windows
 
         for i in range(number_of_windows):
 
-            window_start_original = i * (window - overlap)
-            window_end_original = np.min([(i + 1) * window - i * overlap, len(original_timestamps) - 1])
+            window_start_original = i * (window_size - overlap)
+            window_end_original = np.min([(i + 1) * window_size - i * overlap, len(original_timestamps) - 1])
             window_start_resampled = int(np.round(original_timestamps[window_start_original] * resampling_frequency))
             window_end_resampled = int(np.round(original_timestamps[window_end_original] * resampling_frequency))
 
@@ -652,16 +660,18 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
             band_pass_low = "0" if filter_below is None else filter_below
             band_pass_high = "∞" if filter_over is None else filter_over
 
-            title = "Envelope " + name_array_1 + ": " + str(freq_array_1) + "Hz, " + \
-                    str(max(int(np.ceil(len(array_1) / window_size_env)), 1)) + " w, " + str(overlap_ratio_env) + " o"
+            number_of_windows = _get_number_of_windows(len(array_1), window_size_env, overlap_ratio_env)
+            title = "Envelope " + name_array_1 + ": " + str(freq_array_1) + "Hz, " + str(number_of_windows) + " w, " + \
+                    str(overlap_ratio_env) + " o"
             if filter_below is not None or filter_over is not None:
                 title += " · Band-pass [" + str(band_pass_low) + ", " + str(band_pass_high) + "]"
             ax[i // 2][i % 2].set_title(title)
             ax[i // 2][i % 2].plot(np.arange(0, len(envelope_1)) / freq_array_1, envelope_1)
             i += 1
 
-            title = "Envelope " + name_array_2 + ": " + str(freq_array_2) + "Hz, " + \
-                    str(max(int(np.ceil(len(array_2) / window_size_env)), 1)) + " w, " + str(overlap_ratio_env) + " o"
+            number_of_windows = _get_number_of_windows(len(array_2), window_size_env, overlap_ratio_env)
+            title = "Envelope " + name_array_2 + ": " + str(freq_array_2) + "Hz, " + str(number_of_windows) + " w, " + \
+                    str(overlap_ratio_env) + " o"
             if filter_below is not None or filter_over is not None:
                 title += " · Band-pass [" + str(band_pass_low) + ", " + str(band_pass_high) + "]"
             ax[i // 2][i % 2].set_title(title)
@@ -674,16 +684,16 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
             else:
                 env_or_array = "Envelope "
 
+            number_of_windows = _get_number_of_windows(len(envelope_1), window_size_res, overlap_ratio_res)
             title = "Resampled " + env_or_array + name_array_1 + ": " + str(resampling_rate) + " Hz, " + \
-                    str(max(int(np.ceil(len(envelope_1) / window_size_res)), 1)) + " w, " + str(overlap_ratio_res) + \
-                    " o"
+                    str(number_of_windows) + " w, " + str(overlap_ratio_res) + " o"
             ax[i // 2][i % 2].set_title(title)
             ax[i // 2][i % 2].plot(np.arange(0, len(y1)) / resampling_rate, y1)
             i += 1
 
+            number_of_windows = _get_number_of_windows(len(envelope_2), window_size_res, overlap_ratio_res)
             title = "Resampled " + env_or_array + name_array_2 + ": " + str(resampling_rate) + " Hz, " + \
-                    str(max(int(np.ceil(len(envelope_2) / window_size_res)), 1)) + " w, " + str(overlap_ratio_res) + \
-                    " o"
+                    str(number_of_windows) + " w, " + str(overlap_ratio_res) + " o"
             ax[i // 2][i % 2].set_title(title)
             ax[i // 2][i % 2].plot(np.arange(0, len(y2)) / resampling_rate, y2, color="orange")
             i += 1
@@ -747,7 +757,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
 
 def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelope=True, window_size_env=1e6,
                overlap_ratio_env=0.5, filter_below=None, filter_over=50, resampling_rate=None,
-               window_size_res=1e8, overlap_ratio_res=0.5, resampling_mode="cubic",
+               window_size_res=1e7, overlap_ratio_res=0.5, resampling_mode="cubic",
                return_delay_format="index", return_correlation_value=False, threshold=0.9,
                plot_figure=False, plot_intermediate_steps=False, path_figure=None,
                verbosity=1):
@@ -818,7 +828,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     window_size_res: int or None, optional
         The size of the windows in which to cut the arrays. Cutting lo,g arrays in windows allows to speed up the
         computation. If this parameter is set on `None`, the window size will be set on the number of samples. A good
-        value for this parameter is generally 1e8.
+        value for this parameter is generally 1e7.
 
     overlap_ratio_res: float or None, optional
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
@@ -930,12 +940,12 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
             number_of_plots += 2
         if verbosity > 0:
             print("Getting the envelope from array 1...")
-        envelope_1 = _get_envelope(array_1, freq_array_1, int(np.ceil(len(array_1) / window_size_env)),
-                                   overlap_ratio_env, filter_below, filter_over, verbosity)
+        envelope_1 = _get_envelope(array_1, freq_array_1, window_size_env, overlap_ratio_env, filter_below, filter_over,
+                                   verbosity)
         if verbosity > 0:
             print("Getting the envelope from array 2...")
-        envelope_2 = _get_envelope(array_2, freq_array_2, int(np.ceil(len(array_2) // window_size_env)),
-                                   overlap_ratio_env, filter_below, filter_over, verbosity)
+        envelope_2 = _get_envelope(array_2, freq_array_2, window_size_env, overlap_ratio_env, filter_below, filter_over,
+                                   verbosity)
         if verbosity > 0:
             print("Envelopes calculated.\n")
     else:
@@ -949,13 +959,12 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         rate = resampling_rate
         if verbosity > 0:
             print("Resampling array 1...")
-        print("r", int(np.ceil(len(envelope_1) / window_size_env)))
-        y1 = _resample(envelope_1, freq_array_1, resampling_rate, int(np.ceil(len(envelope_1) / window_size_res)),
-                       overlap_ratio_res, resampling_mode, verbosity)
+        y1 = _resample(envelope_1, freq_array_1, resampling_rate, window_size_res, overlap_ratio_res, resampling_mode,
+                       verbosity)
         if verbosity > 0:
             print("Resampling array 2...")
-        y2 = _resample(envelope_2, freq_array_2, resampling_rate, int(np.ceil(len(envelope_2) / window_size_res)),
-                       overlap_ratio_res, resampling_mode, verbosity)
+        y2 = _resample(envelope_2, freq_array_2, resampling_rate, window_size_res, overlap_ratio_res, resampling_mode,
+                       verbosity)
         if verbosity > 0:
             print("Resampling done.\n")
     else:
@@ -1036,7 +1045,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
 def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope=True,
                 window_size_env=1e6, overlap_ratio_env=0.5, filter_below=None, filter_over=50,
-                resampling_rate=None, window_size_res=1e8, overlap_ratio_res=0.5, resampling_mode="cubic",
+                resampling_rate=None, window_size_res=1e7, overlap_ratio_res=0.5, resampling_mode="cubic",
                 return_delay_format="index", return_correlation_values=False, threshold=0.9,
                 plot_figure=False, plot_intermediate_steps=False, path_figures=None, name_figures="figure",
                 verbosity=1):
@@ -1111,7 +1120,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
     window_size_res: int or None, optional
         The size of the windows in which to cut the arrays. Cutting lo,g arrays in windows allows to speed up the
         computation. If this parameter is set on `None`, the window size will be set on the number of samples. A good
-        value for this parameter is generally 1e8.
+        value for this parameter is generally 1e7.
 
     overlap_ratio_res: float or None, optional
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
@@ -1232,8 +1241,8 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
             number_of_plots += 2
         if verbosity > 0:
             print("Getting the envelope from the array...")
-        envelope_array = _get_envelope(array, freq_array, int(np.ceil(len(array) / window_size_env)), overlap_ratio_env,
-                                       filter_below, filter_over, verbosity)
+        envelope_array = _get_envelope(array, freq_array, window_size_env, overlap_ratio_env, filter_below, filter_over,
+                                       verbosity)
         if verbosity > 0:
             print("Envelope calculated.\n")
     else:
@@ -1247,8 +1256,8 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         rate = resampling_rate
         if verbosity > 0:
             print("Resampling array...")
-        y1 = _resample(envelope_array, freq_array, resampling_rate, int(np.ceil(len(array) / window_size_res)),
-                       overlap_ratio_res, resampling_mode, verbosity)
+        y1 = _resample(envelope_array, freq_array, resampling_rate, window_size_res, overlap_ratio_res, resampling_mode,
+                       verbosity)
         if verbosity > 0:
             print("Resampling done.\n")
     else:
@@ -1282,8 +1291,8 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         if compute_envelope:
             if verbosity > 0:
                 print("Getting the envelope from the excerpt " + str(i+1) + "...")
-            envelope_excerpt = _get_envelope(excerpt, freq_excerpt, int(np.ceil(len(excerpt) / window_size_env)),
-                                             overlap_ratio_env, filter_below, filter_over, verbosity)
+            envelope_excerpt = _get_envelope(excerpt, freq_excerpt, window_size_env, overlap_ratio_env, filter_below,
+                                             filter_over, verbosity)
             if verbosity > 0:
                 print("Envelope calculated.\n")
         else:
@@ -1294,8 +1303,8 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
             rate = resampling_rate
             if verbosity > 0:
                 print("Resampling excerpt...")
-            y2 = _resample(envelope_excerpt, freq_excerpt, resampling_rate,
-                           int(np.ceil(len(excerpt) / window_size_res)), overlap_ratio_res, resampling_mode, verbosity)
+            y2 = _resample(envelope_excerpt, freq_excerpt, resampling_rate, window_size_res, overlap_ratio_res,
+                           resampling_mode, verbosity)
             if verbosity > 0:
                 print("Resampling done.\n")
         else:

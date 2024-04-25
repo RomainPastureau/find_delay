@@ -1,4 +1,4 @@
-# find_delay 2.0
+# find_delay 2.1
 
 Author: Romain Pastureau
 
@@ -75,6 +75,9 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 ![Delay between an audio file and an excerpt from it](https://github.com/RomainPastureau/find_delay/blob/main/figure_3.png?raw=true)
 
 ### Version history
+**2.1 (2024-04-25)**
+* Modified the overall functions so that it takes a window size instead of a number of windows.
+
 **2.0 (2024-04-24)**
 * Changed the parameter asking for a number of windows by a parameter asking for a window size instead
 * Clarified the docstrings in the documentation of the functions
