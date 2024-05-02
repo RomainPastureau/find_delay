@@ -3,10 +3,12 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.2 (2024-05-02)
+Current version: 2.3 (2024-05-02)
 
 Version history
 ---------------
+2.3 (2024-05-02) · Corrected a bug that prevented the figures to be saved as a file
+                 · Plotting without intermediate steps now plots the graphs on top of each other, not side-by-side
 2.2 (2024-05-02) · Arrays with different amplitudes now appear scaled on the graph overlay
                  · Excerpts numbers now start at 1 instead of 0 on the graphs in find_delays
                  · "i_have_a_dream_excerpt2.wav" is now of lower amplitude to test the scaling on the graph overlay
@@ -647,7 +649,10 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     """
 
     # Figure creation
-    fig, ax = plt.subplots(int(np.ceil(number_of_plots / 2)), 2, constrained_layout=True, figsize=(16, 8))
+    if plot_intermediate_steps:
+        fig, ax = plt.subplots(int(np.ceil(number_of_plots / 2)), 2, constrained_layout=True, figsize=(16, 8))
+    else:
+        fig, ax = plt.subplots(2, 1, constrained_layout=True, figsize=(16, 8))
 
     t_array_1 = np.arange(0, len(array_1)) / freq_array_1
     t_array_2 = np.arange(0, len(array_2)) / freq_array_2
@@ -733,71 +738,88 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
             ax[i // 2][i % 2].plot(t_res_2, y2, color="orange")
             i += 1
 
-        # Cross-correlation
-        title = "Cross-correlation"
+    # Cross-correlation
+    title = "Cross-correlation"
 
+    if plot_intermediate_steps:
         ax[i // 2][i % 2].set_title(title)
         ax[i // 2][i % 2].set_ylim(np.min(cross_correlation), 1.5)
         ax[i // 2][i % 2].plot(cross_correlation, color="green")
-        text = ""
-        if return_delay_format == "index":
-            text = "Sample "
-        text += str(return_value)
-        if return_delay_format in ["ms", "s"]:
-            text += return_delay_format
+    else:
+        ax[0].set_title(title)
+        ax[0].set_ylim(np.min(cross_correlation), 1.5)
+        ax[0].plot(cross_correlation, color="green")
+    text = ""
+    if return_delay_format == "index":
+        text = "Sample "
+    text += str(return_value)
+    if return_delay_format in ["ms", "s"]:
+        text += return_delay_format
 
-        if max_correlation_value >= threshold:
-            text += " · Correlation value: " + str(round(max_correlation_value, 3))
-            bbox_props = dict(boxstyle="square,pad=0.3", fc="#99cc00", ec="k", lw=0.72)
-        else:
-            text += " · Correlation value (below threshold): " + str(round(max_correlation_value, 3))
-            bbox_props = dict(boxstyle="square,pad=0.3", fc="#ff0000", ec="k", lw=0.72)
-        arrow_props = dict(arrowstyle="->", connectionstyle="angle,angleA=90")
-        kw = dict(xycoords='data', textcoords="data",
-                  arrowprops=arrow_props, bbox=bbox_props, ha="center", va="center")
+    if max_correlation_value >= threshold:
+        text += " · Correlation value: " + str(round(max_correlation_value, 3))
+        bbox_props = dict(boxstyle="square,pad=0.3", fc="#99cc00", ec="k", lw=0.72)
+    else:
+        text += " · Correlation value (below threshold): " + str(round(max_correlation_value, 3))
+        bbox_props = dict(boxstyle="square,pad=0.3", fc="#ff0000", ec="k", lw=0.72)
+    arrow_props = dict(arrowstyle="->", connectionstyle="angle,angleA=90")
+    kw = dict(xycoords='data', textcoords="data",
+              arrowprops=arrow_props, bbox=bbox_props, ha="center", va="center")
+    if plot_intermediate_steps:
         ax[i // 2][i % 2].annotate(text, xy=(index_max_correlation_value, max_correlation_value),
                                    xytext=(index_max_correlation_value, 1.4), **kw)
+    else:
+        ax[0].annotate(text, xy=(index_max_correlation_value, max_correlation_value),
+                       xytext=(index_max_correlation_value, 1.4), **kw)
 
-        i += 1
+    i += 1
 
-        # Aligned arrays
+    # Aligned arrays
+    if plot_intermediate_steps:
         ax[i // 2][i % 2].set_title("Aligned arrays")
         ax[i // 2][i % 2].plot(t_array_1, array_1, color="#04589388", linewidth=1)
         ax[i // 2][i % 2].tick_params(axis='y', labelcolor="#045893")
         ax[i // 2][i % 2].set_ylabel(name_array_1, color="#045893")
-        ax2 = ax[i // 2][i % 2].twinx()
-
-        if resampling_rate is None:
-            excerpt_in_original = array_1[index_max_correlation_value:
-                                          index_max_correlation_value + len(array_2)]
-        else:
-            index = int(index_max_correlation_value * freq_array_1 / resampling_rate)
-            excerpt_in_original = array_1[index:index + int(len(array_2) * freq_array_1 / freq_array_2)]
-        resampled_timestamps_array2 = t_res_2_aligned[:len(array_2)]
-
-        max_ratio = np.max(np.abs(array_2)) / np.max(np.abs(excerpt_in_original))
-        ax2.plot(resampled_timestamps_array2, array_2, color="#ffa500aa", linewidth=2)
         ylim = ax[i // 2][i % 2].get_ylim()
-        ax2.set_ylim((ylim[0] * max_ratio, ylim[1] * max_ratio))
-        ax2.tick_params(axis='y', labelcolor="#ffa500")
-        ax2.set_ylabel(name_array_2, color="#ffa500")
+        ax2 = ax[i // 2][i % 2].twinx()
+    else:
+        ax[1].set_title("Aligned arrays")
+        ax[1].plot(t_array_1, array_1, color="#04589388", linewidth=1)
+        ax[1].tick_params(axis='y', labelcolor="#045893")
+        ax[1].set_ylabel(name_array_1, color="#045893")
+        ylim = ax[1].get_ylim()
+        ax2 = ax[1].twinx()
 
-        if path_figure is not None:
-            if name_figure is not None:
-                if verbosity > 0:
-                    print("\nSaving the graph under " + str(path_figure) + "/" + str(name_figure) + "...", end=" ")
-                plt.savefig(str(path_figure) + "/" + str(name_figure))
-            else:
-                if verbosity > 0:
-                    print("\nSaving the graph under " + str(path_figure) + "...", end=" ")
-                plt.savefig(str(path_figure))
-            if verbosity > 0:
-                print("Done.")
+    if resampling_rate is None:
+        excerpt_in_original = array_1[index_max_correlation_value:
+                                      index_max_correlation_value + len(array_2)]
+    else:
+        index = int(index_max_correlation_value * freq_array_1 / resampling_rate)
+        excerpt_in_original = array_1[index:index + int(len(array_2) * freq_array_1 / freq_array_2)]
+    resampled_timestamps_array2 = t_res_2_aligned[:len(array_2)]
 
-        if plot_figure:
+    max_ratio = np.max(np.abs(array_2)) / np.max(np.abs(excerpt_in_original))
+    ax2.plot(resampled_timestamps_array2, array_2, color="#ffa500aa", linewidth=2)
+    ax2.set_ylim((ylim[0] * max_ratio, ylim[1] * max_ratio))
+    ax2.tick_params(axis='y', labelcolor="#ffa500")
+    ax2.set_ylabel(name_array_2, color="#ffa500")
+
+    if path_figure is not None:
+        if name_figure is not None:
             if verbosity > 0:
-                print("\nShowing the graph...")
-            plt.show()
+                print("\nSaving the graph under " + str(path_figure) + "/" + str(name_figure) + "...", end=" ")
+            plt.savefig(str(path_figure) + "/" + str(name_figure))
+        else:
+            if verbosity > 0:
+                print("\nSaving the graph under " + str(path_figure) + "...", end=" ")
+            plt.savefig(str(path_figure))
+        if verbosity > 0:
+            print("Done.")
+
+    if plot_figure:
+        if verbosity > 0:
+            print("\nShowing the graph...")
+        plt.show()
 
 
 def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelope=True, window_size_env=1e6,
@@ -1065,7 +1087,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
                         'value should be either "index", "ms", "s" or "timedelta".')
 
     # Plot and/or save the figure
-    if plot_figure or path_figure is not None:
+    if plot_figure is not None or path_figure is not None:
         _create_figure(array_1, array_2, freq_array_1, freq_array_2, "Array 1", "Array 2", envelope_1, envelope_2,
                        y1, y2, compute_envelope, window_size_env, overlap_ratio_env, filter_below, filter_over,
                        resampling_rate, window_size_res, overlap_ratio_res, cross_correlation, threshold,
@@ -1405,7 +1427,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
                             '. The value should be either "index", "ms", "s" or "timedelta".')
 
         # Plot and/or save the figure
-        if plot_figure or path_figure is not None:
+        if plot_figure is not None or path_figures is not None:
             _create_figure(array, excerpt, freq_array, freq_excerpt, "Array", "Excerpt " + str(i+1), envelope_array,
                            envelope_excerpt, y1, y2, compute_envelope, window_size_env, overlap_ratio_env,
                            filter_below, filter_over, resampling_rate, window_size_res, overlap_ratio_res,
@@ -1441,7 +1463,7 @@ if __name__ == "__main__":
     array_2 = [4, 8, 15, 16, 23, 42]
 
     find_delay(array_1, array_2, 1, 1, compute_envelope=False, resampling_rate=None, plot_figure=True,
-               path_figure="figure_1.png", plot_intermediate_steps=True)
+               path_figure="figure_1.png", plot_intermediate_steps=False)
 
     # Example 2: sine function, different frequencies
     timestamps_1 = np.linspace(0, np.pi * 2, 200001)
