@@ -3,11 +3,14 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.1 (2024-04-25)
+Current version: 2.2 (2024-05-02)
 
 Version history
 ---------------
-2.1 (2024-04-25) · Modified the overall functions so that it takes a window size instead of a number of windows.
+2.2 (2024-05-02) · Arrays with different amplitudes now appear scaled on the graph overlay
+                 · Excerpts numbers now start at 1 instead of 0 on the graphs in find_delays
+                 · "i_have_a_dream_excerpt2.wav" is now of lower amplitude to test the scaling on the graph overlay
+2.1 (2024-04-25) · Modified the overall functions so that it takes a window size instead of a number of windows
 2.0 (2024-04-24) · Changed the parameter asking for a number of windows by a parameter asking for a window size instead
                  · Clarified the docstrings in the documentation of the functions
                  · Modified `find_delays` so that saving the figures would iterate the filenames instead of overwriting
@@ -26,6 +29,7 @@ Version history
 """
 
 from matplotlib import pyplot as plt
+from matplotlib import dates as mdates
 from scipy.interpolate import CubicSpline, PchipInterpolator, Akima1DInterpolator, interp1d
 from scipy.io import wavfile
 from scipy.signal import butter, correlate, hilbert, lfilter
@@ -267,7 +271,7 @@ def _get_envelope(array, frequency, window_size=1e6, overlap_ratio=0.5, filter_b
 
 
 def _resample_window(array, original_timestamps, resampled_timestamps, index_start_original, index_end_original,
-                    index_start_resampled, index_end_resampled, method="cubic", verbosity=1):
+                     index_start_resampled, index_end_resampled, method="cubic", verbosity=1):
     """Performs and returns the resampling on a subarray of samples.
 
     Parameters
@@ -367,7 +371,7 @@ def _resample_window(array, original_timestamps, resampled_timestamps, index_sta
 
 
 def _resample(array, original_frequency, resampling_frequency, window_size=1e7, overlap_ratio=0.5,
-             method="cubic", verbosity=1):
+              method="cubic", verbosity=1):
     """Resamples an array to the `resampling_frequency` parameter. It first creates a new set of timestamps at the
     desired frequency, and then interpolates the original data to the new timestamps.
 
@@ -519,8 +523,8 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
                 print("\t\t\tGetting samples from window " + str(i + 1) + "/" + str(number_of_windows) + ".")
 
             resampled_window = _resample_window(array, original_timestamps, resampled_timestamps, window_start_original,
-                                               window_end_original, window_start_resampled, window_end_resampled,
-                                               method, verbosity)
+                                                window_end_original, window_start_resampled, window_end_resampled,
+                                                method, verbosity)
 
             if verbosity > 1:
                 print("Done.\n\t\t\t\tThe resampled window contains " + str(np.size(resampled_window)) + " sample(s).")
@@ -645,17 +649,47 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     # Figure creation
     fig, ax = plt.subplots(int(np.ceil(number_of_plots / 2)), 2, constrained_layout=True, figsize=(16, 8))
 
+    t_array_1 = np.arange(0, len(array_1)) / freq_array_1
+    t_array_2 = np.arange(0, len(array_2)) / freq_array_2
+    t_res_1 = None
+    t_res_2 = None
+    if resampling_rate is not None:
+        t_res_1 = np.arange(0, len(y1)) / resampling_rate
+        t_res_2 = np.arange(0, len(y2)) / resampling_rate
+        t_res_2_aligned = t_array_2 + index_max_correlation_value / resampling_rate
+    else:
+        t_res_2_aligned = t_array_2 + index_max_correlation_value / freq_array_2
+
+    # if x_format_figure == "time" or (x_format_figure == "auto" and return_delay_format in ["s", "ms", "timedelta"]):
+    #     if 1 / freq_array_1 * len(array_1) >= 3600:
+    #         formatter = mdates.AutoDateFormatter(mdates.AutoDateLocator(), defaultfmt='%H:%M:%S')
+    #     else:
+    #         formatter = mdates.AutoDateFormatter(mdates.AutoDateLocator(), defaultfmt='%M:%S')
+    #
+    #     for i in range(len(ax)):
+    #         formatter = mdates.DateFormatter("%H:%M:%S")
+    #         #ax[i].xaxis.set_major_formatter(formatter)
+    #         plt.gcf().axes[i].xaxis.set_major_formatter(formatter)
+    #
+    #     t_array_1 = np.array(t_array_1*1000, dtype="datetime64[ms]")
+    #     t_array_2 = np.array(t_array_2*1000, dtype="datetime64[ms]")
+    #     t_res_1 = np.array(t_res_1*1000, dtype="datetime64[ms]")
+    #     t_res_2 = np.array(t_res_2*1000, dtype="datetime64[ms]")
+    #     t_res_2_aligned = np.array(t_res_2_aligned*1000, dtype="datetime64[ms]")
+
     i = 0
 
     if plot_intermediate_steps:
+        # Original arrays
         ax[i // 2][i % 2].set_title(name_array_1 + ": " + str(round(freq_array_1, 2)) + " Hz")
-        ax[i // 2][i % 2].plot(np.arange(0, len(array_1)) / freq_array_1, array_1)
+        ax[i // 2][i % 2].plot(t_array_1, array_1)
         i += 1
 
         ax[i // 2][i % 2].set_title(name_array_2 + ": " + str(round(freq_array_2, 2)) + " Hz")
-        ax[i // 2][i % 2].plot(np.arange(0, len(array_2)) / freq_array_2, array_2, color="orange")
+        ax[i // 2][i % 2].plot(t_array_2, array_2, color="orange")
         i += 1
 
+        # Envelopes
         if compute_envelope:
             band_pass_low = "0" if filter_below is None else filter_below
             band_pass_high = "∞" if filter_over is None else filter_over
@@ -666,7 +700,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
             if filter_below is not None or filter_over is not None:
                 title += " · Band-pass [" + str(band_pass_low) + ", " + str(band_pass_high) + "]"
             ax[i // 2][i % 2].set_title(title)
-            ax[i // 2][i % 2].plot(np.arange(0, len(envelope_1)) / freq_array_1, envelope_1)
+            ax[i // 2][i % 2].plot(t_array_1, envelope_1)
             i += 1
 
             number_of_windows = _get_number_of_windows(len(array_2), window_size_env, overlap_ratio_env)
@@ -675,9 +709,10 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
             if filter_below is not None or filter_over is not None:
                 title += " · Band-pass [" + str(band_pass_low) + ", " + str(band_pass_high) + "]"
             ax[i // 2][i % 2].set_title(title)
-            ax[i // 2][i % 2].plot(np.arange(0, len(envelope_2)) / freq_array_2, envelope_2, color="orange")
+            ax[i // 2][i % 2].plot(t_array_2, envelope_2, color="orange")
             i += 1
 
+        # Resampled arrays
         if resampling_rate is not None:
             if compute_envelope is False:
                 env_or_array = ""
@@ -688,17 +723,17 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
             title = "Resampled " + env_or_array + name_array_1 + ": " + str(resampling_rate) + " Hz, " + \
                     str(number_of_windows) + " w, " + str(overlap_ratio_res) + " o"
             ax[i // 2][i % 2].set_title(title)
-            ax[i // 2][i % 2].plot(np.arange(0, len(y1)) / resampling_rate, y1)
+            ax[i // 2][i % 2].plot(t_res_1, y1)
             i += 1
 
             number_of_windows = _get_number_of_windows(len(envelope_2), window_size_res, overlap_ratio_res)
             title = "Resampled " + env_or_array + name_array_2 + ": " + str(resampling_rate) + " Hz, " + \
                     str(number_of_windows) + " w, " + str(overlap_ratio_res) + " o"
             ax[i // 2][i % 2].set_title(title)
-            ax[i // 2][i % 2].plot(np.arange(0, len(y2)) / resampling_rate, y2, color="orange")
+            ax[i // 2][i % 2].plot(t_res_2, y2, color="orange")
             i += 1
 
-        # Title
+        # Cross-correlation
         title = "Cross-correlation"
 
         ax[i // 2][i % 2].set_title(title)
@@ -725,17 +760,27 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
 
         i += 1
 
+        # Aligned arrays
         ax[i // 2][i % 2].set_title("Aligned arrays")
-        ax[i // 2][i % 2].plot(np.arange(0, len(array_1)) / freq_array_1, array_1, color="#04589388", linewidth=1)
+        ax[i // 2][i % 2].plot(t_array_1, array_1, color="#04589388", linewidth=1)
+        ax[i // 2][i % 2].tick_params(axis='y', labelcolor="#045893")
+        ax[i // 2][i % 2].set_ylabel(name_array_1, color="#045893")
+        ax2 = ax[i // 2][i % 2].twinx()
 
         if resampling_rate is None:
-            resampled_timestamps_array2 = np.arange(0, len(array_2)) / freq_array_2 + \
-                                          index_max_correlation_value / freq_array_1
+            excerpt_in_original = array_1[index_max_correlation_value:
+                                          index_max_correlation_value + len(array_2)]
         else:
-            resampled_timestamps_array2 = np.arange(0, len(array_2)) / freq_array_2 + \
-                                          index_max_correlation_value / resampling_rate
-        resampled_timestamps_array2 = resampled_timestamps_array2[:len(array_2)]
-        ax[i // 2][i % 2].plot(resampled_timestamps_array2, array_2, color="#ffa500aa", linewidth=2)
+            index = int(index_max_correlation_value * freq_array_1 / resampling_rate)
+            excerpt_in_original = array_1[index:index + int(len(array_2) * freq_array_1 / freq_array_2)]
+        resampled_timestamps_array2 = t_res_2_aligned[:len(array_2)]
+
+        max_ratio = np.max(np.abs(array_2)) / np.max(np.abs(excerpt_in_original))
+        ax2.plot(resampled_timestamps_array2, array_2, color="#ffa500aa", linewidth=2)
+        ylim = ax[i // 2][i % 2].get_ylim()
+        ax2.set_ylim((ylim[0] * max_ratio, ylim[1] * max_ratio))
+        ax2.tick_params(axis='y', labelcolor="#ffa500")
+        ax2.set_ylabel(name_array_2, color="#ffa500")
 
         if path_figure is not None:
             if name_figure is not None:
@@ -759,8 +804,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
                overlap_ratio_env=0.5, filter_below=None, filter_over=50, resampling_rate=None,
                window_size_res=1e7, overlap_ratio_res=0.5, resampling_mode="cubic",
                return_delay_format="index", return_correlation_value=False, threshold=0.9,
-               plot_figure=False, plot_intermediate_steps=False, path_figure=None,
-               verbosity=1):
+               plot_figure=False, plot_intermediate_steps=False, path_figure=None, verbosity=1):
     """This function tries to find the timestamp at which an excerpt (array_2) begins in a time series (array_1).
     The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
     calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
@@ -1026,7 +1070,8 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
                        y1, y2, compute_envelope, window_size_env, overlap_ratio_env, filter_below, filter_over,
                        resampling_rate, window_size_res, overlap_ratio_res, cross_correlation, threshold,
                        number_of_plots, return_delay_format, return_value, max_correlation_value,
-                       index_max_correlation_value, plot_figure, path_figure, None, plot_intermediate_steps, verbosity)
+                       index_max_correlation_value, plot_figure, path_figure, None, plot_intermediate_steps,
+                       verbosity)
 
     if max_correlation_value >= threshold:
 
@@ -1189,7 +1234,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
     name_figures: str, optional
         The name to give to each figure in the directory set by `path_figures`. The figures will be found in
-        `path_figures/name_figures_n.png`, where n is the index of the excerpt in `excerpts`, starting at 0.
+        `path_figures/name_figures_n.png`, where n is the index of the excerpt in `excerpts`, starting at 1.
 
     verbosity: int, optional
         Sets how much feedback the code will provide in the console output:
@@ -1268,7 +1313,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
         # Introduction
         if verbosity > 0:
-            print("Excerpt " + str(i+1) + "/" + str(len(excerpts)))
+            print("Excerpt " + str(i + 1) + "/" + str(len(excerpts)))
 
         # Get the excerpt
         excerpt = excerpts[i]
@@ -1290,7 +1335,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         # Envelope
         if compute_envelope:
             if verbosity > 0:
-                print("Getting the envelope from the excerpt " + str(i+1) + "...")
+                print("Getting the envelope from the excerpt " + str(i + 1) + "...")
             envelope_excerpt = _get_envelope(excerpt, freq_excerpt, window_size_env, overlap_ratio_env, filter_below,
                                              filter_over, verbosity)
             if verbosity > 0:
@@ -1361,12 +1406,12 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
         # Plot and/or save the figure
         if plot_figure or path_figure is not None:
-            _create_figure(array, excerpt, freq_array, freq_excerpt, "Array", "Excerpt " + str(i), envelope_array,
+            _create_figure(array, excerpt, freq_array, freq_excerpt, "Array", "Excerpt " + str(i+1), envelope_array,
                            envelope_excerpt, y1, y2, compute_envelope, window_size_env, overlap_ratio_env,
                            filter_below, filter_over, resampling_rate, window_size_res, overlap_ratio_res,
                            cross_correlation, threshold, number_of_plots, return_delay_format, return_value,
                            max_correlation_value, index_max_correlation_value, plot_figure, path_figures, name_figures
-                           + "_" + str(i) + ".png", plot_intermediate_steps, verbosity)
+                           + "_" + str(i+1) + ".png", plot_intermediate_steps, verbosity)
 
         if max_correlation_value >= threshold:
 

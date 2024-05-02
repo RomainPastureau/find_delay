@@ -1,4 +1,4 @@
-# find_delay 2.1
+# find_delay 2.2
 
 Author: Romain Pastureau
 
@@ -75,8 +75,13 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 ![Delay between an audio file and an excerpt from it](https://github.com/RomainPastureau/find_delay/blob/main/figure_3.png?raw=true)
 
 ### Version history
+**2.2 (2024-05-02)**
+* "i_have_a_dream_excerpt2.wav" is now of lower amplitude to test the scaling on the graph overlay
+* Arrays with different amplitudes now appear scaled on the graph overlay
+* Excerpts numbers now start at 1 instead of 0 on the graphs in find_delays
+
 **2.1 (2024-04-25)**
-* Modified the overall functions so that it takes a window size instead of a number of windows.
+* Modified the overall functions so that it takes a window size instead of a number of windows
 
 **2.0 (2024-04-24)**
 * Changed the parameter asking for a number of windows by a parameter asking for a window size instead
