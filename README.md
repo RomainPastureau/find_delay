@@ -4,6 +4,7 @@ Author: Romain Pastureau
 
 ## What is find_delay?
 **find_delay** is a **Python package** that tries to find the delay where a time series appear in another via cross-correlation. It can theoretically work with any time series (see the examples in the ``__main__`` of the file), but was created to try to align audio files.
+**[Read the documentation here!](https://find_delay.readthedocs.io/en/package/)**
 
 ## Quick use for audio files
 To find when an excerpt starts in an audio file, use the `find_delay` function and fill only the first four parameters;
@@ -21,7 +22,7 @@ Finally, the function performs the cross-correlation between the two arrays.
 The results can be then plotted if the corresponding parameters are activated, and the function returns the delay at which to find the second array in the first by selecting the delay with the maximum correlation value (optionally, the function can also return this correlation value).
 
 ## How to
-The best way to use this function is to install the find_delay module for Python by running `py -m pip install find_delay`.
+The best way to use this function is to install the find_delay module for Python by running `py -m pip install find-delay`.
 You can then import the function by writing `from find_delay import find_delay` (or `from find_delay import find_delays` if you want to locate multiple excerpt in one big time series).
 You can also run demos/demo.py to get four examples (in that case, you will need to download the .wav files present in the repository and place them in the same folder for examples 3 and 4).
 

@@ -21,13 +21,13 @@ You can install find_delay using:
 
         .. code-block:: bash
 
-            python3 -m pip install find_delay
+            python3 -m pip install find-delay
 
     .. tab:: Windows
 
         .. code-block:: bash
 
-            py -m pip install find_delay
+            py -m pip install find-delay
 
 How do I use find_delay?
 ------------------------

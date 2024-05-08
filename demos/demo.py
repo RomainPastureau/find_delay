@@ -1,4 +1,4 @@
-from find_delay import *
+from find_delay.find_delay import *
 import numpy as np
 from scipy.io import wavfile
 
