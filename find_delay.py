@@ -3,16 +3,22 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.3 (2024-05-02)
+Current version: 2.4 (2024-05-08)
 
 Version history
 ---------------
+2.4 (2024-05-08) · The functions now look for correlation at the edges of the first array, in the case where the second
+                   array contains information that starts before the beginning, or ends after the end of the first
+                 · Example 4 has been updated with one new audio file to demonstrate this change
+                 · Adding a parameter x_format_figure that allows to display HH:MM:SS time on the x axis
+                 · Corrected a bug in the percentage progressions that prevented to display all the steps
+                 · Added "Quick use for audio files" segment in the README file
 2.3 (2024-05-02) · Corrected a bug that prevented the figures to be saved as a file
                  · Plotting without intermediate steps now plots the graphs on top of each other, not side-by-side
 2.2 (2024-05-02) · Arrays with different amplitudes now appear scaled on the graph overlay
                  · Excerpts numbers now start at 1 instead of 0 on the graphs in find_delays
                  · "i_have_a_dream_excerpt2.wav" is now of lower amplitude to test the scaling on the graph overlay
-2.1 (2024-04-25) · Modified the overall functions so that it takes a window size instead of a number of windows
+2.1 (2024-04-25) · Modified the overall functions so that they take a window size instead of a number of windows
 2.0 (2024-04-24) · Changed the parameter asking for a number of windows by a parameter asking for a window size instead
                  · Clarified the docstrings in the documentation of the functions
                  · Modified `find_delays` so that saving the figures would iterate the filenames instead of overwriting
@@ -41,6 +47,11 @@ import datetime as dt
 
 def _filter_frequencies(array, frequency, filter_below=None, filter_over=None, verbosity=1):
     """Applies a low-pass, high-pass or band-pass filter to the data in the attribute :attr:`samples`.
+
+    .. versionadded:: 1.0
+
+    .. versionchanged:: 1.1
+        Turned into a "private" function by adding a leading underscore.
 
     Parameters
     ----------
@@ -107,6 +118,17 @@ def _get_number_of_windows(array_length_or_array, window_size, overlap_ratio=0, 
     """Given an array, calculates how many windows from the defined `window_size` can be created, with or
     without overlap.
 
+    .. versionadded:: 1.0
+
+    .. versionchanged:: 1.1
+        Turned into a "private" function by adding a leading underscore.
+
+    .. versionchanged:: 1.3
+        Function temporarily removed as it was unused at the time.
+
+    .. versionchanged:: 2.1
+        Function reinstated.
+
     Parameters
     ----------
     array_length_or_array: list(int or float) or np.array(int or float) or int
@@ -151,6 +173,20 @@ def _get_envelope(array, frequency, window_size=1e6, overlap_ratio=0.5, filter_b
     """Calculates the envelope of an array, and returns it. The function can also optionally perform a band-pass
     filtering, if the corresponding parameters are provided.
 
+    .. versionadded:: 1.0
+
+    .. versionchanged:: 1.1
+        Turned into a "private" function by adding a leading underscore.
+
+    .. versionchanged:: 2.0
+        Sets the number of windows to 1 if the parameter number_of_windows is lower than 1 (deprecated by version 2.1).
+
+    .. versionchanged:: 2.1
+        The function now takes a `window_size` parameter instead of a `number_of_windows`.
+
+    .. versionchanged:: 2.4
+        Corrected the progression percentage display.
+
     Parameters
     ----------
     array: list or np.ndarray
@@ -165,6 +201,8 @@ def _get_envelope(array, frequency, window_size=1e6, overlap_ratio=0.5, filter_b
         on the number of samples. A good value for this parameter is generally 1 million. If this parameter is set on 0,
         on None or on a number of samples bigger than the amount of elements in the array, the window size is set on
         the length of the samples.
+
+        .. versionadded:: 2.1
 
     overlap_ratio: float or None, optional
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
@@ -258,6 +296,9 @@ def _get_envelope(array, frequency, window_size=1e6, overlap_ratio=0.5, filter_b
             print("Done.")
 
     if verbosity == 1:
+        while 1 > next_percentage / 100:
+            print(str(next_percentage) + "%", end=" ")
+            next_percentage += 10
         print("100% - Done.")
     elif verbosity > 1:
         print("Done.")
@@ -275,6 +316,11 @@ def _get_envelope(array, frequency, window_size=1e6, overlap_ratio=0.5, filter_b
 def _resample_window(array, original_timestamps, resampled_timestamps, index_start_original, index_end_original,
                      index_start_resampled, index_end_resampled, method="cubic", verbosity=1):
     """Performs and returns the resampling on a subarray of samples.
+
+    .. versionadded:: 1.0
+
+    .. versionchanged:: 1.1
+        Turned into a "private" function by adding a leading underscore.
 
     Parameters
     ----------
@@ -377,6 +423,20 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
     """Resamples an array to the `resampling_frequency` parameter. It first creates a new set of timestamps at the
     desired frequency, and then interpolates the original data to the new timestamps.
 
+    .. versionadded:: 1.0
+
+    .. versionchanged:: 1.1
+        Turned into a "private" function by adding a leading underscore.
+
+    .. versionchanged:: 2.0
+        Sets the number of windows to 1 if the parameter number_of_windows is lower than 1 (deprecated).
+
+    .. versionchanged:: 2.1
+        The function now takes a `window_size` parameter instead of a `number_of_windows`.
+
+    .. versionchanged:: 2.4
+        Corrected the progression percentage display.
+
     Parameters
     ----------
     array: list or np.ndarray
@@ -395,6 +455,8 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
         on the number of samples. A good value for this parameter is generally 10 million. If this parameter is set on
         0, on None or on a number of samples bigger than the amount of elements in the array, the window size is set on
         the length of the samples.
+
+        .. versionadded:: 2.1
 
     overlap_ratio: float or None, optional
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
@@ -557,6 +619,9 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
                 print("Done.")
 
         if verbosity == 1:
+            while 1 > next_percentage / 100:
+                print(str(next_percentage) + "%", end=" ")
+                next_percentage += 10
             print("100% - Done.")
         elif verbosity > 1:
             print("\t\tResampling done.")
@@ -574,9 +639,31 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
                    resampling_rate, window_size_res, overlap_ratio_res, cross_correlation, threshold,
                    number_of_plots, return_delay_format, return_value, max_correlation_value,
                    index_max_correlation_value, plot_figure, path_figure, name_figure, plot_intermediate_steps,
-                   verbosity):
+                   x_format_figure, verbosity):
     """
     Creates and/or saves a figure given the parameters of the find_delay function.
+
+    .. versionadded:: 1.1
+
+    .. versionchanged:: 1.2
+        Added transparency in the graph overlay.
+
+    .. versionchanged:: 2.0
+        Modified subplot titles to reflect changes of separated number of windows between both arrays.
+        Corrected the figure saving to a file and prevented overwriting the same figure using find_delays.
+
+    .. versionchanged:: 2.2
+        Arrays with different amplitudes now appear scaled on the aligned arrays graph.
+        Added a second y axis to the aligned arrays graph.
+
+    .. versionchanged:: 2.3
+        Corrected the figure saving to a file.
+        If `plot_intermediate_steps` is `False`, the two graphs "cross-correlation" and "aligned arrays" are now on top
+        of each other instead of side-by-side.
+
+    .. versionchanged:: 2.4
+        Added the new parameter `x_format_figure`, allowing to have HH:MM:SS times on the x axis.
+        Modified the scaling of the aligned arrays figure to be more accurate.
 
     array_1: np.array
         The first array involved in the cross-correlation.
@@ -638,6 +725,11 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     plot_intermediate_steps: bool
         If set on `True`, plots the original audio clips, the envelopes and the resampled arrays (if calculated) besides
         the cross-correlation.
+    x_format_figure: str
+        If set on `"time"`, the values on the x axes of the output will take the HH:MM:SS format (or MM:SS if the time
+        series are less than one hour long). If set on `"float"`, the values on the x axes will be displayed as float
+        (unit: second). If set on `"auto"` (default), the format of the values on the x axes will be defined depending
+        on the value of `return_delay_format`.
     verbosity: int
         Sets how much feedback the code will provide in the console output:
 
@@ -654,6 +746,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     else:
         fig, ax = plt.subplots(2, 1, constrained_layout=True, figsize=(16, 8))
 
+    # Defining the timestamps
     t_array_1 = np.arange(0, len(array_1)) / freq_array_1
     t_array_2 = np.arange(0, len(array_2)) / freq_array_2
     t_res_1 = None
@@ -662,25 +755,83 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         t_res_1 = np.arange(0, len(y1)) / resampling_rate
         t_res_2 = np.arange(0, len(y2)) / resampling_rate
         t_res_2_aligned = t_array_2 + index_max_correlation_value / resampling_rate
+        t_cc = (np.arange(0, len(cross_correlation)) - y2.size + 1) / resampling_rate
     else:
         t_res_2_aligned = t_array_2 + index_max_correlation_value / freq_array_2
+        t_cc = (np.arange(0, len(cross_correlation)) - y2.size + 1) / freq_array_1
 
-    # if x_format_figure == "time" or (x_format_figure == "auto" and return_delay_format in ["s", "ms", "timedelta"]):
-    #     if 1 / freq_array_1 * len(array_1) >= 3600:
-    #         formatter = mdates.AutoDateFormatter(mdates.AutoDateLocator(), defaultfmt='%H:%M:%S')
-    #     else:
-    #         formatter = mdates.AutoDateFormatter(mdates.AutoDateLocator(), defaultfmt='%M:%S')
-    #
-    #     for i in range(len(ax)):
-    #         formatter = mdates.DateFormatter("%H:%M:%S")
-    #         #ax[i].xaxis.set_major_formatter(formatter)
-    #         plt.gcf().axes[i].xaxis.set_major_formatter(formatter)
-    #
-    #     t_array_1 = np.array(t_array_1*1000, dtype="datetime64[ms]")
-    #     t_array_2 = np.array(t_array_2*1000, dtype="datetime64[ms]")
-    #     t_res_1 = np.array(t_res_1*1000, dtype="datetime64[ms]")
-    #     t_res_2 = np.array(t_res_2*1000, dtype="datetime64[ms]")
-    #     t_res_2_aligned = np.array(t_res_2_aligned*1000, dtype="datetime64[ms]")
+    # Set default x_format_figure and setting timestamps to be datetime
+    if x_format_figure == "auto" and return_delay_format in ["s", "ms", "timedelta"]:
+        x_format_figure = "time"
+
+        t_array_1 = np.array(t_array_1 * 1000000, dtype="datetime64[us]")
+        t_array_2 = np.array(t_array_2 * 1000000, dtype="datetime64[us]")
+        t_res_1 = np.array(t_res_1 * 1000000, dtype="datetime64[us]")
+        t_res_2 = np.array(t_res_2 * 1000000, dtype="datetime64[us]")
+        t_res_2_aligned = np.array(t_res_2_aligned * 1000000, dtype="datetime64[us]")
+        t_cc = np.array(t_cc * 1000000, dtype="datetime64[us]")
+
+    # Formatting functions for the x axis (MM:SS and HH:MM:SS)
+    def get_label(value, include_hour=True, include_us=True):
+        """Returns a label value depending on the selected parameters."""
+
+        neg = False
+        # If negative, put positive
+        if value < 0:
+            neg = True
+            value = abs(value)
+
+        # If zero, set zero
+        elif value == 0:
+            if include_hour:
+                return "00:00:00"
+            else:
+                return "00:00"
+
+        # Turn to timedelta
+        td_value = mdates.num2timedelta(value)
+
+        seconds = td_value.total_seconds()
+        hh = str(int(seconds // 3600)).zfill(2)
+        mm = str(int((seconds // 60) % 60)).zfill(2)
+        ss = str(int(seconds % 60)).zfill(2)
+
+        us = str(int((seconds % 1) * 1000000)).rstrip("0")
+
+        label = ""
+        if neg:
+            label += "-"
+        if include_hour:
+            label += hh + ":"
+        label += mm + ":" + ss
+        if include_us and us != "":
+            label += "." + us
+
+        return label
+
+    def get_label_hh_mm_ss_no_ms(value, pos=None):
+        """Returns a label value as HH:MM:SS, without any ms value."""
+        return get_label(value, True, False)
+
+    def get_label_hh_mm_ss(value, pos=None):
+        """Returns a label value as HH:MM:SS.ms, without any trailing zero."""
+        return get_label(value, True, True)
+
+    def set_label_time_figure(ax):
+        """Sets the time formatted labels on the x axes."""
+        if x_format_figure == "time":
+            formatter = mdates.AutoDateFormatter(ax.xaxis.get_major_locator())
+            formatter.scaled[1 / mdates.MUSECONDS_PER_DAY] = get_label_hh_mm_ss
+            formatter.scaled[1 / mdates.SEC_PER_DAY] = get_label_hh_mm_ss
+            formatter.scaled[1 / mdates.MINUTES_PER_DAY] = get_label_hh_mm_ss_no_ms
+            formatter.scaled[1 / mdates.HOURS_PER_DAY] = get_label_hh_mm_ss_no_ms
+            formatter.scaled[1] = get_label_hh_mm_ss_no_ms
+            formatter.scaled[mdates.DAYS_PER_MONTH] = get_label_hh_mm_ss_no_ms
+            formatter.scaled[mdates.DAYS_PER_YEAR] = get_label_hh_mm_ss_no_ms
+            ax.xaxis.set_major_formatter(formatter)
+            return ax
+
+        return ax
 
     i = 0
 
@@ -688,10 +839,12 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         # Original arrays
         ax[i // 2][i % 2].set_title(name_array_1 + ": " + str(round(freq_array_1, 2)) + " Hz")
         ax[i // 2][i % 2].plot(t_array_1, array_1)
+        ax[i // 2][i % 2] = set_label_time_figure(ax[i // 2][i % 2])
         i += 1
 
         ax[i // 2][i % 2].set_title(name_array_2 + ": " + str(round(freq_array_2, 2)) + " Hz")
         ax[i // 2][i % 2].plot(t_array_2, array_2, color="orange")
+        ax[i // 2][i % 2] = set_label_time_figure(ax[i // 2][i % 2])
         i += 1
 
         # Envelopes
@@ -706,6 +859,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
                 title += " · Band-pass [" + str(band_pass_low) + ", " + str(band_pass_high) + "]"
             ax[i // 2][i % 2].set_title(title)
             ax[i // 2][i % 2].plot(t_array_1, envelope_1)
+            ax[i // 2][i % 2] = set_label_time_figure(ax[i // 2][i % 2])
             i += 1
 
             number_of_windows = _get_number_of_windows(len(array_2), window_size_env, overlap_ratio_env)
@@ -715,6 +869,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
                 title += " · Band-pass [" + str(band_pass_low) + ", " + str(band_pass_high) + "]"
             ax[i // 2][i % 2].set_title(title)
             ax[i // 2][i % 2].plot(t_array_2, envelope_2, color="orange")
+            ax[i // 2][i % 2] = set_label_time_figure(ax[i // 2][i % 2])
             i += 1
 
         # Resampled arrays
@@ -729,6 +884,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
                     str(number_of_windows) + " w, " + str(overlap_ratio_res) + " o"
             ax[i // 2][i % 2].set_title(title)
             ax[i // 2][i % 2].plot(t_res_1, y1)
+            ax[i // 2][i % 2] = set_label_time_figure(ax[i // 2][i % 2])
             i += 1
 
             number_of_windows = _get_number_of_windows(len(envelope_2), window_size_res, overlap_ratio_res)
@@ -736,6 +892,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
                     str(number_of_windows) + " w, " + str(overlap_ratio_res) + " o"
             ax[i // 2][i % 2].set_title(title)
             ax[i // 2][i % 2].plot(t_res_2, y2, color="orange")
+            ax[i // 2][i % 2] = set_label_time_figure(ax[i // 2][i % 2])
             i += 1
 
     # Cross-correlation
@@ -743,12 +900,13 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
 
     if plot_intermediate_steps:
         ax[i // 2][i % 2].set_title(title)
-        ax[i // 2][i % 2].set_ylim(np.min(cross_correlation), 1.5)
-        ax[i // 2][i % 2].plot(cross_correlation, color="green")
+        ax[i // 2][i % 2].set_ylim(np.nanmin(cross_correlation), 1.5)
+        ax[i // 2][i % 2].plot(t_cc, cross_correlation, color="green")
+        ax[i // 2][i % 2] = set_label_time_figure(ax[i // 2][i % 2])
     else:
         ax[0].set_title(title)
-        ax[0].set_ylim(np.min(cross_correlation), 1.5)
-        ax[0].plot(cross_correlation, color="green")
+        ax[0].set_ylim(np.nanmin(cross_correlation), 1.5)
+        ax[0].plot(t_cc, cross_correlation, color="green")
     text = ""
     if return_delay_format == "index":
         text = "Sample "
@@ -766,11 +924,11 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     kw = dict(xycoords='data', textcoords="data",
               arrowprops=arrow_props, bbox=bbox_props, ha="center", va="center")
     if plot_intermediate_steps:
-        ax[i // 2][i % 2].annotate(text, xy=(index_max_correlation_value, max_correlation_value),
-                                   xytext=(index_max_correlation_value, 1.4), **kw)
+        ax[i // 2][i % 2].annotate(text, xy=(t_cc[index_max_correlation_value + y2.size - 1], max_correlation_value),
+                                   xytext=(t_cc[index_max_correlation_value + y2.size - 1], 1.4), **kw)
     else:
-        ax[0].annotate(text, xy=(index_max_correlation_value, max_correlation_value),
-                       xytext=(index_max_correlation_value, 1.4), **kw)
+        ax[0].annotate(text, xy=(t_cc[index_max_correlation_value + y2.size - 1], max_correlation_value),
+                       xytext=(t_cc[index_max_correlation_value + y2.size - 1], 1.4), **kw)
 
     i += 1
 
@@ -778,6 +936,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     if plot_intermediate_steps:
         ax[i // 2][i % 2].set_title("Aligned arrays")
         ax[i // 2][i % 2].plot(t_array_1, array_1, color="#04589388", linewidth=1)
+        ax[i // 2][i % 2] = set_label_time_figure(ax[i // 2][i % 2])
         ax[i // 2][i % 2].tick_params(axis='y', labelcolor="#045893")
         ax[i // 2][i % 2].set_ylabel(name_array_1, color="#045893")
         ylim = ax[i // 2][i % 2].get_ylim()
@@ -785,6 +944,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     else:
         ax[1].set_title("Aligned arrays")
         ax[1].plot(t_array_1, array_1, color="#04589388", linewidth=1)
+        ax[1] = set_label_time_figure(ax[1])
         ax[1].tick_params(axis='y', labelcolor="#045893")
         ax[1].set_ylabel(name_array_1, color="#045893")
         ylim = ax[1].get_ylim()
@@ -798,9 +958,20 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         excerpt_in_original = array_1[index:index + int(len(array_2) * freq_array_1 / freq_array_2)]
     resampled_timestamps_array2 = t_res_2_aligned[:len(array_2)]
 
-    max_ratio = np.max(np.abs(array_2)) / np.max(np.abs(excerpt_in_original))
+    min_excerpt_in_original = np.nanmin(excerpt_in_original)
+    max_excerpt_in_original = np.nanmax(excerpt_in_original)
+
+    if min_excerpt_in_original != 0:
+        min_ratio = np.nanmin(array_2) / min_excerpt_in_original
+    else:
+        min_ratio = 0
+
+    if max_excerpt_in_original != 0:
+        max_ratio = np.nanmax(array_2) / max_excerpt_in_original
+    else:
+        max_ratio = 0
     ax2.plot(resampled_timestamps_array2, array_2, color="#ffa500aa", linewidth=2)
-    ax2.set_ylim((ylim[0] * max_ratio, ylim[1] * max_ratio))
+    ax2.set_ylim((ylim[0] * min_ratio, ylim[1] * max_ratio))
     ax2.tick_params(axis='y', labelcolor="#ffa500")
     ax2.set_ylabel(name_array_2, color="#ffa500")
 
@@ -826,12 +997,30 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
                overlap_ratio_env=0.5, filter_below=None, filter_over=50, resampling_rate=None,
                window_size_res=1e7, overlap_ratio_res=0.5, resampling_mode="cubic",
                return_delay_format="index", return_correlation_value=False, threshold=0.9,
-               plot_figure=False, plot_intermediate_steps=False, path_figure=None, verbosity=1):
+               plot_figure=False, plot_intermediate_steps=False, x_format_figure="auto", path_figure=None, verbosity=1):
     """This function tries to find the timestamp at which an excerpt (array_2) begins in a time series (array_1).
     The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
     calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
     arrays is unequal). The function returns the timestamp of the maximal correlation value, or `None` if this value is
     below threshold. Optionally, it can also return a second element, the maximal correlation value.
+
+    .. versionadded:: 1.0
+
+    .. versionchanged:: 1.1
+        Separated the figure generation into a new function `_create_figure`.
+
+    .. versionchanged:: 2.0
+        Changed parameters `number_of_windows` to `window_size`.
+
+    .. versionchanged:: 2.1
+        Decreased default `window_size_res` value from 1e8 to 1e7.
+
+    .. versionchanged:: 2.3
+        Corrected the figure saving to a file.
+
+    .. versionchanged:: 2.4
+        Modified the cross-correlation to look for the excerpt at the edges of the first array.
+        Added the new parameter `x_format_figure`, allowing to have HH:MM:SS times on the x axis.
 
     Important
     ---------
@@ -841,7 +1030,11 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
     Note
     ----
-    Using Numpy arrays rather than lists will drastically increase the speed of the computation.
+    Since version 2.4, this function can find excerpts containing data that would be present outside the main array. In
+    other words, if the excerpt starts 1 second before the onset of the original array, the function will return a delay
+    of -1 sec. However, this should be avoided, as information missing from the original array will result in lower
+    correlation - with a substantial amount of data missing from the original array, the function may return erroneous
+    results. This is why it is always preferable to use excerpts that are entirely contained in the original array.
 
     Parameters
     ----------
@@ -866,6 +1059,8 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         The size of the windows in which to cut the arrays to calculate the envelope. Cutting long arrays
         in windows allows to speed up the computation. If this parameter is set on `None`, the window size will be set
         on the number of samples. A good value for this parameter is generally 1 million.
+
+        .. versionadded:: 2.0
 
     overlap_ratio_env: float or None, optional
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
@@ -895,6 +1090,11 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         The size of the windows in which to cut the arrays. Cutting lo,g arrays in windows allows to speed up the
         computation. If this parameter is set on `None`, the window size will be set on the number of samples. A good
         value for this parameter is generally 1e7.
+
+        .. versionadded:: 2.0
+
+        .. versionchanged:: 2.1
+            Decreased default `window_size_res` value from 1e8 to 1e7.
 
     overlap_ratio_res: float or None, optional
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
@@ -958,6 +1158,14 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     plot_intermediate_steps: bool, optional
         If set on `True`, plots the original arrays, the envelopes (if calculated) and the resampled arrays (if
         calculated) besides the cross-correlation.
+
+    x_format_figure: str
+        If set on `"time"`, the values on the x axes of the output will take the HH:MM:SS format (or MM:SS if the time
+        series are less than one hour long). If set on `"float"`, the values on the x axes will be displayed as float
+        (unit: second). If set on `"auto"` (default), the format of the values on the x axes will be defined depending
+        on the value of `return_delay_format`.
+
+         .. versionadded:: 2.4
 
     path_figure: str or None, optional
         If set, saves the figure at the given path.
@@ -1048,13 +1256,13 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         print("Computing the correlation...", end=" ")
 
     y2_normalized = (y2 - y2.mean()) / y2.std() / np.sqrt(y2.size)
-    y1_m = correlate(y1, np.ones(y2.size), "valid") ** 2 / y2_normalized.size
-    y1_m2 = correlate(y1 ** 2, np.ones(y2.size), "valid")
-    cross_correlation = correlate(y1, y2_normalized, "valid") / np.sqrt(y1_m2 - y1_m)
-    max_correlation_value = np.max(cross_correlation)
+    y1_m = correlate(y1, np.ones(y2.size), "full") ** 2 / y2_normalized.size
+    y1_m2 = correlate(y1 ** 2, np.ones(y2.size), "full")
+    cross_correlation = correlate(y1, y2_normalized, "full") / np.sqrt(y1_m2 - y1_m)
+    max_correlation_value = np.nanmax(cross_correlation)
 
-    index_max_correlation_value = np.argmax(cross_correlation)
-    index = int(round(index_max_correlation_value * freq_array_1 / rate, 0))
+    index_max_correlation_value = np.nanargmax(cross_correlation) - y2.size + 1
+    index = int(np.round(index_max_correlation_value * freq_array_1 / rate, 0))
     delay_in_seconds = index_max_correlation_value / rate
     t = dt.timedelta(days=delay_in_seconds // 86400, seconds=int(delay_in_seconds % 86400),
                      microseconds=(delay_in_seconds % 1) * 1000000)
@@ -1064,11 +1272,11 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         print("\tCross-correlation calculated in: " + str(dt.datetime.now() - time_before_cross_correlation))
 
         if max_correlation_value >= threshold:
-            print("\tMaximum correlation (" + str(round(max_correlation_value, 3)) + ") found at sample " +
+            print("\tMaximum correlation (" + str(np.round(max_correlation_value, 3)) + ") found at sample " +
                   str(index) + " (timestamp " + str(t) + ").")
 
         else:
-            print("\tNo correlation over threshold found (max correlation: " + str(round(max_correlation_value, 3)) +
+            print("\tNo correlation over threshold found (max correlation: " + str(np.round(max_correlation_value, 3)) +
                   ") found at sample " + str(index) + " (timestamp " + str(t) + ").")
 
         print("\nComplete delay finding function executed in: " + str(dt.datetime.now() - time_before_function))
@@ -1093,7 +1301,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
                        resampling_rate, window_size_res, overlap_ratio_res, cross_correlation, threshold,
                        number_of_plots, return_delay_format, return_value, max_correlation_value,
                        index_max_correlation_value, plot_figure, path_figure, None, plot_intermediate_steps,
-                       verbosity)
+                       x_format_figure, verbosity)
 
     if max_correlation_value >= threshold:
 
@@ -1114,13 +1322,33 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
                 window_size_env=1e6, overlap_ratio_env=0.5, filter_below=None, filter_over=50,
                 resampling_rate=None, window_size_res=1e7, overlap_ratio_res=0.5, resampling_mode="cubic",
                 return_delay_format="index", return_correlation_values=False, threshold=0.9,
-                plot_figure=False, plot_intermediate_steps=False, path_figures=None, name_figures="figure",
-                verbosity=1):
+                plot_figure=False, plot_intermediate_steps=False, x_format_figure="auto", path_figures=None,
+                name_figures="figure", verbosity=1):
     """This function tries to find the timestamp at which multiple excerpts begins in an array.
     The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
     calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
     arrays is unequal). The function returns the timestamp of the maximal correlation value, or `None` if this value is
     below threshold. Optionally, it can also return a second element, the maximal correlation value.
+
+    .. versionadded:: 1.1
+
+    .. versionchanged:: 2.0
+        Changed parameters `number_of_windows` to `window_size`.
+        Modified the name of the parameter `path_figure` by `path_figures`.
+        Added the parameter `name_figures`.
+
+    .. versionchanged:: 2.1
+        Decreased default `window_size_res` value from 1e8 to 1e7.
+
+    .. versionchanged:: 2.2
+        Figure names index now start at 1 instead of 0.
+
+    .. versionchanged:: 2.3
+        Corrected the figure saving to a file.
+
+    .. versionchanged:: 2.4
+        Modified the cross-correlation to look for the excerpt at the edges of the first array.
+        Added the new parameter `x_format_figure`, allowing to have HH:MM:SS times on the x axis.
 
     Important
     ---------
@@ -1130,7 +1358,11 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
     Note
     ----
-    Using Numpy arrays rather than lists will drastically increase the speed of the computation.
+    Since version 2.4, this function can find excerpts containing data that would be present outside the main array. In
+    other words, if the excerpt starts 1 second before the onset of the original array, the function will return a delay
+    of -1 sec. However, this should be avoided, as information missing from the original array will result in lower
+    correlation - with a substantial amount of data missing from the original array, the function may return erroneous
+    results. This is why it is always preferable to use excerpts that are entirely contained in the original array.
 
     Note
     ----
@@ -1143,7 +1375,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         An array of samples.
 
     excerpts: list(list or np.ndarray)
-        A list of excerpts, each being an array of samples. Each excerpt must be smaller than or of equal size to the
+        A list of excerpts, each being an array of samples. Each excerpt should be smaller than or of equal size to the
         array in which to locate it. The amplitude, frequency or values do not have to match exactly the ones from the
         first array.
 
@@ -1162,6 +1394,8 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         The size of the windows in which to cut the arrays to calculate the envelope. Cutting long arrays
         in windows allows to speed up the computation. If this parameter is set on `None`, the window size will be set
         on the number of samples. A good value for this parameter is generally 1 million.
+
+        .. versionadded:: 2.0
 
     overlap_ratio_env: float or None, optional
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
@@ -1188,6 +1422,11 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         The size of the windows in which to cut the arrays. Cutting lo,g arrays in windows allows to speed up the
         computation. If this parameter is set on `None`, the window size will be set on the number of samples. A good
         value for this parameter is generally 1e7.
+
+        .. versionadded:: 2.0
+
+        .. versionchanged:: 2.1
+            Decreased default `window_size_res` value from 1e8 to 1e7.
 
     overlap_ratio_res: float or None, optional
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
@@ -1253,6 +1492,14 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
     path_figures: str or None, optional
         If set, saves the figures in the given directory.
+
+    x_format_figure: str
+        If set on `"time"`, the values on the x axes of the output will take the HH:MM:SS format (or MM:SS if the time
+        series are less than one hour long). If set on `"float"`, the values on the x axes will be displayed as float
+        (unit: second). If set on `"auto"` (default), the format of the values on the x axes will be defined depending
+        on the value of `return_delay_format`.
+
+        .. versionadded:: 2.4
 
     name_figures: str, optional
         The name to give to each figure in the directory set by `path_figures`. The figures will be found in
@@ -1387,13 +1634,13 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
             print("Computing the correlation...", end=" ")
 
         y2_normalized = (y2 - y2.mean()) / y2.std() / np.sqrt(y2.size)
-        y1_m = correlate(y1, np.ones(y2.size), "valid") ** 2 / y2_normalized.size
-        y1_m2 = correlate(y1 ** 2, np.ones(y2.size), "valid")
-        cross_correlation = correlate(y1, y2_normalized, "valid") / np.sqrt(y1_m2 - y1_m)
-        max_correlation_value = np.max(cross_correlation)
+        y1_m = correlate(y1, np.ones(y2.size), "full") ** 2 / y2_normalized.size
+        y1_m2 = correlate(y1 ** 2, np.ones(y2.size), "full")
+        cross_correlation = correlate(y1, y2_normalized, "full") / np.sqrt(y1_m2 - y1_m)
+        max_correlation_value = np.nanmax(cross_correlation)
 
-        index_max_correlation_value = np.argmax(cross_correlation)
-        index = int(round(index_max_correlation_value * freq_array / rate, 0))
+        index_max_correlation_value = np.nanargmax(cross_correlation) - y2.size + 1
+        index = int(np.round(index_max_correlation_value * freq_array / rate, 0))
         delay_in_seconds = index_max_correlation_value / rate
         t = dt.timedelta(days=delay_in_seconds // 86400, seconds=int(delay_in_seconds % 86400),
                          microseconds=(delay_in_seconds % 1) * 1000000)
@@ -1403,12 +1650,12 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
             print("\tCross-correlation calculated in: " + str(dt.datetime.now() - time_before_cross_correlation))
 
             if max_correlation_value >= threshold:
-                print("\tMaximum correlation (" + str(round(max_correlation_value, 3)) + ") found at sample " +
+                print("\tMaximum correlation (" + str(np.round(max_correlation_value, 3)) + ") found at sample " +
                       str(index) + " (timestamp " + str(t) + ").")
 
             else:
                 print("\tNo correlation over threshold found (max correlation: " +
-                      str(round(max_correlation_value, 3)) + ") found at sample " + str(index) + " (timestamp " +
+                      str(np.round(max_correlation_value, 3)) + ") found at sample " + str(index) + " (timestamp " +
                       str(t) + ").")
 
             print("\nComplete delay finding function executed in: " + str(dt.datetime.now() - time_before_function))
@@ -1428,12 +1675,12 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
         # Plot and/or save the figure
         if plot_figure is not None or path_figures is not None:
-            _create_figure(array, excerpt, freq_array, freq_excerpt, "Array", "Excerpt " + str(i+1), envelope_array,
+            _create_figure(array, excerpt, freq_array, freq_excerpt, "Array", "Excerpt " + str(i + 1), envelope_array,
                            envelope_excerpt, y1, y2, compute_envelope, window_size_env, overlap_ratio_env,
                            filter_below, filter_over, resampling_rate, window_size_res, overlap_ratio_res,
                            cross_correlation, threshold, number_of_plots, return_delay_format, return_value,
                            max_correlation_value, index_max_correlation_value, plot_figure, path_figures, name_figures
-                           + "_" + str(i+1) + ".png", plot_intermediate_steps, verbosity)
+                           + "_" + str(i + 1) + ".png", plot_intermediate_steps, x_format_figure, verbosity)
 
         if max_correlation_value >= threshold:
 
@@ -1458,6 +1705,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
 
 if __name__ == "__main__":
+
     # Example 1: random numbers
     array_1 = [24, 70, 28, 59, 13, 97, 63, 30, 89, 4, 8, 15, 16, 23, 42, 37, 70, 18, 59, 48, 41, 83, 99, 6, 24, 86]
     array_2 = [4, 8, 15, 16, 23, 42]
@@ -1477,7 +1725,7 @@ if __name__ == "__main__":
                verbosity=1)
 
     # Example 3: audio files
-    audio_path = "i_have_a_dream_full.wav"
+    audio_path = "i_have_a_dream_full_without_end.wav"
     audio_wav = wavfile.read(audio_path)
     audio_frequency = audio_wav[0]
     audio_array = audio_wav[1][:, 0]  # Turn to mono
@@ -1499,13 +1747,20 @@ if __name__ == "__main__":
     excerpt2_frequency = excerpt2_wav[0]
     excerpt2_array = excerpt2_wav[1][:, 0]  # Turn to mono
 
+    excerpt3_path = "i_have_a_dream_excerpt_end.wav"
+    excerpt3_wav = wavfile.read(excerpt3_path)
+    excerpt3_frequency = excerpt3_wav[0]
+    excerpt3_array = excerpt3_wav[1][:, 0]  # Turn to mono
+
     excerpt_not_present_path = "au_revoir.wav"
     excerpt_not_present_wav = wavfile.read(excerpt_not_present_path)
     excerpt_not_present_frequency = excerpt_not_present_wav[0]
     excerpt_not_present_array = excerpt_not_present_wav[1][:, 0]  # Turn to mono
 
-    find_delays(audio_array, [excerpt_array, excerpt2_array, excerpt_not_present_array], audio_frequency,
-                [excerpt_frequency, excerpt2_frequency, excerpt_not_present_frequency],
+    find_delays(audio_array,
+                [excerpt_array, excerpt2_array, excerpt3_array, excerpt_not_present_array],
+                audio_frequency,
+                [excerpt_frequency, excerpt2_frequency, excerpt3_frequency, excerpt_not_present_frequency],
                 compute_envelope=True, window_size_env=1e6, overlap_ratio_env=0.5,
                 resampling_rate=1000, window_size_res=1e7, overlap_ratio_res=0.5, return_delay_format="timedelta",
-                resampling_mode="cubic", plot_figure=True, plot_intermediate_steps=True, verbosity=1)
+                resampling_mode="cubic", threshold=0.8, plot_figure=True, plot_intermediate_steps=True, verbosity=1)

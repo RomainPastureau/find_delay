@@ -1,9 +1,13 @@
-# find_delay 2.3
+# find_delay 2.4
 
 Author: Romain Pastureau
 
 ## What is find_delay?
 **find_delay** is a **Python function** that tries to find the delay where a time series appear in another via cross-correlation. It can theoretically work with any time series (see the examples in the ``__main__`` of the file), but was created to try to align audio files.
+
+## Quick use for audio files
+To find when an excerpt starts in an audio file, use the `find_delay` function and fill only the first four parameters;
+leave the other parameters default (just set `plot_figure = True` if you want to visualize the output of the function).
 
 ## Specifics
 The function accepts to arrays containing time series - the time series can be of different frequency or amplitude - the only condition for the function to work is that the second array must be entirely contained into the first (note: if it is not the case, try to run the function with the beginning of the second array only).
@@ -75,6 +79,14 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 ![Delay between an audio file and an excerpt from it](https://github.com/RomainPastureau/find_delay/blob/main/figure_3.png?raw=true)
 
 ### Version history
+**2.4 (2024-05-08)**
+* The functions now look for correlation at the edges of the first array, in the case where the second array contains
+  information that starts before the beginning, or ends after the end of the first
+* Example 4 has been updated with one new audio file to demonstrate this change
+* Adding a parameter x_format_figure that allows to display HH:MM:SS time on the x axis
+* Corrected a bug in the percentage progressions that prevented to display all the steps
+* Added "Quick use for audio files" segment in the README file
+
 **2.3 (2024-05-02)**
 * Corrected a bug that prevented the figures to be saved as a file
 * Plotting without intermediate steps now plots the graphs on top of each other, not side-by-side
@@ -85,7 +97,7 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 * Excerpts numbers now start at 1 instead of 0 on the graphs in find_delays
 
 **2.1 (2024-04-25)**
-* Modified the overall functions so that it takes a window size instead of a number of windows
+* Modified the overall functions so that they take a window size instead of a number of windows
 
 **2.0 (2024-04-24)**
 * Changed the parameter asking for a number of windows by a parameter asking for a window size instead
