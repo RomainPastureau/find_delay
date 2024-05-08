@@ -1,4 +1,4 @@
-# find_delay 2.5
+# find_delay 2.6
 
 Author: Romain Pastureau
 
@@ -80,6 +80,9 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 ![Delay between an audio file and an excerpt from it](https://github.com/RomainPastureau/find_delay/blob/main/tests/figure_3.png?raw=true)
 
 ### Version history
+**2.6 (2024-05-08)**
+* Removed demo audio files to lighten the Python package; they are still available on the main branch
+
 **2.5 (2024-05-08)**
 * Turned find_delay into a Python package, install with `py -m pip install find_delay`
 

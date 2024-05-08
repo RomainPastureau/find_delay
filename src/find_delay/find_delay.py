@@ -3,10 +3,11 @@
 * find_delays.rst does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.5 (2024-05-08)
+Current version: 2.6 (2024-05-08)
 
 Version history
 ---------------
+2.6 (2024-05-08) · Removed demo audio files to lighten the Python package; they are still available on the main branch
 2.5 (2024-05-08) · Turned find_delay into a Python package, install with `py -m pip install find-delay`
 2.4 (2024-05-08) · The functions now look for correlation at the edges of the first array, in the case where the second
                    array contains information that starts before the beginning, or ends after the end of the first
