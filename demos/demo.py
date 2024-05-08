@@ -1,4 +1,4 @@
-from find_delay import find_delays, find_delays
+from find_delay.find_delay import *
 import numpy as np
 from scipy.io import wavfile
 
@@ -8,7 +8,7 @@ if __name__ == "__main__":
     array_1 = [24, 70, 28, 59, 13, 97, 63, 30, 89, 4, 8, 15, 16, 23, 42, 37, 70, 18, 59, 48, 41, 83, 99, 6, 24, 86]
     array_2 = [4, 8, 15, 16, 23, 42]
 
-    find_delays(array_1, array_2, 1, 1, compute_envelope=False, resampling_rate=None, plot_figure=True,
+    find_delay(array_1, array_2, 1, 1, compute_envelope=False, resampling_rate=None, plot_figure=True,
                path_figure="figure_1.png", plot_intermediate_steps=False)
 
     # Example 2: sine function, different frequencies
@@ -17,7 +17,7 @@ if __name__ == "__main__":
     timestamps_2 = np.linspace(np.pi * 0.5, np.pi * 0.75, 6001)
     array_2 = np.sin(timestamps_2)
 
-    find_delays(array_1, array_2, 100000 / np.pi, 6000 / (np.pi / 4),
+    find_delay(array_1, array_2, 100000 / np.pi, 6000 / (np.pi / 4),
                compute_envelope=False, resampling_rate=1000, window_size_res=20000, overlap_ratio_res=0.5,
                resampling_mode="cubic", plot_figure=True, path_figure="figure_2.png", plot_intermediate_steps=True,
                verbosity=1)
@@ -33,7 +33,7 @@ if __name__ == "__main__":
     excerpt_frequency = excerpt_wav[0]
     excerpt_array = excerpt_wav[1][:, 0]  # Turn to mono
 
-    find_delays(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
+    find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
                compute_envelope=True, window_size_env=1e6, overlap_ratio_env=0.5,
                resampling_rate=1000, window_size_res=1e7, overlap_ratio_res=0.5, return_delay_format="timedelta",
                resampling_mode="cubic", plot_figure=True, path_figure="figure_3.png", plot_intermediate_steps=True,
