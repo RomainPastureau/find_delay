@@ -1,12 +1,13 @@
 """Contains a series of functions directed at calculating the delay between two arrays.
 * find_delay finds the delay between two time series using cross-correlation.
-* find_delays does the same, but for multiple excerpts from one big time series.
+* find_delays.rst does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.4 (2024-05-08)
+Current version: 2.5 (2024-05-08)
 
 Version history
 ---------------
+2.5 (2024-05-08) · Turned find_delay into a Python package, install with `py -m pip install find_delay`
 2.4 (2024-05-08) · The functions now look for correlation at the edges of the first array, in the case where the second
                    array contains information that starts before the beginning, or ends after the end of the first
                  · Example 4 has been updated with one new audio file to demonstrate this change
@@ -16,12 +17,12 @@ Version history
 2.3 (2024-05-02) · Corrected a bug that prevented the figures to be saved as a file
                  · Plotting without intermediate steps now plots the graphs on top of each other, not side-by-side
 2.2 (2024-05-02) · Arrays with different amplitudes now appear scaled on the graph overlay
-                 · Excerpts numbers now start at 1 instead of 0 on the graphs in find_delays
+                 · Excerpts numbers now start at 1 instead of 0 on the graphs in find_delays.rst
                  · "i_have_a_dream_excerpt2.wav" is now of lower amplitude to test the scaling on the graph overlay
 2.1 (2024-04-25) · Modified the overall functions so that they take a window size instead of a number of windows
 2.0 (2024-04-24) · Changed the parameter asking for a number of windows by a parameter asking for a window size instead
                  · Clarified the docstrings in the documentation of the functions
-                 · Modified `find_delays` so that saving the figures would iterate the filenames instead of overwriting
+                 · Modified `find_delays.rst` so that saving the figures would iterate the filenames instead of overwriting
                  · Modified `_get_envelope` and `_resample` so that a number of windows inferior to 1 would be set at 1
                  · Added documentation for `_create_figure` and simplified unused parameters
                  · Corrected broken figure saving
@@ -29,7 +30,7 @@ Version history
 1.3 (2024-04-18) · Removed unused function `_get_number_of_windows`
 1.2 (2024-04-17) · Added transparency of the second (orange) array on the graph overlay
                  · Clarified README.md and added figures
-1.1 (2024-04-16) · Added `find_delays`
+1.1 (2024-04-16) · Added `find_delays.rst`
                  · Created _create_figure containing all the plotting-related code
                  · Modified the graph plot when the max correlation is below threshold
                  · Minor corrections in docstrings
@@ -650,7 +651,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
 
     .. versionchanged:: 2.0
         Modified subplot titles to reflect changes of separated number of windows between both arrays.
-        Corrected the figure saving to a file and prevented overwriting the same figure using find_delays.
+        Corrected the figure saving to a file and prevented overwriting the same figure using find_delays.rst.
 
     .. versionchanged:: 2.2
         Arrays with different amplitudes now appear scaled on the aligned arrays graph.
@@ -674,9 +675,9 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     freq_array_2: int or float
         The sampling rate of `array_2`.
     name_array_1: str
-        The name of the first array; will be "Array 1" for `find_delay` and "Array" for `find_delays`.
+        The name of the first array; will be "Array 1" for `find_delay` and "Array" for `find_delays.rst`.
     name_array_2: str
-        The name of the second array; will be "Array 2" for `find_delay` and "Excerpt n" for `find_delays`, with n
+        The name of the second array; will be "Array 2" for `find_delay` and "Excerpt n" for `find_delays.rst`, with n
         being the index of the excerpt in the folder.
     envelope_1: np.array
         The envelope of `array_1` (if calculated).
@@ -1702,65 +1703,3 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         return delays, correlation_values
     else:
         return delays
-
-
-if __name__ == "__main__":
-
-    # Example 1: random numbers
-    array_1 = [24, 70, 28, 59, 13, 97, 63, 30, 89, 4, 8, 15, 16, 23, 42, 37, 70, 18, 59, 48, 41, 83, 99, 6, 24, 86]
-    array_2 = [4, 8, 15, 16, 23, 42]
-
-    find_delay(array_1, array_2, 1, 1, compute_envelope=False, resampling_rate=None, plot_figure=True,
-               path_figure="figure_1.png", plot_intermediate_steps=False)
-
-    # Example 2: sine function, different frequencies
-    timestamps_1 = np.linspace(0, np.pi * 2, 200001)
-    array_1 = np.sin(timestamps_1)
-    timestamps_2 = np.linspace(np.pi * 0.5, np.pi * 0.75, 6001)
-    array_2 = np.sin(timestamps_2)
-
-    find_delay(array_1, array_2, 100000 / np.pi, 6000 / (np.pi / 4),
-               compute_envelope=False, resampling_rate=1000, window_size_res=20000, overlap_ratio_res=0.5,
-               resampling_mode="cubic", plot_figure=True, path_figure="figure_2.png", plot_intermediate_steps=True,
-               verbosity=1)
-
-    # Example 3: audio files
-    audio_path = "i_have_a_dream_full_without_end.wav"
-    audio_wav = wavfile.read(audio_path)
-    audio_frequency = audio_wav[0]
-    audio_array = audio_wav[1][:, 0]  # Turn to mono
-
-    excerpt_path = "i_have_a_dream_excerpt.wav"
-    excerpt_wav = wavfile.read(excerpt_path)
-    excerpt_frequency = excerpt_wav[0]
-    excerpt_array = excerpt_wav[1][:, 0]  # Turn to mono
-
-    find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
-               compute_envelope=True, window_size_env=1e6, overlap_ratio_env=0.5,
-               resampling_rate=1000, window_size_res=1e7, overlap_ratio_res=0.5, return_delay_format="timedelta",
-               resampling_mode="cubic", plot_figure=True, path_figure="figure_3.png", plot_intermediate_steps=True,
-               verbosity=1)
-
-    # Example 4: multiple audio files
-    excerpt2_path = "i_have_a_dream_excerpt2.wav"
-    excerpt2_wav = wavfile.read(excerpt2_path)
-    excerpt2_frequency = excerpt2_wav[0]
-    excerpt2_array = excerpt2_wav[1][:, 0]  # Turn to mono
-
-    excerpt3_path = "i_have_a_dream_excerpt_end.wav"
-    excerpt3_wav = wavfile.read(excerpt3_path)
-    excerpt3_frequency = excerpt3_wav[0]
-    excerpt3_array = excerpt3_wav[1][:, 0]  # Turn to mono
-
-    excerpt_not_present_path = "au_revoir.wav"
-    excerpt_not_present_wav = wavfile.read(excerpt_not_present_path)
-    excerpt_not_present_frequency = excerpt_not_present_wav[0]
-    excerpt_not_present_array = excerpt_not_present_wav[1][:, 0]  # Turn to mono
-
-    find_delays(audio_array,
-                [excerpt_array, excerpt2_array, excerpt3_array, excerpt_not_present_array],
-                audio_frequency,
-                [excerpt_frequency, excerpt2_frequency, excerpt3_frequency, excerpt_not_present_frequency],
-                compute_envelope=True, window_size_env=1e6, overlap_ratio_env=0.5,
-                resampling_rate=1000, window_size_res=1e7, overlap_ratio_res=0.5, return_delay_format="timedelta",
-                resampling_mode="cubic", threshold=0.8, plot_figure=True, plot_intermediate_steps=True, verbosity=1)

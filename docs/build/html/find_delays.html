@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>find_delays &mdash; find_delay 2.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=ffea67bc"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+        <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="find_delay" href="find_delay.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #99cc00" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            find_delay
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="find_delay.html">find_delay</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="find_delay.html#find_delay.find_delay.find_delay"><code class="docutils literal notranslate"><span class="pre">find_delay()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">find_delays</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#find_delay.find_delay.find_delays"><code class="docutils literal notranslate"><span class="pre">find_delays()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #99cc00" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">find_delay</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">find_delays</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/find_delays.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="find-delays">
+<h1>find_delays<a class="headerlink" href="#find-delays" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="find_delay.find_delay.find_delays">
+<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">find_delays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excerpts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_excerpts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_envelope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_below</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_over</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_delay_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_correlation_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_intermediate_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_format_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_figures</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_figures</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'figure'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay.find_delays" title="Permalink to this definition"></a></dt>
+<dd><p>This function tries to find the timestamp at which multiple excerpts begins in an array.
+The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
+calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
+arrays is unequal). The function returns the timestamp of the maximal correlation value, or <cite>None</cite> if this value is
+below threshold. Optionally, it can also return a second element, the maximal correlation value.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.1.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.0: </span>Changed parameters <cite>number_of_windows</cite> to <cite>window_size</cite>.
+Modified the name of the parameter <cite>path_figure</cite> by <cite>path_figures</cite>.
+Added the parameter <cite>name_figures</cite>.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.1: </span>Decreased default <cite>window_size_res</cite> value from 1e8 to 1e7.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.2: </span>Figure names index now start at 1 instead of 0.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.3: </span>Corrected the figure saving to a file.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.4: </span>Modified the cross-correlation to look for the excerpt at the edges of the first array.
+Added the new parameter <cite>x_format_figure</cite>, allowing to have HH:MM:SS times on the x axis.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Because it is easy to get confused: this function returns the timestamp in array where each excerpt begins. This
+means that, if you want to align the array and an excerpt, you need to remove the delay to each timestamp of the
+array: that way, the value at timestamp 0 in the array will be aligned with the value at timestamp 0 in the excerpt.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since version 2.4, this function can find excerpts containing data that would be present outside the main array. In
+other words, if the excerpt starts 1 second before the onset of the original array, the function will return a delay
+of -1 sec. However, this should be avoided, as information missing from the original array will result in lower
+correlation - with a substantial amount of data missing from the original array, the function may return erroneous
+results. This is why it is always preferable to use excerpts that are entirely contained in the original array.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Compared to find_delay (without an “s”), this function allows to compute only once the envelope of the first array,
+allowing to gain computation time.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array</strong> (<em>list</em><em> or </em><em>np.ndarray</em>) – An array of samples.</p></li>
+<li><p><strong>excerpts</strong> (<em>list</em><em>(</em><em>list</em><em> or </em><em>np.ndarray</em><em>)</em>) – A list of excerpts, each being an array of samples. Each excerpt should be smaller than or of equal size to the
+array in which to locate it. The amplitude, frequency or values do not have to match exactly the ones from the
+first array.</p></li>
+<li><p><strong>freq_array</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – The sampling frequency of the array, in Hz (default: 1).</p></li>
+<li><p><strong>freq_excerpts</strong> (<em>int</em><em> or </em><em>float</em><em> or </em><em>list</em><em>(</em><em>int</em><em> or </em><em>float</em><em>)</em>) – The sampling frequency of the excerpts, in Hz (default: 1). This parameter accepts a single value that will be
+applied for each excerpt, or a list of values that has to be the same length as the number of excerpts, with
+each value corresponding to the frequency of the corresponding excerpt.</p></li>
+<li><p><strong>compute_envelope</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <cite>True</cite> (default), calculates the envelope of the array values before performing the cross-correlation.</p></li>
+<li><p><strong>window_size_env</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – <p>The size of the windows in which to cut the arrays to calculate the envelope. Cutting long arrays
+in windows allows to speed up the computation. If this parameter is set on <cite>None</cite>, the window size will be set
+on the number of samples. A good value for this parameter is generally 1 million.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+</p></li>
+<li><p><strong>overlap_ratio_env</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – The ratio of samples overlapping between each window. If this parameter is not <cite>None</cite>, each window will
+overlap with the previous (and, logically, the next) for an amount of samples equal to the number of samples in
+a window times the overlap ratio. Then, only the central values of each window will be preserved and
+concatenated; this allows to discard any “edge” effect due to the windowing. If the parameter is set on <cite>None</cite>
+or 0, the windows will not overlap.</p></li>
+<li><p><strong>filter_below</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If set, a high-pass filter will be applied on the envelopes before performing the cross-correlation (default:
+0 Hz).</p></li>
+<li><p><strong>filter_over</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If set, a low-pass filter will be applied on the envelopes before performing the cross-correlation (default:
+50 Hz).</p></li>
+<li><p><strong>resampling_rate</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – The sampling rate at which to downsample the arrays for the cross-correlation. A larger value will result in
+longer computation times (default: 1000). Setting the parameter on <cite>None</cite> will not downsample the arrays,
+which will result in an error if the two arrays are not the same frequency. If this parameter is <cite>None</cite>, the
+next parameters related to resampling can be ignored.</p></li>
+<li><p><strong>window_size_res</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – <p>The size of the windows in which to cut the arrays. Cutting lo,g arrays in windows allows to speed up the
+computation. If this parameter is set on <cite>None</cite>, the window size will be set on the number of samples. A good
+value for this parameter is generally 1e7.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.0.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.1: </span>Decreased default <cite>window_size_res</cite> value from 1e8 to 1e7.</p>
+</div>
+</p></li>
+<li><p><strong>overlap_ratio_res</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – The ratio of samples overlapping between each window. If this parameter is not <cite>None</cite>, each window will
+overlap with the previous (and, logically, the next) for an amount of samples equal to the number of samples in
+a window times the overlap ratio. Then, only the central values of each window will be preserved and
+concatenated; this allows to discard any “edge” effect due to the windowing. If the parameter is set on <cite>None</cite>
+or 0, the windows will not overlap.</p></li>
+<li><p><strong>resampling_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>This parameter allows for various values:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;linear&quot;</span></code> performs a linear
+<a class="reference external" href="https://numpy.org/devdocs/reference/generated/numpy.interp.html">numpy.interp</a> interpolation. This method,
+though simple, may not be very precise for upsampling naturalistic stimuli.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;cubic&quot;</span></code> performs a cubic interpolation via <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.CubicSpline.html">scipy.interpolate.CubicSpline</a>. This method,
+while smoother than the linear interpolation, may lead to unwanted oscillations nearby strong variations in
+the data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;pchip&quot;</span></code> performs a monotonic cubic spline interpolation (Piecewise Cubic Hermite Interpolating
+Polynomial) via <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html">scipy.interpolate.PchipInterpolator</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;akima&quot;</span></code> performs another type of monotonic cubic spline interpolation, using
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html">scipy.interpolate.Akima1DInterpolator</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;take&quot;</span></code> keeps one out of n samples from the original array. While being the fastest computation, it will
+be prone to imprecision if the downsampling factor is not an integer divider of the original frequency.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;interp1d_XXX&quot;</span></code> uses the function <cite>scipy.interpolate.interp1d
+&lt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html&gt;</cite>. The XXX part of the
+parameter can be replaced by <code class="docutils literal notranslate"><span class="pre">&quot;linear&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;nearest&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;nearest-up&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;zero&quot;</span></code>, “slinear”<code class="docutils literal notranslate"><span class="pre">,</span>
+<span class="pre">``&quot;quadratic&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;cubic&quot;</span></code>”, <code class="docutils literal notranslate"><span class="pre">&quot;previous&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;next&quot;</span></code> (see the documentation of this function for
+specifics).</p></li>
+</ul>
+</p></li>
+<li><p><strong>threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – The threshold of the minimum correlation value between the two arrays to accept a delay as a solution. If
+multiple delays are over threshold, the delay with the maximum correlation value will be returned. This value
+should be between 0 and 1; if the maximum found value is below the threshold, the function will return <cite>None</cite>
+instead of a timestamp.</p></li>
+<li><p><strong>return_delay_format</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>This parameter can be either <code class="docutils literal notranslate"><span class="pre">&quot;index&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ms&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;s&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;timedelta&quot;</span></code>:</p>
+<blockquote>
+<div><ul>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">&quot;index&quot;</span></code> (default), the function will return the index in array_1 at which array_2 has the highest
+cross-correlation value.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">&quot;ms&quot;</span></code>, the function will return the timestamp in array_1, in milliseconds, at which array_2 has the
+highest cross-correlation value.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">&quot;s&quot;</span></code>, the function will return the timestamp in array_1, in seconds, at which array_2 has the
+highest cross-correlation value.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">&quot;timedelta&quot;</span></code>, the function will return the timestamp in array_1 at which array_2 has the
+highest cross-correlation value as a
+<a class="reference external" href="https://docs.python.org/3/library/datetime.html#timedelta-objects">datetime.timedelta</a> object.</p></li>
+</ul>
+</div></blockquote>
+</p></li>
+<li><p><strong>return_correlation_values</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <cite>True</cite>, the function returns a second value: the correlation value at the returned delay. This value will
+be None if it is below the specified threshold.</p></li>
+<li><p><strong>plot_figure</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set on <cite>True</cite>, plots a graph showing the result of the cross-correlation using Matplotlib. Note that plotting
+the figure causes an interruption of the code execution.</p></li>
+<li><p><strong>plot_intermediate_steps</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set on <cite>True</cite>, plots the original arrays, the envelopes (if calculated) and the resampled arrays (if
+calculated) besides the cross-correlation.</p></li>
+<li><p><strong>path_figures</strong> (<em>str</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If set, saves the figures in the given directory.</p></li>
+<li><p><strong>x_format_figure</strong> (<em>str</em>) – <p>If set on <cite>“time”</cite>, the values on the x axes of the output will take the HH:MM:SS format (or MM:SS if the time
+series are less than one hour long). If set on <cite>“float”</cite>, the values on the x axes will be displayed as float
+(unit: second). If set on <cite>“auto”</cite> (default), the format of the values on the x axes will be defined depending
+on the value of <cite>return_delay_format</cite>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 2.4.</span></p>
+</div>
+</p></li>
+<li><p><strong>name_figures</strong> (<em>str</em><em>, </em><em>optional</em>) – The name to give to each figure in the directory set by <cite>path_figures</cite>. The figures will be found in
+<cite>path_figures/name_figures_n.png</cite>, where n is the index of the excerpt in <cite>excerpts</cite>, starting at 1.</p></li>
+<li><p><strong>verbosity</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Sets how much feedback the code will provide in the console output:</p>
+<ul>
+<li><p><em>0: Silent mode.</em> The code won’t provide any feedback, apart from error messages.</p></li>
+<li><p><em>1: Normal mode</em> (default). The code will provide essential feedback such as progression markers and
+current steps.</p></li>
+<li><p><em>2: Chatty mode.</em> The code will provide all possible information on the events happening. Note that this
+may clutter the output and slow down the execution.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>int, float, timedelta or None</em> – The sample index, timestamp or timedelta of array1 at which array2 can be found (defined by the parameter
+return_delay_format), or <cite>None</cite> if array1 is not contained in array2.</p></li>
+<li><p><em>float or None, optional</em> – Optionally, if return_correlation_value is <cite>True</cite>, the correlation value at the corresponding index/timestamp.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="find_delay.html" class="btn btn-neutral float-left" title="find_delay" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Romain Pastureau.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

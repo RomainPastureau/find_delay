@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "find_delay"
+version = "2.5"
+authors = [
+  { name="Romain Pastureau", email="r.pastureau@bcbl.eu" },
+]
+description = "Calculate the delay between two arrays"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "scipy >= 1.11.0",
+    "numpy >= 1.25.0",
+    "matplotlib >= 3.7",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/RomainPastureau/find_delay"
+"Bug Tracker" = "https://github.com/RomainPastureau/find_delay/issues"
+"Documentation" = "https://find_delay.readthedocs.io/en/latest/"
+

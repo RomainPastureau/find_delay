@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Pastureau
+    given-names: Romain
+    orcid: https://orcid.org/0000-0002-1468-9801
+title: "find_delay"
+version: 2.5
+date-released: 2024-05-08
