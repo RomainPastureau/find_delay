@@ -21,11 +21,9 @@ Finally, the function performs the cross-correlation between the two arrays.
 The results can be then plotted if the corresponding parameters are activated, and the function returns the delay at which to find the second array in the first by selecting the delay with the maximum correlation value (optionally, the function can also return this correlation value).
 
 ## How to
-The best way to use this function is to install the find_delay module for Python by running 
-`py -m pip install find_delay`.
-The best way to use this function is to download the find_delay.py file and place it in the same folder as your Python script. You can then import the function by writing `from find_delay import find_delay` (or `from find_delay import find_delays` if you want to locate multiple excerpt in one big time series).
-
-You can also run find_delay.py to get four examples (in that case, you will need to download the .wav files present in the repository and place them in the same folder for examples 3 and 4).
+The best way to use this function is to install the find_delay module for Python by running `py -m pip install find_delay`.
+You can then import the function by writing `from find_delay import find_delay` (or `from find_delay import find_delays` if you want to locate multiple excerpt in one big time series).
+You can also run demos/demo.py to get four examples (in that case, you will need to download the .wav files present in the repository and place them in the same folder for examples 3 and 4).
 
 ## Dependencies
 * **Matplotlib** for the plots
