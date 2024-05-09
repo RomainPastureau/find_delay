@@ -3,10 +3,16 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.4 (2024-05-08)
+Current version: 2.7 (2024-05-09)
 
 Version history
 ---------------
+2.7 (2024-05-09) · Simplified `from find_delay.find_delay import find_delay` to `from find_delay import find_delay`
+                 · Corrected scaling (again) on the aligned arrays graph
+                 · Reestablished audio examples with downloadable WAV files when running the demo
+                 · Added an example with random generated numbers
+2.6 (2024-05-08) · Removed demo audio files to lighten the Python package; they are still available on the main branch
+2.5 (2024-05-08) · Turned find_delay into a Python package, install with `py -m pip install find-delay`
 2.4 (2024-05-08) · The functions now look for correlation at the edges of the first array, in the case where the second
                    array contains information that starts before the beginning, or ends after the end of the first
                  · Example 4 has been updated with one new audio file to demonstrate this change
@@ -970,8 +976,11 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         max_ratio = np.nanmax(array_2) / max_excerpt_in_original
     else:
         max_ratio = 0
+
+    ratio = np.nanmax([min_ratio, max_ratio])
+                     
     ax2.plot(resampled_timestamps_array2, array_2, color="#ffa500aa", linewidth=2)
-    ax2.set_ylim((ylim[0] * min_ratio, ylim[1] * max_ratio))
+    ax2.set_ylim((ylim[0] * ratio, ylim[1] * ratio))
     ax2.tick_params(axis='y', labelcolor="#ffa500")
     ax2.set_ylabel(name_array_2, color="#ffa500")
 
@@ -1713,7 +1722,14 @@ if __name__ == "__main__":
     find_delay(array_1, array_2, 1, 1, compute_envelope=False, resampling_rate=None, plot_figure=True,
                path_figure="figure_1.png", plot_intermediate_steps=False)
 
-    # Example 2: sine function, different frequencies
+    # Example 2: random numbers
+    array_1 = np.array([np.random.randint(-100, 101) for i in range(100)])
+    start = np.random.randint(0, 90)
+    array_2 = array_1[start:start+10]
+
+    find_delay(array_1, array_2, compute_envelope=False, plot_figure=True)
+
+    # Example 3: sine function, different frequencies
     timestamps_1 = np.linspace(0, np.pi * 2, 200001)
     array_1 = np.sin(timestamps_1)
     timestamps_2 = np.linspace(np.pi * 0.5, np.pi * 0.75, 6001)
@@ -1724,7 +1740,7 @@ if __name__ == "__main__":
                resampling_mode="cubic", plot_figure=True, path_figure="figure_2.png", plot_intermediate_steps=True,
                verbosity=1)
 
-    # Example 3: audio files
+    # Example 4: audio files
     audio_path = "i_have_a_dream_full_without_end.wav"
     audio_wav = wavfile.read(audio_path)
     audio_frequency = audio_wav[0]
@@ -1741,7 +1757,7 @@ if __name__ == "__main__":
                resampling_mode="cubic", plot_figure=True, path_figure="figure_3.png", plot_intermediate_steps=True,
                verbosity=1)
 
-    # Example 4: multiple audio files
+    # Example 5: multiple audio files
     excerpt2_path = "i_have_a_dream_excerpt2.wav"
     excerpt2_wav = wavfile.read(excerpt2_path)
     excerpt2_frequency = excerpt2_wav[0]
