@@ -42,7 +42,7 @@ find_delay(array_1, array_2, 1, 1, compute_envelope=False, resampling_rate=None,
            path_figure="figure_1.png", plot_intermediate_steps=True)
 ```
 
-![Delay between two numerical time series](https://github.com/RomainPastureau/find_delay/blob/main/figure_1.png?raw=true)
+![Delay between two numerical time series](https://raw.githubusercontent.com/RomainPastureau/find_delay/package/demos/figure_1.png)
 
 ### Delay between a sine function and a portion of it, different frequencies
 ```
@@ -57,7 +57,7 @@ find_delay(array_1, array_2, 100000 / np.pi, 6000 / (np.pi / 4),
            verbosity=1)
 ```
 
-![Delay between a sine function and a portion of it, different frequencies](https://github.com/RomainPastureau/find_delay/blob/main/figure_2.png?raw=true)
+![Delay between a sine function and a portion of it, different frequencies](https://raw.githubusercontent.com/RomainPastureau/find_delay/package/demos/figure_2.png)
 
 ### Delay between an audio file and an excerpt from it
 ```
@@ -78,7 +78,7 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
            verbosity=1)
 ```
 
-![Delay between an audio file and an excerpt from it](https://github.com/RomainPastureau/find_delay/blob/main/figure_3.png?raw=true)
+![Delay between an audio file and an excerpt from it](https://raw.githubusercontent.com/RomainPastureau/find_delay/package/demos/figure_3.png)
 
 ### Version history
 **2.7 (2024-05-09)**

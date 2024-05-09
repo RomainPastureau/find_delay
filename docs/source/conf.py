@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src')))
 project = 'find_delay'
 copyright = '2024, Romain Pastureau'
 author = 'Romain Pastureau'
-release = '2.5'
+release = '2.7'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -25,8 +25,6 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx_tabs.tabs',
     'sphinx_copybutton',
-    #'sphinx.ext.autosectionlabel',
-    #'sphinx-autodoc-typehints',
 ]
 
 templates_path = ['_templates']

@@ -29,6 +29,14 @@ You can install find_delay using:
 
             py -m pip install find-delay
 
+Once it is installed, you can import find_delay into your script via:
+
+.. code-block:: python
+
+   import find_delay
+
+You can then use :doc:`find_delay.find_delay() <find_delay>` or :doc:`find_delay.find_delays() <find_delays>`.
+
 How do I use find_delay?
 ------------------------
 To find when an excerpt starts in an array, use the `find_delay` function and fill only the first five parameters:
@@ -58,7 +66,7 @@ Example 1: two arrays of random numbers
 
    find_delay(array_1, array_2, 1, 1, False, path_figure="figure_1.png")
 
-.. image:: ../../tests/figure_1.png
+.. image:: ../../demos/figure_1.png
 
 Example 2: sine function, different frequencies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -75,7 +83,7 @@ Example 2: sine function, different frequencies
                resampling_mode="cubic", plot_figure=True, path_figure="figure_2.png",
                plot_intermediate_steps=True, verbosity=1)
 
-.. image:: ../../tests/figure_2.png
+.. image:: ../../demos/figure_2.png
 
 Example 3: audio files, different frequencies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -98,7 +106,7 @@ Example 3: audio files, different frequencies
                resampling_mode="cubic", plot_figure=True, path_figure="figure_3.png",
                plot_intermediate_steps=True, verbosity=1)
 
-.. image:: ../../tests/figure_3.png
+.. image:: ../../demos/figure_3.png
 
 Indices and tables
 ------------------
