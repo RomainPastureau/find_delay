@@ -1,3 +1,5 @@
-find_delay_2.py
-find_delay_3.py
-.idea
+demos/find_delay_2.py
+demos/find_delay_3.py
+.idea/
+.venv/
+demos/*.wav
