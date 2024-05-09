@@ -1,12 +1,16 @@
 """Contains a series of functions directed at calculating the delay between two arrays.
 * find_delay finds the delay between two time series using cross-correlation.
-* find_delays.rst does the same, but for multiple excerpts from one big time series.
+* find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.6 (2024-05-08)
+Current version: 2.7 (2024-05-09)
 
 Version history
 ---------------
+2.7 (2024-05-09) · Simplified `from find_delay.find_delay import find_delay` to `from find_delay import find_delay`
+                 · Corrected scaling (again) on the aligned arrays graph
+                 · Reestablished audio examples with downloadable WAV files when running the demo
+                 · Added an example with random generated numbers
 2.6 (2024-05-08) · Removed demo audio files to lighten the Python package; they are still available on the main branch
 2.5 (2024-05-08) · Turned find_delay into a Python package, install with `py -m pip install find-delay`
 2.4 (2024-05-08) · The functions now look for correlation at the edges of the first array, in the case where the second
@@ -18,12 +22,12 @@ Version history
 2.3 (2024-05-02) · Corrected a bug that prevented the figures to be saved as a file
                  · Plotting without intermediate steps now plots the graphs on top of each other, not side-by-side
 2.2 (2024-05-02) · Arrays with different amplitudes now appear scaled on the graph overlay
-                 · Excerpts numbers now start at 1 instead of 0 on the graphs in find_delays.rst
+                 · Excerpts numbers now start at 1 instead of 0 on the graphs in find_delays
                  · "i_have_a_dream_excerpt2.wav" is now of lower amplitude to test the scaling on the graph overlay
 2.1 (2024-04-25) · Modified the overall functions so that they take a window size instead of a number of windows
 2.0 (2024-04-24) · Changed the parameter asking for a number of windows by a parameter asking for a window size instead
                  · Clarified the docstrings in the documentation of the functions
-                 · Modified `find_delays.rst` so that saving the figures would iterate the filenames instead of overwriting
+                 · Modified `find_delays` so that saving the figures would iterate the filenames instead of overwriting
                  · Modified `_get_envelope` and `_resample` so that a number of windows inferior to 1 would be set at 1
                  · Added documentation for `_create_figure` and simplified unused parameters
                  · Corrected broken figure saving
@@ -31,7 +35,7 @@ Version history
 1.3 (2024-04-18) · Removed unused function `_get_number_of_windows`
 1.2 (2024-04-17) · Added transparency of the second (orange) array on the graph overlay
                  · Clarified README.md and added figures
-1.1 (2024-04-16) · Added `find_delays.rst`
+1.1 (2024-04-16) · Added `find_delays`
                  · Created _create_figure containing all the plotting-related code
                  · Modified the graph plot when the max correlation is below threshold
                  · Minor corrections in docstrings
@@ -41,7 +45,6 @@ Version history
 from matplotlib import pyplot as plt
 from matplotlib import dates as mdates
 from scipy.interpolate import CubicSpline, PchipInterpolator, Akima1DInterpolator, interp1d
-from scipy.io import wavfile
 from scipy.signal import butter, correlate, hilbert, lfilter
 import numpy as np
 import datetime as dt
@@ -652,7 +655,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
 
     .. versionchanged:: 2.0
         Modified subplot titles to reflect changes of separated number of windows between both arrays.
-        Corrected the figure saving to a file and prevented overwriting the same figure using find_delays.rst.
+        Corrected the figure saving to a file and prevented overwriting the same figure using find_delays.
 
     .. versionchanged:: 2.2
         Arrays with different amplitudes now appear scaled on the aligned arrays graph.
@@ -676,9 +679,9 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     freq_array_2: int or float
         The sampling rate of `array_2`.
     name_array_1: str
-        The name of the first array; will be "Array 1" for `find_delay` and "Array" for `find_delays.rst`.
+        The name of the first array; will be "Array 1" for `find_delay` and "Array" for `find_delays`.
     name_array_2: str
-        The name of the second array; will be "Array 2" for `find_delay` and "Excerpt n" for `find_delays.rst`, with n
+        The name of the second array; will be "Array 2" for `find_delay` and "Excerpt n" for `find_delays`, with n
         being the index of the excerpt in the folder.
     envelope_1: np.array
         The envelope of `array_1` (if calculated).
@@ -972,8 +975,11 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         max_ratio = np.nanmax(array_2) / max_excerpt_in_original
     else:
         max_ratio = 0
+
+    ratio = np.nanmax([min_ratio, max_ratio])
+
     ax2.plot(resampled_timestamps_array2, array_2, color="#ffa500aa", linewidth=2)
-    ax2.set_ylim((ylim[0] * min_ratio, ylim[1] * max_ratio))
+    ax2.set_ylim((ylim[0] * ratio, ylim[1] * ratio))
     ax2.tick_params(axis='y', labelcolor="#ffa500")
     ax2.set_ylabel(name_array_2, color="#ffa500")
 

@@ -2,3 +2,4 @@ demos/find_delay_2.py
 demos/find_delay_3.py
 .idea/
 .venv/
+demos/*.wav
