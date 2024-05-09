@@ -1,10 +1,14 @@
 # find_delay 2.7
+[![Documentation Status](https://readthedocs.org/projects/find-delay/badge/?version=latest)](https://find-delay.readthedocs.io/en/latest/?badge=latest)
+
 [PyPI page](https://pypi.org/project/find-delay/)
 
 Author: Romain Pastureau
 
 ## What is find_delay?
-**find_delay** is a **Python package** that tries to find the delay where a time series appear in another via cross-correlation. It can theoretically work with any time series (see the examples in the ``__main__`` of the file), but was created to try to align audio files.
+**find_delay** is a **Python package** that tries to find the delay where a time series appears in another via 
+cross-correlation. It can theoretically work with any time series (see the examples in the ``__main__`` of the file), 
+but was created to try to align audio files.
 **[Read the documentation here!](https://find-delay.readthedocs.io/en/latest/)**
 
 ## Quick use for audio files
@@ -12,25 +16,36 @@ To find when an excerpt starts in an audio file, use the `find_delay` function a
 leave the other parameters default (just set `plot_figure = True` if you want to visualize the output of the function).
 
 ## Specifics
-The function accepts to arrays containing time series - the time series can be of different frequency or amplitude - the only condition for the function to work is that the second array must be entirely contained into the first (note: if it is not the case, try to run the function with the beginning of the second array only).
+The function accepts two arrays containing time series - the time series can be of different frequency or amplitude - 
+the only condition for the function to work is that the second array must be entirely contained into the first (note: 
+if this is not the case, try to run the function with the beginning of the second array only).
 
-The function can then calculate the envelope of the time series (recommended for audio files) and apply a band-pass filter to the result.
+The function can then calculate the envelope of the time series (recommended for audio files) and apply a band-pass 
+filter to the result.
 
 The function can also resample the arrays (necessary when the two time series do not have the same frequency).
 
 Finally, the function performs the cross-correlation between the two arrays.
 
-The results can be then plotted if the corresponding parameters are activated, and the function returns the delay at which to find the second array in the first by selecting the delay with the maximum correlation value (optionally, the function can also return this correlation value).
+The results can be then plotted if the corresponding parameters are activated, and the function returns the delay at 
+which to find the second array in the first by selecting the delay with the maximum correlation value (optionally, the 
+function can also return this correlation value).
 
 ## How to
-The best way to use this function is to install the find_delay module for Python by running `py -m pip install find-delay`.
-You can then import the function by writing `from find_delay import find_delay` (or `from find_delay import find_delays` if you want to locate multiple excerpt in one big time series).
-You can also run demos/demo.py to get four examples (in that case, you will need to download the .wav files present in the repository and place them in the same folder for examples 3 and 4).
+The best way to use this function is to install the find_delay module for Python by running 
+`py -m pip install find-delay`.
+
+You can then import the function by writing `from find_delay import find_delay` (or `from find_delay import find_delays`
+if you want to locate multiple excerpts in one big time series).
+
+You can also run demos/demo.py to get four examples (in that case, you will need to download the .wav files present in 
+the repository and place them in the same folder for examples 3 and 4).
 
 ## Dependencies
 * **Matplotlib** for the plots
 * **Numpy** for handling the numerical arrays
-* **Scipy** for loading the wav files, performing the resampling, calculating the envelope and applying a band-pass filter.
+* **Scipy** for loading the WAV files, performing the resampling, calculating the envelope, and applying a band-pass 
+  filter.
 
 ## Examples
 ### Delay between two numerical time series
@@ -85,7 +100,7 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 * Simplified `from find_delay.find_delay import find_delay` to `from find_delay import find_delay`
 * Corrected scaling (again) on the aligned arrays graph
 * Reestablished audio examples with downloadable WAV files when running the demo
-* Added an example with random generated numbers
+* Added an example with randomly generated numbers
 
 **2.6 (2024-05-08)**
 * Removed demo audio files to lighten the Python package; they are still available on the main branch
@@ -97,7 +112,7 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 * The functions now look for correlation at the edges of the first array, in the case where the second array contains
   information that starts before the beginning, or ends after the end of the first
 * Example 4 has been updated with one new audio file to demonstrate this change
-* Adding a parameter x_format_figure that allows to display HH:MM:SS time on the x axis
+* Adding a parameter x_format_figure that allows to display HH:MM:SS time on the x-axis
 * Corrected a bug in the percentage progressions that prevented to display all the steps
 * Added "Quick use for audio files" segment in the README file
 
@@ -108,7 +123,7 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 **2.2 (2024-05-02)**
 * "i_have_a_dream_excerpt2.wav" is now of lower amplitude to test the scaling on the graph overlay
 * Arrays with different amplitudes now appear scaled on the graph overlay
-* Excerpts numbers now start at 1 instead of 0 on the graphs in find_delays
+* Excerpt numbers now start at 1 instead of 0 on the graphs in find_delays
 
 **2.1 (2024-04-25)**
 * Modified the overall functions so that they take a window size instead of a number of windows

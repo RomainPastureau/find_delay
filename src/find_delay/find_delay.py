@@ -10,19 +10,19 @@ Version history
 2.7 (2024-05-09) · Simplified `from find_delay.find_delay import find_delay` to `from find_delay import find_delay`
                  · Corrected scaling (again) on the aligned arrays graph
                  · Reestablished audio examples with downloadable WAV files when running the demo
-                 · Added an example with random generated numbers
+                 · Added an example with randomly generated numbers
 2.6 (2024-05-08) · Removed demo audio files to lighten the Python package; they are still available on the main branch
 2.5 (2024-05-08) · Turned find_delay into a Python package, install with `py -m pip install find-delay`
 2.4 (2024-05-08) · The functions now look for correlation at the edges of the first array, in the case where the second
                    array contains information that starts before the beginning, or ends after the end of the first
                  · Example 4 has been updated with one new audio file to demonstrate this change
-                 · Adding a parameter x_format_figure that allows to display HH:MM:SS time on the x axis
+                 · Adding a parameter x_format_figure that allows to display HH:MM:SS time on the x-axis
                  · Corrected a bug in the percentage progressions that prevented to display all the steps
                  · Added "Quick use for audio files" segment in the README file
 2.3 (2024-05-02) · Corrected a bug that prevented the figures to be saved as a file
                  · Plotting without intermediate steps now plots the graphs on top of each other, not side-by-side
 2.2 (2024-05-02) · Arrays with different amplitudes now appear scaled on the graph overlay
-                 · Excerpts numbers now start at 1 instead of 0 on the graphs in find_delays
+                 · Excerpt numbers now start at 1 instead of 0 on the graphs in find_delays
                  · "i_have_a_dream_excerpt2.wav" is now of lower amplitude to test the scaling on the graph overlay
 2.1 (2024-04-25) · Modified the overall functions so that they take a window size instead of a number of windows
 2.0 (2024-04-24) · Changed the parameter asking for a number of windows by a parameter asking for a window size instead

@@ -108,6 +108,23 @@ Example 3: audio files, different frequencies
 
 .. image:: ../../demos/figure_3.png
 
+How does it work?
+-----------------
+The function accepts two arrays containing time series - the time series can be of different frequency or amplitude -
+the only condition for the function to work is that the second array must be entirely contained into the first (note:
+if this is not the case, try to run the function with the beginning of the second array only).
+
+The function can then calculate the envelope of the time series (recommended for audio files) and apply a band-pass
+filter to the result.
+
+The function can also resample the arrays (necessary when the two time series do not have the same frequency).
+
+Finally, the function performs the cross-correlation between the two arrays.
+
+The results can be then plotted if the corresponding parameters are activated, and the function returns the delay at
+which to find the second array in the first by selecting the delay with the maximum correlation value (optionally, the
+function can also return this correlation value).
+
 Indices and tables
 ------------------
 .. toctree::
