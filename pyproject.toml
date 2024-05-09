@@ -25,6 +25,6 @@ dependencies = [
 [project.urls]
 "Homepage" = "https://github.com/RomainPastureau/find_delay"
 "Bug Tracker" = "https://github.com/RomainPastureau/find_delay/issues"
-"Documentation" = "https://find_delay.readthedocs.io/en/latest/"
+"Documentation" = "https://find-delay.readthedocs.io/en/latest/"
 "PyPI" = "https://pypi.org/project/find-delay/"
 
