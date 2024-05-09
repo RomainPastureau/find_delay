@@ -7,7 +7,7 @@ Author: Romain Pastureau
 
 Now, find_delay is also a Python package! See the [package branch](https://github.com/RomainPastureau/find_delay/tree/package) branch.
 
-[Read the documentation here](https://find_delay.readthedocs.io/en/package/)
+[Read the documentation here](https://find-delay.readthedocs.io/en/package/)
 
 [Find the PyPI page here](https://pypi.org/project/find-delay/)
 
