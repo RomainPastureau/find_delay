@@ -36,7 +36,7 @@ if __name__ == "__main__":
     for wav_file in wav_files:
         if not os.path.exists(wav_file):
             print("Fetching demo wav file " + wav_file + " from GitHub...")
-            urllib.request.urlretrieve("https://github.com/RomainPastureau/find_delay/blob/main/" + wav_file
+            urllib.request.urlretrieve("https://github.com/RomainPastureau/find_delay/blob/original/" + wav_file
                                        + "?raw=true", wav_file)
         else:
             print("Demo WAV file " + wav_file + " already downloaded.")
