@@ -7,18 +7,27 @@ Author: Romain Pastureau
 
 ## What is find_delay?
 **find_delay** is a **Python package** that tries to find the delay where a time series appears in another via 
-cross-correlation. It can theoretically work with any time series (see the examples in the ``__main__`` of the file), 
-but was created to try to align audio files.
+cross-correlation. It can theoretically work with any time series (see the examples in the 
+[demos folder](https://github.com/RomainPastureau/find_delay/tree/main/demos), but was created to try to align audio 
+files.
 **[Read the documentation here!](https://find-delay.readthedocs.io/en/latest/)**
+
+## How to
+The best way to use this function is to install the find_delay module for Python by running 
+`py -m pip install find-delay`.
+
+You can then import the function by writing `from find_delay import find_delay` (or `from find_delay import find_delays`
+if you want to locate multiple excerpts in one big time series).
+
+You can also run demos/demo.py to get four examples (in that case, you will need to download the .wav files present in 
+the repository and place them in the same folder for examples 3 and 4).
 
 ## Quick use for audio files
 To find when an excerpt starts in an audio file, use the `find_delay` function and fill only the first four parameters;
 leave the other parameters default (just set `plot_figure = True` if you want to visualize the output of the function).
 
 ## Specifics
-The function accepts two arrays containing time series - the time series can be of different frequency or amplitude - 
-the only condition for the function to work is that the second array must be entirely contained into the first (note: 
-if this is not the case, try to run the function with the beginning of the second array only).
+The function accepts two arrays containing time series - the time series can be of different frequency or amplitude.
 
 The function can then calculate the envelope of the time series (recommended for audio files) and apply a band-pass 
 filter to the result.
@@ -30,16 +39,6 @@ Finally, the function performs the cross-correlation between the two arrays.
 The results can be then plotted if the corresponding parameters are activated, and the function returns the delay at 
 which to find the second array in the first by selecting the delay with the maximum correlation value (optionally, the 
 function can also return this correlation value).
-
-## How to
-The best way to use this function is to install the find_delay module for Python by running 
-`py -m pip install find-delay`.
-
-You can then import the function by writing `from find_delay import find_delay` (or `from find_delay import find_delays`
-if you want to locate multiple excerpts in one big time series).
-
-You can also run demos/demo.py to get four examples (in that case, you will need to download the .wav files present in 
-the repository and place them in the same folder for examples 3 and 4).
 
 ## Dependencies
 * **Matplotlib** for the plots
@@ -53,8 +52,7 @@ the repository and place them in the same folder for examples 3 and 4).
 array_1 = [24, 70, 28, 59, 13, 97, 63, 30, 89, 4, 8, 15, 16, 23, 42, 37, 70, 18, 59, 48, 41, 83, 99, 6, 24, 86]
 array_2 = [4, 8, 15, 16, 23, 42]
 
-find_delay(array_1, array_2, 1, 1, compute_envelope=False, resampling_rate=None, plot_figure=True,
-           path_figure="figure_1.png", plot_intermediate_steps=True)
+find_delay(array_1, array_2, compute_envelope=False, plot_figure=True, path_figure="figure_1.png")
 ```
 
 ![Delay between two numerical time series](https://raw.githubusercontent.com/RomainPastureau/find_delay/package/demos/figure_1.png)
@@ -153,6 +151,6 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 **1.0 (2024-04-12)**
 * Initial release
 
-If you detect any bug, please contact me following [this link](mailto:r.pastureau@bcbl.eu).
+If you detect any bug, please [open an issue](https://github.com/RomainPastureau/find_delay/issues/new).
 
-Thanks :)
+Thanks! 🦆
