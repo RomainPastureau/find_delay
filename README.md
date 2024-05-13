@@ -8,8 +8,8 @@ Author: Romain Pastureau
 ## What is find_delay?
 **find_delay** is a **Python package** that tries to find the delay where a time series appears in another via 
 cross-correlation. It can theoretically work with any time series (see the examples in the 
-[demos folder](https://github.com/RomainPastureau/find_delay/tree/main/demos), but was created to try to align audio 
-files.
+[demos folder](https://github.com/RomainPastureau/find_delay/tree/main/demos), but was created to try to align 
+audio files.
 **[Read the documentation here!](https://find-delay.readthedocs.io/en/latest/)**
 
 ## How to
@@ -154,3 +154,4 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 If you detect any bug, please [open an issue](https://github.com/RomainPastureau/find_delay/issues/new).
 
 Thanks! 🦆
+
