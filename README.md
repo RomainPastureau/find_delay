@@ -1,4 +1,4 @@
-# find_delay 2.7
+# find_delay 2.8
 [![Documentation Status](https://readthedocs.org/projects/find-delay/badge/?version=latest)](https://find-delay.readthedocs.io/en/latest/?badge=latest)
 
 [PyPI page](https://pypi.org/project/find-delay/)
@@ -94,6 +94,11 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 ![Delay between an audio file and an excerpt from it](https://raw.githubusercontent.com/RomainPastureau/find_delay/package/demos/figure_3.png)
 
 ### Version history
+**2.8 (2024-06-19)**
+* Added tests with random numbers
+* Corrected the link to the documentation on the PyPI page
+* Replaced the strings by f-strings
+
 **2.7 (2024-05-09)**
 * Simplified `from find_delay.find_delay import find_delay` to `from find_delay import find_delay`
 * Corrected scaling (again) on the aligned arrays graph

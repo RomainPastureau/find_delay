@@ -1,3 +1,5 @@
+"""Demo file from the find_delay module. Run to execute four examples of the find_delay and find_delays functions."""
+
 from find_delay import find_delay, find_delays
 import numpy as np
 from scipy.io import wavfile

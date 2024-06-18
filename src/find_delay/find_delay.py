@@ -3,10 +3,13 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.7 (2024-05-09)
+Current version: 2.8 (2024-06-18)
 
 Version history
 ---------------
+2.8 (2024-06-19) · Added tests with random numbers
+                 · Corrected the link to the documentation on the PyPI page
+                 · Replaced the strings by f-strings
 2.7 (2024-05-09) · Simplified `from find_delay.find_delay import find_delay` to `from find_delay import find_delay`
                  · Corrected scaling (again) on the aligned arrays graph
                  · Reestablished audio examples with downloadable WAV files when running the demo
@@ -94,22 +97,21 @@ def _filter_frequencies(array, frequency, filter_below=None, filter_over=None, v
     # Band-pass filter
     if filter_below not in [None, 0] and filter_over not in [None, 0]:
         if verbosity > 0:
-            print("\tApplying a band-pass filter for frequencies between " + str(filter_below) + " and " +
-                  str(filter_over) + " Hz.")
+            print(f"\tApplying a band-pass filter for frequencies between {filter_below} and {filter_over} Hz.")
         b, a = butter(2, [filter_below, filter_over], "band", fs=frequency)
         filtered_array = lfilter(b, a, array)
 
     # High-pass filter
     elif filter_below not in [None, 0]:
         if verbosity > 0:
-            print("\tApplying a high-pass filter for frequencies over " + str(filter_below) + " Hz.")
+            print(f"\tApplying a high-pass filter for frequencies over {filter_below} Hz.")
         b, a = butter(2, filter_below, "high", fs=frequency)
         filtered_array = lfilter(b, a, array)
 
     # Low-pass filter
     elif filter_over not in [None, 0]:
         if verbosity > 0:
-            print("\tApplying a low-pass filter for frequencies below " + str(filter_over) + " Hz.")
+            print(f"\tApplying a low-pass filter for frequencies below {filter_over} Hz.")
         b, a = butter(2, filter_over, "low", fs=frequency)
         filtered_array = lfilter(b, a, array)
 
@@ -160,8 +162,8 @@ def _get_number_of_windows(array_length_or_array, window_size, overlap_ratio=0, 
     overlap = int(np.ceil(overlap_ratio * window_size))
 
     if overlap_ratio >= 1:
-        raise Exception("The size of the overlap (" + str(overlap) + ") cannot be bigger than or equal to the size " +
-                        "of the window (" + str(window_size) + ").")
+        raise Exception(f"The size of the overlap ({overlap}) cannot be bigger than or equal to the size of the " +
+                        f"window ({window_size}).")
     if window_size > array_length:
         window_size = array_length
 
@@ -255,8 +257,8 @@ def _get_envelope(array, frequency, window_size=1e6, overlap_ratio=0.5, filter_b
         print("\tGetting the Hilbert transform...", end=" ")
     elif verbosity > 1:
         print("\tGetting the Hilbert transform...")
-        print("\t\tDividing the samples in " + str(number_of_windows) + " window(s) of " + str(window_size) +
-              " samples, with an overlap of " + str(overlap) + " samples.")
+        print(f"\t\tDividing the samples in {number_of_windows} window(s) of {window_size} samples, with an overlap " +
+              f"of {overlap} samples.")
 
     envelope = np.zeros(len(array))
     j = 0
@@ -266,15 +268,15 @@ def _get_envelope(array, frequency, window_size=1e6, overlap_ratio=0.5, filter_b
 
         if verbosity == 1:
             while i / number_of_windows > next_percentage / 100:
-                print(str(next_percentage) + "%", end=" ")
+                print(f"{next_percentage}%", end=" ")
                 next_percentage += 10
 
         # Get the Hilbert transform of the window
         array_start = i * (window_size - overlap)
         array_end = np.min([(i + 1) * window_size - i * overlap, len(array)])
         if verbosity > 1:
-            print("\t\t\tGetting samples from window " + str(i + 1) + "/" + str(number_of_windows) + ": samples " +
-                  str(array_start) + " to " + str(array_end) + "... ", end=" ")
+            print(f"\t\t\tGetting samples from window {i + 1}/{number_of_windows}: samples {array_start} " +
+                  f"to {array_end}... ", end=" ")
         hilbert_window = np.abs(hilbert(array[array_start:array_end]))
 
         # Keep only the center values
@@ -289,9 +291,8 @@ def _get_envelope(array, frequency, window_size=1e6, overlap_ratio=0.5, filter_b
             slice_end = window_size - int(np.ceil(overlap / 2))
 
         if verbosity > 1:
-            print("\n\t\t\tKeeping the samples from " + str(slice_start) + " to " + str(slice_end) + " in the " +
-                  "window: samples " + str(array_start + slice_start) + " to " + str(array_start + slice_end) + "...",
-                  end=" ")
+            print(f"\n\t\t\tKeeping the samples from {slice_start} to {slice_end} in the window: samples " +
+                  f"{array_start + slice_start} to {array_start + slice_end}...", end=" ")
 
         preserved_samples = hilbert_window[slice_start:slice_end]
         envelope[j:j + len(preserved_samples)] = preserved_samples
@@ -302,7 +303,7 @@ def _get_envelope(array, frequency, window_size=1e6, overlap_ratio=0.5, filter_b
 
     if verbosity == 1:
         while 1 > next_percentage / 100:
-            print(str(next_percentage) + "%", end=" ")
+            print(f"{next_percentage}%", end=" ")
             next_percentage += 10
         print("100% - Done.")
     elif verbosity > 1:
@@ -313,7 +314,7 @@ def _get_envelope(array, frequency, window_size=1e6, overlap_ratio=0.5, filter_b
         envelope = _filter_frequencies(envelope, frequency, filter_below, filter_over, verbosity)
 
     if verbosity > 0:
-        print("\tEnvelope calculated in: " + str(dt.datetime.now() - time_before))
+        print(f"\tEnvelope calculated in: {dt.datetime.now() - time_before}")
 
     return envelope
 
@@ -394,12 +395,12 @@ def _resample_window(array, original_timestamps, resampled_timestamps, index_sta
     resampled_timestamps_window = resampled_timestamps[index_start_resampled:index_end_resampled + 1]
 
     if verbosity > 1:
-        print("\t\t\t\tIn the original array, the window contains samples " + str(index_start_original) + " to " +
-              str(index_end_original) + " (from timestamps " + str(original_timestamps_window[0]) + " to " +
-              str(original_timestamps_window[-1]) + ").")
-        print("\t\t\t\tIn the new array, the window contains samples " + str(index_start_resampled) + " to " +
-              str(index_end_resampled) + " (from timestamps " + str(resampled_timestamps_window[0]) + " to " +
-              str(resampled_timestamps_window[-1]) + ").")
+        print(f"\t\t\t\tIn the original array, the window contains samples {index_start_original} to " +
+              f"{index_end_original} (from timestamps {original_timestamps_window[0]} to " +
+              f"{original_timestamps_window[-1]}).")
+        print(f"\t\t\t\tIn the new array, the window contains samples {index_start_resampled} to "
+              f"{index_end_resampled} (from timestamps {resampled_timestamps_window[0]} to "
+              f"{resampled_timestamps_window[-1]}).")
         print("\t\t\t\tInterpolating the data...", end=" ")
 
     if np.size(array_window) == 1:
@@ -420,7 +421,7 @@ def _resample_window(array, original_timestamps, resampled_timestamps, index_sta
         interp = interp1d(original_timestamps, array, kind=method.split("_")[1])
         return interp(resampled_timestamps_window)
     else:
-        raise Exception("Invalid resampling method: " + str(method) + ".")
+        raise Exception(f"Invalid resampling method: {method}.")
 
 
 def _resample(array, original_frequency, resampling_frequency, window_size=1e7, overlap_ratio=0.5,
@@ -519,13 +520,13 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
 
     if resampling_frequency == original_frequency:
         if verbosity > 0:
-            print("\tNot performing the resampling as the resampling frequency is the same as the original frequency" +
-                  " (" + str(resampling_frequency) + " Hz).")
+            print(f"\tNot performing the resampling as the resampling frequency is the same as the original frequency" +
+                  f" ({resampling_frequency} Hz).")
         return array
 
     if verbosity > 0:
-        print("\tResampling the array at " + str(resampling_frequency) + " Hz (mode: " + str(method) + ")...")
-        print("\t\tOriginal frequency: " + str(round(original_frequency, 2)) + " Hz.")
+        print(f"\tResampling the array at {resampling_frequency} Hz (mode: {method})...")
+        print(f"\t\tOriginal frequency: {round(original_frequency, 2)} Hz.")
         if verbosity > 1:
             print("\t\tPerforming the resampling...")
         else:
@@ -533,20 +534,19 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
 
     if method == "take":
         if resampling_frequency > original_frequency:
-            raise Exception("""The mode "take" does not allow for upsampling of the data. Please input a resampling
-            frequency inferior to the original (""" + str(original_frequency) + ").")
+            raise Exception(f"The mode \"take\" does not allow for upsampling of the data. Please input a resampling " +
+                            f"frequency inferior to the original ({original_frequency}).")
         factor_resampling = original_frequency / resampling_frequency
         print(factor_resampling)
         if factor_resampling != int(factor_resampling):
-            print("Warning: The downsampling factor is not an integer (" + str(factor_resampling) + "), meaning that " +
-                  "the downsampling may not be accurate. To ensure an accurate resampling with the \"take\" mode, use" +
-                  " a resampling frequency that is an integer divider of the original frequency (" +
-                  str(original_frequency) + " Hz).")
+            print(f"Warning: The downsampling factor is not an integer ({factor_resampling}), meaning that the " +
+                  f"downsampling may not be accurate. To ensure an accurate resampling with the \"take\" mode, use" +
+                  f" a resampling frequency that is an integer divider of the original frequency " +
+                  f"({original_frequency} Hz).")
         indices = np.arange(0, len(array), factor_resampling, dtype=int)
         resampled_array = np.take(array, indices)
 
     else:
-
         # Define the timestamps
         original_timestamps = np.arange(0, np.size(array)) / original_frequency
         resampled_timestamps = np.arange(0, np.max(original_timestamps) + (1 / resampling_frequency),
@@ -568,9 +568,8 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
         number_of_windows = _get_number_of_windows(len(array), window_size, overlap_ratio, True)
 
         if verbosity > 1 and number_of_windows != 1:
-            print("\t\t\tCreating " + str(number_of_windows) + " window(s), each containing " + str(window_size) +
-                  " samples, with a " + str(round(overlap_ratio * 100, 2)) + " % overlap (" + str(overlap) +
-                  " samples).")
+            print(f"\t\t\tCreating {number_of_windows} window(s), each containing {window_size} samples, with a " +
+                  f"{round(overlap_ratio * 100, 2)}% overlap ({overlap} samples).")
 
         resampled_array = np.zeros(np.size(resampled_timestamps))
         j = 0
@@ -585,18 +584,18 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
 
             if verbosity == 1:
                 while i / number_of_windows > next_percentage / 100:
-                    print(str(next_percentage) + "%", end=" ")
+                    print(f"{next_percentage}%", end=" ")
                     next_percentage += 10
 
             if verbosity > 1:
-                print("\t\t\tGetting samples from window " + str(i + 1) + "/" + str(number_of_windows) + ".")
+                print(f"\t\t\tGetting samples from window {i + 1}/{number_of_windows}.")
 
             resampled_window = _resample_window(array, original_timestamps, resampled_timestamps, window_start_original,
                                                 window_end_original, window_start_resampled, window_end_resampled,
                                                 method, verbosity)
 
             if verbosity > 1:
-                print("Done.\n\t\t\t\tThe resampled window contains " + str(np.size(resampled_window)) + " sample(s).")
+                print(f"Done.\n\t\t\t\tThe resampled window contains {np.size(resampled_window)} sample(s).")
 
             # Keep only the center values
             if i == 0:
@@ -609,11 +608,11 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
             preserved_samples = resampled_window[window_slice_start:]
 
             if verbosity > 1:
-                print("\t\t\tKeeping the samples from " + str(resampled_slice_start) + " to " +
-                      str(resampled_slice_start + len(preserved_samples) - 1) + " (in the window, samples " +
-                      str(window_slice_start) + " to " + str(len(resampled_window) - 1) + ")", end="")
+                print(f"\t\t\tKeeping the samples from {resampled_slice_start} to " +
+                      f"{resampled_slice_start + len(preserved_samples) - 1} (in the window, samples " +
+                      f"{window_slice_start} to {len(resampled_window) - 1})", end="")
                 if resampled_slice_start != j:
-                    print(" · Rewriting samples " + str(resampled_slice_start) + " to " + str(j - 1) + "...", end=" ")
+                    print(f" · Rewriting samples {resampled_slice_start} to {j - 1}...", end=" ")
                 else:
                     print("...", end=" ")
 
@@ -625,16 +624,16 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
 
         if verbosity == 1:
             while 1 > next_percentage / 100:
-                print(str(next_percentage) + "%", end=" ")
+                print(f"{next_percentage}%", end=" ")
                 next_percentage += 10
             print("100% - Done.")
         elif verbosity > 1:
             print("\t\tResampling done.")
 
     if verbosity > 0:
-        print("\t\tThe original array had " + str(len(array)) + " samples.")
-        print("\t\tThe new array has " + str(len(resampled_array)) + " samples.")
-        print("\tResampling performed in: " + str(dt.datetime.now() - time_before))
+        print(f"\t\tThe original array had {len(array)} samples.")
+        print(f"\t\tThe new array has {len(resampled_array)} samples.")
+        print(f"\tResampling performed in: {dt.datetime.now() - time_before}")
 
     return resampled_array
 
@@ -986,11 +985,11 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     if path_figure is not None:
         if name_figure is not None:
             if verbosity > 0:
-                print("\nSaving the graph under " + str(path_figure) + "/" + str(name_figure) + "...", end=" ")
+                print(f"\nSaving the graph under {path_figure}/{name_figure}...", end=" ")
             plt.savefig(str(path_figure) + "/" + str(name_figure))
         else:
             if verbosity > 0:
-                print("\nSaving the graph under " + str(path_figure) + "...", end=" ")
+                print(f"\nSaving the graph under {path_figure}...", end=" ")
             plt.savefig(str(path_figure))
         if verbosity > 0:
             print("Done.")
@@ -1201,10 +1200,8 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     # Introduction
     if verbosity > 0:
         print("Trying to find when the second array starts in the first.")
-        print("\t The first array contains " + str(len(array_1)) + " samples, at a rate of " + str(freq_array_1) +
-              " Hz.")
-        print("\t The second array contains " + str(len(array_2)) + " samples, at a rate of " + str(freq_array_2) +
-              " Hz.\n")
+        print(f"\t The first array contains {len(array_1)} samples, at a rate of {freq_array_1} Hz.")
+        print(f"\t The second array contains {len(array_2)} samples, at a rate of {freq_array_2} Hz.\n")
 
     # Turn lists into ndarray
     if isinstance(array_1, list):
@@ -1252,9 +1249,9 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     else:
         rate = freq_array_1
         if freq_array_1 != freq_array_2:
-            raise Exception("The rate of the two arrays you are trying to correlate are different (" +
-                            str(freq_array_1) + " Hz and " + str(freq_array_2) + " Hz). You must indicate a " +
-                            "resampling rate to perform the cross-correlation.")
+            raise Exception(f"The rate of the two arrays you are trying to correlate are different ({freq_array_1} Hz" +
+                            f" and {freq_array_2} Hz). You must indicate a resampling rate to perform the " +
+                            f"cross-correlation.")
         y1 = envelope_1
         y2 = envelope_2
 
@@ -1277,17 +1274,17 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
     if verbosity > 0:
         print("Done.")
-        print("\tCross-correlation calculated in: " + str(dt.datetime.now() - time_before_cross_correlation))
+        print(f"\tCross-correlation calculated in: {dt.datetime.now() - time_before_cross_correlation}")
 
         if max_correlation_value >= threshold:
-            print("\tMaximum correlation (" + str(np.round(max_correlation_value, 3)) + ") found at sample " +
-                  str(index) + " (timestamp " + str(t) + ").")
+            print(f"\tMaximum correlation ({np.round(max_correlation_value, 3)}) found at sample {index} " +
+                  f"(timestamp {t}).")
 
         else:
-            print("\tNo correlation over threshold found (max correlation: " + str(np.round(max_correlation_value, 3)) +
-                  ") found at sample " + str(index) + " (timestamp " + str(t) + ").")
+            print(f"\tNo correlation over threshold found (max correlation: {np.round(max_correlation_value, 3)} " +
+                  f") found at sample {index} (timestamp {t}).")
 
-        print("\nComplete delay finding function executed in: " + str(dt.datetime.now() - time_before_function))
+        print(f"\nComplete delay finding function executed in: {dt.datetime.now() - time_before_function}")
 
     # Return values: None if below threshold
     if return_delay_format == "index":
@@ -1299,8 +1296,8 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     elif return_delay_format == "timedelta":
         return_value = t
     else:
-        raise Exception("Wrong value for the parameter return_delay_format: " + str(return_delay_format) + ". The " +
-                        'value should be either "index", "ms", "s" or "timedelta".')
+        raise Exception(f"Wrong value for the parameter return_delay_format: {return_delay_format}. The value should " +
+                        f"be either \"index\", \"ms\", \"s\" or \"timedelta\".")
 
     # Plot and/or save the figure
     if plot_figure is not None or path_figure is not None:
@@ -1539,9 +1536,8 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
     # Introduction
     if verbosity > 0:
         print("Trying to find when the excerpts starts in the array.")
-        print("\t The main array contains " + str(len(array)) + " samples, at a rate of " + str(freq_array) +
-              " Hz.")
-        print("\t" + str(len(excerpts)) + " excerpts to find.")
+        print(f"\t The main array contains {len(array)} samples, at a rate of {freq_array} Hz.")
+        print(f"\t{len(excerpts)} excerpts to find.")
 
     # Turn list into ndarray
     if isinstance(array, list):
@@ -1550,8 +1546,8 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
     # Check that the length of the excerpts equals the length of the frequencies
     if isinstance(freq_excerpts, list):
         if len(excerpts) != len(freq_excerpts):
-            raise Exception("The number of frequencies given for the excerpts (" + str(len(freq_excerpts)) + ") " +
-                            "is inconsistent with the number of excerpts (" + str(len(excerpts)) + ").")
+            raise Exception(f"The number of frequencies given for the excerpts ({len(freq_excerpts)}) " +
+                            f"is inconsistent with the number of excerpts ({len(excerpts)}).")
 
     number_of_plots = 2
     if plot_intermediate_steps:
@@ -1590,7 +1586,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
         # Introduction
         if verbosity > 0:
-            print("Excerpt " + str(i + 1) + "/" + str(len(excerpts)))
+            print(f"Excerpt {i + 1}/{len(excerpts)}")
 
         # Get the excerpt
         excerpt = excerpts[i]
@@ -1606,13 +1602,12 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
             freq_excerpt = freq_excerpts
 
         if verbosity > 0:
-            print("\t The excerpt contains " + str(len(excerpt)) + " samples, at a rate of " + str(freq_excerpt) +
-                  " Hz.\n")
+            print(f"\t The excerpt contains {len(excerpt)} samples, at a rate of {freq_excerpt} Hz.\n")
 
         # Envelope
         if compute_envelope:
             if verbosity > 0:
-                print("Getting the envelope from the excerpt " + str(i + 1) + "...")
+                print(f"Getting the envelope from the excerpt {i+1}...")
             envelope_excerpt = _get_envelope(excerpt, freq_excerpt, window_size_env, overlap_ratio_env, filter_below,
                                              filter_over, verbosity)
             if verbosity > 0:
@@ -1631,9 +1626,9 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
                 print("Resampling done.\n")
         else:
             if freq_array != freq_excerpt:
-                raise Exception("The rate of the two arrays you are trying to correlate are different (" +
-                                str(freq_array) + " Hz and " + str(freq_excerpt) + " Hz). You must indicate a " +
-                                "resampling rate to perform the cross-correlation.")
+                raise Exception(f"The rate of the two arrays you are trying to correlate are different ({freq_array} " +
+                                f"Hz and {freq_excerpt} Hz). You must indicate a resampling rate to perform the " +
+                                f"cross-correlation.")
             y2 = envelope_excerpt
 
         time_before_cross_correlation = dt.datetime.now()
@@ -1655,18 +1650,17 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
         if verbosity > 0:
             print("Done.")
-            print("\tCross-correlation calculated in: " + str(dt.datetime.now() - time_before_cross_correlation))
+            print(f"\tCross-correlation calculated in: {dt.datetime.now() - time_before_cross_correlation}")
 
             if max_correlation_value >= threshold:
-                print("\tMaximum correlation (" + str(np.round(max_correlation_value, 3)) + ") found at sample " +
-                      str(index) + " (timestamp " + str(t) + ").")
+                print(f"\tMaximum correlation ({np.round(max_correlation_value, 3)}) found at sample {index} " +
+                      f"(timestamp {t}).")
 
             else:
-                print("\tNo correlation over threshold found (max correlation: " +
-                      str(np.round(max_correlation_value, 3)) + ") found at sample " + str(index) + " (timestamp " +
-                      str(t) + ").")
+                print(f"\tNo correlation over threshold found (max correlation: {np.round(max_correlation_value, 3)})" +
+                      f" found at sample {index} (timestamp {t}).")
 
-            print("\nComplete delay finding function executed in: " + str(dt.datetime.now() - time_before_function))
+            print(f"\nComplete delay finding function executed in: {dt.datetime.now() - time_before_function}")
 
         # Return values: None if below threshold
         if return_delay_format == "index":
@@ -1678,8 +1672,8 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         elif return_delay_format == "timedelta":
             return_value = t
         else:
-            raise Exception("Wrong value for the parameter return_delay_format: " + str(return_delay_format) +
-                            '. The value should be either "index", "ms", "s" or "timedelta".')
+            raise Exception(f"Wrong value for the parameter return_delay_format: {return_delay_format}. The value " +
+                            f"should be either \"index\", \"ms\", \"s\" or \"timedelta\".")
 
         # Plot and/or save the figure
         if plot_figure is not None or path_figures is not None:
