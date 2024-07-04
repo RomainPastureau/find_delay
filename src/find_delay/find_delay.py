@@ -365,12 +365,12 @@ def _resample_window(array, original_timestamps, resampled_timestamps, index_sta
           Polynomial) via `scipy.interpolate.PchipInterpolator
           <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html>`_.
         • ``"akima"`` performs another type of monotonic cubic spline interpolation, using
-        `scipy.interpolate.Akima1DInterpolator
-        <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_.
+          `scipy.interpolate.Akima1DInterpolator
+          <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_.
         • ``"take"`` keeps one out of n samples from the original array. While being the fastest computation, it will
           be prone to imprecision if the downsampling factor is not an integer divider of the original frequency.
         • ``"interp1d_XXX"`` uses the function `scipy.interpolate.interp1d
-          <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`. The XXX part of the
+          <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`_. The XXX part of the
           parameter can be replaced by ``"linear"``, ``"nearest"``, ``"nearest-up"``, ``"zero"``, "slinear"``,
           ``"quadratic"``, ``"cubic"``”, ``"previous"``, and ``"next"`` (see the documentation of this function for
           specifics).
@@ -485,12 +485,12 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
           Polynomial) via `scipy.interpolate.PchipInterpolator
           <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html>`_.
         • ``"akima"`` performs another type of monotonic cubic spline interpolation, using
-        `scipy.interpolate.Akima1DInterpolator
-        <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_.
+          `scipy.interpolate.Akima1DInterpolator
+          <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_.
         • ``"take"`` keeps one out of n samples from the original array. While being the fastest computation, it will
           be prone to imprecision if the downsampling factor is not an integer divider of the original frequency.
         • ``"interp1d_XXX"`` uses the function `scipy.interpolate.interp1d
-          <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`. The XXX part of the
+          <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`_. The XXX part of the
           parameter can be replaced by ``"linear"``, ``"nearest"``, ``"nearest-up"``, ``"zero"``, "slinear"``,
           ``"quadratic"``, ``"cubic"``”, ``"previous"``, and ``"next"`` (see the documentation of this function for
           specifics).
@@ -1046,7 +1046,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     Parameters
     ----------
     array_1: list or np.ndarray
-        An first array of samples.
+        A first array of samples.
 
     array_2: list or np.ndarray
         An second array of samples, smaller than or of equal size to the first one, that is allegedly an excerpt
@@ -1130,7 +1130,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         • ``"take"`` keeps one out of n samples from the original array. While being the fastest computation, it will
           be prone to imprecision if the downsampling factor is not an integer divider of the original frequency.
         • ``"interp1d_XXX"`` uses the function `scipy.interpolate.interp1d
-          <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`. The XXX part of the
+          <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`_. The XXX part of the
           parameter can be replaced by ``"linear"``, ``"nearest"``, ``"nearest-up"``, ``"zero"``, "slinear"``,
           ``"quadratic"``, ``"cubic"``”, ``"previous"``, and ``"next"`` (see the documentation of this function for
           specifics).
@@ -1459,7 +1459,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         • ``"take"`` keeps one out of n samples from the original array. While being the fastest computation, it will
           be prone to imprecision if the downsampling factor is not an integer divider of the original frequency.
         • ``"interp1d_XXX"`` uses the function `scipy.interpolate.interp1d
-          <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`. The XXX part of the
+          <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`_. The XXX part of the
           parameter can be replaced by ``"linear"``, ``"nearest"``, ``"nearest-up"``, ``"zero"``, "slinear"``,
           ``"quadratic"``, ``"cubic"``”, ``"previous"``, and ``"next"`` (see the documentation of this function for
           specifics).

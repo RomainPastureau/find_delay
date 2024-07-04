@@ -111,8 +111,9 @@ Example 3: audio files, different frequencies
 How does it work?
 -----------------
 The function accepts two arrays containing time series - the time series can be of different frequency or amplitude -
-the only condition for the function to work is that the second array must be entirely contained into the first (note:
-if this is not the case, try to run the function with the beginning of the second array only).
+the only condition for the function to work is that the second array should be entirely contained into the first (note:
+if this is not the case, try to run the function with the beginning of the second array only - it is also possible to
+run the function as is, but this implies taking the risk of getting erroneous results).
 
 The function can then calculate the envelope of the time series (recommended for audio files) and apply a band-pass
 filter to the result.
@@ -132,6 +133,8 @@ Indices and tables
 
    find_delay
    find_delays
+   private_functions
+   version_history
 
 * :ref:`genindex`
 * :ref:`modindex`

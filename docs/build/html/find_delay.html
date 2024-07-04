@@ -1,26 +1,24 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en">
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>find_delay &mdash; find_delay 2.7 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
-      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-      <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
-      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
-
-  
+  <title>find_delay &mdash; find_delay 2.8 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=6c6a69cf"></script>
-        <script src="_static/doctools.js?v=888ff710"></script>
-        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+        <script src="_static/documentation_options.js?v=4348de45"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
         <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/js/theme.js"></script>
@@ -58,6 +56,31 @@
 <li class="toctree-l2"><a class="reference internal" href="find_delays.html#find_delay.find_delays"><code class="docutils literal notranslate"><span class="pre">find_delays()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="private_functions.html">Private functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._filter_frequencies"><code class="docutils literal notranslate"><span class="pre">_filter_frequencies()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._get_number_of_windows"><code class="docutils literal notranslate"><span class="pre">_get_number_of_windows()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._get_envelope"><code class="docutils literal notranslate"><span class="pre">_get_envelope()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._resample_window"><code class="docutils literal notranslate"><span class="pre">_resample_window()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._resample"><code class="docutils literal notranslate"><span class="pre">_resample()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._create_figure"><code class="docutils literal notranslate"><span class="pre">_create_figure()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="version_history.html">Version history</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id1">2.8 (2024-06-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id2">2.7 (2024-05-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id3">2.6 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id4">2.5 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id5">2.4 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id6">2.3 (2024-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id7">2.2 (2024-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id8">2.1 (2024-04-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id9">2.0 (2024-04-24)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id10">1.3 (2024-04-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id11">1.2 (2024-04-17)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id12">1.1 (2024-04-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id13">1.0 (2024-04-12)</a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -85,17 +108,17 @@
            <div itemprop="articleBody">
              
   <section id="find-delay">
-<h1>find_delay<a class="headerlink" href="#find-delay" title="Permalink to this heading"></a></h1>
+<h1>find_delay<a class="headerlink" href="#find-delay" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="find_delay.find_delay">
-<span class="sig-prename descclassname"><span class="pre">find_delay.</span></span><span class="sig-name descname"><span class="pre">find_delay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_array_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_array_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_envelope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_below</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_over</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_delay_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_correlation_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_intermediate_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_format_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">find_delay.</span></span><span class="sig-name descname"><span class="pre">find_delay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_array_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_array_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_envelope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_below</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_over</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_delay_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_correlation_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_intermediate_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_format_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay" title="Link to this definition"></a></dt>
 <dd><p>This function tries to find the timestamp at which an excerpt (array_2) begins in a time series (array_1).
 The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
 calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
 arrays is unequal). The function returns the timestamp of the maximal correlation value, or <cite>None</cite> if this value is
 below threshold. Optionally, it can also return a second element, the maximal correlation value.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 1.0.</span></p>
+<p><span class="versionmodified added">Added in version 1.0.</span></p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 1.1: </span>Separated the figure generation into a new function <cite>_create_figure</cite>.</p>
@@ -130,7 +153,7 @@ results. This is why it is always preferable to use excerpts that are entirely c
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array_1</strong> (<em>list</em><em> or </em><em>np.ndarray</em>) – An first array of samples.</p></li>
+<li><p><strong>array_1</strong> (<em>list</em><em> or </em><em>np.ndarray</em>) – A first array of samples.</p></li>
 <li><p><strong>array_2</strong> (<em>list</em><em> or </em><em>np.ndarray</em>) – An second array of samples, smaller than or of equal size to the first one, that is allegedly an excerpt
 from the first one. The amplitude, frequency or values do not have to match exactly the ones from the first
 array.</p></li>
@@ -141,7 +164,7 @@ array.</p></li>
 in windows allows to speed up the computation. If this parameter is set on <cite>None</cite>, the window size will be set
 on the number of samples. A good value for this parameter is generally 1 million.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 2.0.</span></p>
+<p><span class="versionmodified added">Added in version 2.0.</span></p>
 </div>
 </p></li>
 <li><p><strong>overlap_ratio_env</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – The ratio of samples overlapping between each window. If this parameter is not <cite>None</cite>, each window will
@@ -164,7 +187,7 @@ millisecond-precision delay.</p></li>
 computation. If this parameter is set on <cite>None</cite>, the window size will be set on the number of samples. A good
 value for this parameter is generally 1e7.</p>
 <div class="versionadded">
-<p><span class="versionmodified added">New in version 2.0.</span></p>
+<p><span class="versionmodified added">Added in version 2.0.</span></p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 2.1: </span>Decreased default <cite>window_size_res</cite> value from 1e8 to 1e7.</p>
@@ -190,8 +213,7 @@ Polynomial) via <a class="reference external" href="https://docs.scipy.org/doc/s
 <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html">scipy.interpolate.Akima1DInterpolator</a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;take&quot;</span></code> keeps one out of n samples from the original array. While being the fastest computation, it will
 be prone to imprecision if the downsampling factor is not an integer divider of the original frequency.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;interp1d_XXX&quot;</span></code> uses the function <cite>scipy.interpolate.interp1d
-&lt;https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html&gt;</cite>. The XXX part of the
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;interp1d_XXX&quot;</span></code> uses the function <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html">scipy.interpolate.interp1d</a>. The XXX part of the
 parameter can be replaced by <code class="docutils literal notranslate"><span class="pre">&quot;linear&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;nearest&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;nearest-up&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;zero&quot;</span></code>, “slinear”<code class="docutils literal notranslate"><span class="pre">,</span>
 <span class="pre">``&quot;quadratic&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;cubic&quot;</span></code>”, <code class="docutils literal notranslate"><span class="pre">&quot;previous&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;next&quot;</span></code> (see the documentation of this function for
 specifics).</p></li>
@@ -228,7 +250,7 @@ series are less than one hour long). If set on <cite>“float”</cite>, the val
 on the value of <cite>return_delay_format</cite>.</p>
 <blockquote>
 <div><div class="versionadded">
-<p><span class="versionmodified added">New in version 2.4.</span></p>
+<p><span class="versionmodified added">Added in version 2.4.</span></p>
 </div>
 </div></blockquote>
 </p></li>
