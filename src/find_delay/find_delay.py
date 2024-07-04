@@ -669,6 +669,8 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         Added the new parameter `x_format_figure`, allowing to have HH:MM:SS times on the x axis.
         Modified the scaling of the aligned arrays figure to be more accurate.
 
+    Parameters
+    ----------
     array_1: np.array
         The first array involved in the cross-correlation.
     array_2: np.array
