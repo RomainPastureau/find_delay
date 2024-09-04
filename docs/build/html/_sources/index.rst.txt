@@ -37,6 +37,13 @@ Once it is installed, you can import find_delay into your script via:
 
 You can then use :doc:`find_delay.find_delay() <find_delay>` or :doc:`find_delay.find_delays() <find_delays>`.
 
+.. important::
+   The proper name of the package is ``find_delay``, with an **underscore**. Use it when importing the package in any of
+   your projects. However, PIP (the Package Installer for Python) automatically converts underscores to dashes when
+   creating packages, to uniformize with other programming languages. Hence, when installing the package in an
+   environment, you should run ```pip install find-delay``` (with a dash). Note that calling
+   ```pip install find_delay``` (with an underscore) should also work most of the time.
+
 How do I use find_delay?
 ------------------------
 To find when an excerpt starts in an array, use the `find_delay` function and fill only the first five parameters:
@@ -135,6 +142,7 @@ Indices and tables
    find_delays
    private_functions
    version_history
+   faq
 
 * :ref:`genindex`
 * :ref:`modindex`

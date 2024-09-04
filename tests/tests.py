@@ -1,7 +1,8 @@
 """Tests both functions."""
 
 import unittest
-from find_delay import find_delay, find_delays
+import find_delay
+#from find_delay import find_delay, find_delays, _get_number_of_windows
 import random
 
 
@@ -21,7 +22,7 @@ class Tests(unittest.TestCase):
         array_2_len = random.randint(5, array_1_len - array_2_start - 5)
         array_2 = array_1[array_2_start:array_2_start + array_2_len]
         print(f"Creating excerpt with length {array_2_len}, starting at {array_2_start}.")
-        delay = find_delay(array_1, array_2, compute_envelope=False)
+        delay = find_delay.find_delay(array_1, array_2, compute_envelope=False)
 
         assert(delay == array_2_start)
 
@@ -44,7 +45,7 @@ class Tests(unittest.TestCase):
             excerpt_len = random.randint(5, array_len - excerpt_start - 5)
             excerpts.append(array[excerpt_start:excerpt_start + excerpt_len])
             print(f"Creating excerpt with length {excerpt_len}, starting at {excerpt_start}.")
-        delays = find_delays(array, excerpts, compute_envelope=False)
+        delays = find_delay.find_delays(array, excerpts, compute_envelope=False)
 
         for i in range(number_of_excerpts):
             assert(delays[i] == excerpts_start[i])

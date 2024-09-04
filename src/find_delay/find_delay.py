@@ -3,10 +3,20 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.8 (2024-06-18)
+Current version: 2.9 (2024-09-05)
 
 Version history
 ---------------
+2.9 (2024-09-05) · Added the possibility to pass paths to WAV files as parameters of `find_delay` and `find_delays`
+                 · Added the parameter mono_channel describing the method for converting multiple-channel audio to mono
+                 · Added the function _convert_to_mono to perform the conversion to mono
+                 · Corrected the display of negative delays when they are in timedelta format. A delay of -1 second
+                   will now print `-0:00:01` instead of `-1 day, 23:59:59`.
+                 · Corrected a bug preventing the figure to display when the excerpt is found at the edges of the first
+                   array
+                 · Closed the figure at the end of _create_figure to prevent warnings
+                 · Added an FAQ page in the documentation
+                 · Corrected typos and type errors in the documentation
 2.8 (2024-06-19) · Added tests with random numbers
                  · Corrected the link to the documentation on the PyPI page
                  · Replaced the strings by f-strings
@@ -45,14 +55,18 @@ Version history
 1.0 (2024-04-12) · Initial release
 """
 
+
 from matplotlib import pyplot as plt
 from matplotlib import dates as mdates
 from scipy.interpolate import CubicSpline, PchipInterpolator, Akima1DInterpolator, interp1d
+from scipy.io import wavfile
 from scipy.signal import butter, correlate, hilbert, lfilter
 import numpy as np
 import datetime as dt
+import os
 
 
+# noinspection PyTupleAssignmentBalance
 def _filter_frequencies(array, frequency, filter_below=None, filter_over=None, verbosity=1):
     """Applies a low-pass, high-pass or band-pass filter to the data in the attribute :attr:`samples`.
 
@@ -142,8 +156,8 @@ def _get_number_of_windows(array_length_or_array, window_size, overlap_ratio=0, 
         An array of numerical values, or its length.
     window_size: int
         The number of array elements in each window.
-    overlap_ratio: int
-        The ratio of array elements overlapping between each window and the next.
+    overlap_ratio: float
+        The ratio, between 0 and 1, of array elements overlapping between each window and the next.
     add_incomplete_window: bool
         If set on ``True``, the last window will be included even if its size is smaller than ``window_size``.
         Otherwise, it will be ignored.
@@ -372,7 +386,7 @@ def _resample_window(array, original_timestamps, resampled_timestamps, index_sta
         • ``"interp1d_XXX"`` uses the function `scipy.interpolate.interp1d
           <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`_. The XXX part of the
           parameter can be replaced by ``"linear"``, ``"nearest"``, ``"nearest-up"``, ``"zero"``, "slinear"``,
-          ``"quadratic"``, ``"cubic"``”, ``"previous"``, and ``"next"`` (see the documentation of this function for
+          ``"quadratic"``, ``"cubic"``, ``"previous"``, and ``"next"`` (see the documentation of this function for
           specifics).
 
     verbosity: int, optional
@@ -492,7 +506,7 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
         • ``"interp1d_XXX"`` uses the function `scipy.interpolate.interp1d
           <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`_. The XXX part of the
           parameter can be replaced by ``"linear"``, ``"nearest"``, ``"nearest-up"``, ``"zero"``, "slinear"``,
-          ``"quadratic"``, ``"cubic"``”, ``"previous"``, and ``"next"`` (see the documentation of this function for
+          ``"quadratic"``, ``"cubic"``, ``"previous"``, and ``"next"`` (see the documentation of this function for
           specifics).
 
     verbosity: int, optional
@@ -638,6 +652,79 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
     return resampled_array
 
 
+def _convert_to_mono(audio_data, mono_channel, verbosity=1):
+    """Converts an audio array to mono.
+
+    .. versionadded:: 2.9
+
+    Parameters
+    ----------
+    audio_data: np.array (1D or 2D)
+        The parameter data resulting from reading a WAV file with
+        `scipy.io.wavfile.read <https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.wavfile.read.html>`_.
+
+    mono_channel: int or str, optional
+        Defines the method to use to convert multiple-channel WAV files to mono, if one of the parameters `array1` or
+        `array2` is a path pointing to a WAV file. By default, this parameter value is ``0``: the channel with index 0
+        in the WAV file is used as the array, while all the other channels are discarded. This value can be any
+        of the channels indices (using ``1`` will preserve the channel with index 1, etc.). This parameter can also
+        take the value ``"average"``: in that case, a new channel is created by averaging the values of all the
+        channels of the WAV file. Note that this parameter applies to both arrays: in the case where you need to select
+        different channels for each WAV file, open the files before calling the function and pass the samples and
+        frequencies as parameters.
+
+    verbosity: int
+        Sets how much feedback the code will provide in the console output:
+
+        • *0: Silent mode.* The code won’t provide any feedback, apart from error messages.
+        • *1: Normal mode* (default). The code will provide essential feedback such as progression markers and
+          current steps.
+        • *2: Chatty mode.* The code will provide all possible information on the events happening. Note that this
+          may clutter the output and slow down the execution.
+
+    Returns
+    -------
+    np.array
+        A 1D numpy array containing the audio converted to mono.
+    """
+
+    # If mono_channel is a channel number
+    if isinstance(mono_channel, int):
+
+        # If the channel number is negative or nonexistent
+        if mono_channel >= np.size(audio_data[1]) or mono_channel < 0:
+            if np.size(audio_data[1] == 0):
+                raise Exception(f"""The channel chosen for the parameter "mono_channel" ({mono_channel}) is not valid.
+                As the audio data is mono, the channel chosen should be 0.""")
+            else:
+                raise Exception(f"""The channel chosen for the parameter "mono_channel" ({mono_channel}) is not valid.
+                Please choose a channel between 0 and {np.size(audio_data[1]) - 1}.""")
+
+        # If the audio data is already mono
+        if np.size(audio_data[1]) == 1:
+            mono_array = audio_data[1]
+            if verbosity > 0:
+                print(f"\tThe audio data is already in mono, no conversion necessary.")
+
+        # If the audio data is not mono
+        else:
+            mono_array = audio_data[:, mono_channel]  # Turn to mono
+            if verbosity > 0:
+                print(f"\tFile converted to mono by keeping channel with index {mono_channel}. The original file"
+                      f" contains {np.size(audio_data[1])} channels.")
+
+    # If mono_channel is "average"
+    elif mono_channel == "average":
+        mono_array = np.mean(audio_data[1], 1)
+
+    # Any other case
+    else:
+        raise Exception(f"""The parameter "mono_channel" should be an integer (the channel index) or "average", not
+                        {mono_channel}.""")
+
+    return mono_array
+
+
 def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, name_array_2, envelope_1, envelope_2,
                    y1, y2, compute_envelope, window_size_env, overlap_ratio_env, filter_below, filter_over,
                    resampling_rate, window_size_res, overlap_ratio_res, cross_correlation, threshold,
@@ -658,7 +745,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
 
     .. versionchanged:: 2.2
         Arrays with different amplitudes now appear scaled on the aligned arrays graph.
-        Added a second y axis to the aligned arrays graph.
+        Added a second y-axis to the aligned arrays graph.
 
     .. versionchanged:: 2.3
         Corrected the figure saving to a file.
@@ -666,7 +753,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         of each other instead of side-by-side.
 
     .. versionchanged:: 2.4
-        Added the new parameter `x_format_figure`, allowing to have HH:MM:SS times on the x axis.
+        Added the new parameter `x_format_figure`, allowing to have HH:MM:SS times on the x-axis.
         Modified the scaling of the aligned arrays figure to be more accurate.
 
     Parameters
@@ -777,7 +864,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         t_res_2_aligned = np.array(t_res_2_aligned * 1000000, dtype="datetime64[us]")
         t_cc = np.array(t_cc * 1000000, dtype="datetime64[us]")
 
-    # Formatting functions for the x axis (MM:SS and HH:MM:SS)
+    # Formatting functions for the x-axis (MM:SS and HH:MM:SS)
     def get_label(value, include_hour=True, include_us=True):
         """Returns a label value depending on the selected parameters."""
 
@@ -956,24 +1043,42 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         ylim = ax[1].get_ylim()
         ax2 = ax[1].twinx()
 
+    # Get the min and max values for overlaying the two arrays
     if resampling_rate is None:
-        excerpt_in_original = array_1[index_max_correlation_value:
-                                      index_max_correlation_value + len(array_2)]
+        excerpt_in_original = array_1[max(0, index_max_correlation_value):
+                                      min(index_max_correlation_value + len(array_2), len(array_1))]
     else:
         index = int(index_max_correlation_value * freq_array_1 / resampling_rate)
-        excerpt_in_original = array_1[index:index + int(len(array_2) * freq_array_1 / freq_array_2)]
+        excerpt_in_original = array_1[max(0, index):
+                                      min(index + int(len(array_2) * freq_array_1 / freq_array_2), len(array_1))]
     resampled_timestamps_array2 = t_res_2_aligned[:len(array_2)]
 
     min_excerpt_in_original = np.nanmin(excerpt_in_original)
     max_excerpt_in_original = np.nanmax(excerpt_in_original)
 
+    index_start_array_2 = 0
+    if index_max_correlation_value < 0:
+        if resampling_rate is None:
+            index_start_array_2 = -index_max_correlation_value
+        else:
+            index_start_array_2 = -index_max_correlation_value * freq_array_2 / resampling_rate
+
+    index_end_array_2 = len(array_2)
+    if resampling_rate is None and index_max_correlation_value + len(array_2) > len(array_1):
+        index_end_array_2 = len(array_1) - index_max_correlation_value
+    elif resampling_rate is not None:
+        if index_max_correlation_value * freq_array_1 / resampling_rate + \
+            len(array_2) * freq_array_1 / freq_array_2 > len(array_1):
+            index_end_array_2 = int(((len(array_1) - index_max_correlation_value * freq_array_1 / resampling_rate) *
+                                     freq_array_2 / freq_array_1))
+
     if min_excerpt_in_original != 0:
-        min_ratio = np.nanmin(array_2) / min_excerpt_in_original
+        min_ratio = np.nanmin(array_2[index_start_array_2:index_end_array_2]) / min_excerpt_in_original
     else:
         min_ratio = 0
 
     if max_excerpt_in_original != 0:
-        max_ratio = np.nanmax(array_2) / max_excerpt_in_original
+        max_ratio = np.nanmax(array_2[index_start_array_2:index_end_array_2]) / max_excerpt_in_original
     else:
         max_ratio = 0
 
@@ -1001,12 +1106,15 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
             print("\nShowing the graph...")
         plt.show()
 
+    plt.close()
+
 
 def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelope=True, window_size_env=1e6,
                overlap_ratio_env=0.5, filter_below=None, filter_over=50, resampling_rate=None,
                window_size_res=1e7, overlap_ratio_res=0.5, resampling_mode="cubic",
                return_delay_format="index", return_correlation_value=False, threshold=0.9,
-               plot_figure=False, plot_intermediate_steps=False, x_format_figure="auto", path_figure=None, verbosity=1):
+               plot_figure=False, plot_intermediate_steps=False, x_format_figure="auto", path_figure=None,
+               mono_channel=0, verbosity=1):
     """This function tries to find the timestamp at which an excerpt (array_2) begins in a time series (array_1).
     The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
     calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
@@ -1029,7 +1137,11 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
     .. versionchanged:: 2.4
         Modified the cross-correlation to look for the excerpt at the edges of the first array.
-        Added the new parameter `x_format_figure`, allowing to have HH:MM:SS times on the x axis.
+        Added the new parameter `x_format_figure`, allowing to have HH:MM:SS times on the x-axis.
+
+    .. versionchanged:: 2.9
+        array_1 and array_2 can now be strings containing paths to WAV files.
+        Added the parameter mono_channel.
 
     Important
     ---------
@@ -1047,18 +1159,25 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
     Parameters
     ----------
-    array_1: list or np.ndarray
-        A first array of samples.
+    array_1: list, np.ndarray or str
+        A first array of samples, or a string containing the path to a WAV file. In this case, the parameter
+        `freq_array_1` will be ignored and extracted from the WAV file. Note that if the WAV file contains more than one
+        channel, the function will turn the WAV to mono by only keeping the channel with index 0.
 
-    array_2: list or np.ndarray
+        .. versionchanged:: 2.9
+
+    array_2: list, np.ndarray or str
         An second array of samples, smaller than or of equal size to the first one, that is allegedly an excerpt
         from the first one. The amplitude, frequency or values do not have to match exactly the ones from the first
-        array.
+        array. The parameter can also be a string containing the path to a WAV file (see description of parameter
+        array_1).
+
+        .. versionchanged:: 2.9
 
     freq_array_1: int or float, optional
         The sampling frequency of the first array, in Hz (default: 1).
 
-    freq_array_2: int or float
+    freq_array_2: int or float, optional
         The sampling frequency of the second array, in Hz (default: 1).
 
     compute_envelope: bool, optional
@@ -1134,7 +1253,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         • ``"interp1d_XXX"`` uses the function `scipy.interpolate.interp1d
           <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`_. The XXX part of the
           parameter can be replaced by ``"linear"``, ``"nearest"``, ``"nearest-up"``, ``"zero"``, "slinear"``,
-          ``"quadratic"``, ``"cubic"``”, ``"previous"``, and ``"next"`` (see the documentation of this function for
+          ``"quadratic"``, ``"cubic"``, ``"previous"``, and ``"next"`` (see the documentation of this function for
           specifics).
 
     threshold: float, optional
@@ -1155,6 +1274,8 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
             • If ``"timedelta"``, the function will return the timestamp in array_1 at which array_2 has the
               highest cross-correlation value as a
               `datetime.timedelta <https://docs.python.org/3/library/datetime.html#timedelta-objects>`_ object.
+              Note that, in the case where the result is negative, the timedelta format may give unexpected display
+              results (-1 second returns -1 days, 86399 seconds).
 
     return_correlation_value: bool, optional
         If `True`, the function returns a second value: the correlation value at the returned delay. This value will
@@ -1168,7 +1289,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         If set on `True`, plots the original arrays, the envelopes (if calculated) and the resampled arrays (if
         calculated) besides the cross-correlation.
 
-    x_format_figure: str
+    x_format_figure: str, optional
         If set on `"time"`, the values on the x axes of the output will take the HH:MM:SS format (or MM:SS if the time
         series are less than one hour long). If set on `"float"`, the values on the x axes will be displayed as float
         (unit: second). If set on `"auto"` (default), the format of the values on the x axes will be defined depending
@@ -1178,6 +1299,18 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
     path_figure: str or None, optional
         If set, saves the figure at the given path.
+
+    mono_channel: int or str, optional
+        Defines the method to use to convert multiple-channel WAV files to mono, if one of the parameters `array1` or
+        `array2` is a path pointing to a WAV file. By default, this parameter value is ``0``: the channel with index 0
+        in the WAV file is used as the array, while all the other channels are discarded. This value can be any
+        of the channels indices (using ``1`` will preserve the channel with index 1, etc.). This parameter can also
+        take the value ``"average"``: in that case, a new channel is created by averaging the values of all the
+        channels of the WAV file. Note that this parameter applies to both arrays: in the case where you need to select
+        different channels for each WAV file, open the files before calling the function and pass the samples and
+        frequencies as parameters.
+
+        .. versionadded:: 2.9
 
     verbosity: int, optional
         Sets how much feedback the code will provide in the console output:
@@ -1193,23 +1326,48 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     int, float, timedelta or None
         The sample index, timestamp or timedelta of array_1 at which array_2 can be found (defined by the parameter
         return_delay_format), or `None` if array1 is not contained in array_2.
+
     float or None, optional
         Optionally, if return_correlation_value is `True`, the correlation value at the corresponding index/timestamp.
     """
 
     time_before_function = dt.datetime.now()
 
-    # Introduction
-    if verbosity > 0:
-        print("Trying to find when the second array starts in the first.")
-        print(f"\t The first array contains {len(array_1)} samples, at a rate of {freq_array_1} Hz.")
-        print(f"\t The second array contains {len(array_2)} samples, at a rate of {freq_array_2} Hz.\n")
+    # Tries to open WAV files if they are paths
+    if isinstance(array_1, str):
+        if verbosity > 0:
+            print(f"Loading WAV file to array_1 from the path {array_1}...")
+        if not os.path.exists(array_1):
+            raise Exception(f"The file passed as parameter for array_1 doesn't exist: {array_1}")
+
+        audio_wav = wavfile.read(array_1)
+        freq_array_1 = audio_wav[0]
+        array_1 = _convert_to_mono(audio_wav[1], mono_channel, verbosity)
+
+    if isinstance(array_2, str):
+        if verbosity > 0:
+            print(f"Loading WAV file to array_2 from the path {array_2}...")
+        if not os.path.exists(array_2):
+            raise Exception(f"The file passed as parameter for array_1 doesn't exist: {array_2}")
+
+        audio_wav = wavfile.read(array_2)
+        freq_array_2 = audio_wav[0]
+        array_2 = _convert_to_mono(audio_wav[1], mono_channel, verbosity)
 
     # Turn lists into ndarray
     if isinstance(array_1, list):
         array_1 = np.array(array_1)
     if isinstance(array_2, list):
         array_2 = np.array(array_2)
+
+    # Introduction
+    if verbosity > 0:
+        print("Trying to find when the second array starts in the first.")
+        print(f"\t The first array contains {np.size(array_1)} samples, at a rate of {freq_array_1} Hz.")
+        print(f"\t The second array contains {np.size(array_2)} samples, at a rate of {freq_array_2} Hz.\n")
+
+    if len(array_1) * freq_array_1 > len(array_2) * freq_array_2:
+        pass
 
     number_of_plots = 2
     if plot_intermediate_steps:
@@ -1271,8 +1429,14 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     index_max_correlation_value = np.nanargmax(cross_correlation) - y2.size + 1
     index = int(np.round(index_max_correlation_value * freq_array_1 / rate, 0))
     delay_in_seconds = index_max_correlation_value / rate
-    t = dt.timedelta(days=delay_in_seconds // 86400, seconds=int(delay_in_seconds % 86400),
-                     microseconds=(delay_in_seconds % 1) * 1000000)
+    if delay_in_seconds >= 0:
+        sign = ""
+        t = dt.timedelta(days=delay_in_seconds // 86400, seconds=int(delay_in_seconds % 86400),
+                         microseconds=(delay_in_seconds % 1) * 1000000)
+    else:
+        sign = "-"
+        t = dt.timedelta(days=-delay_in_seconds // 86400, seconds=int(-delay_in_seconds % 86400),
+                         microseconds=(-delay_in_seconds % 1) * 1000000)
 
     if verbosity > 0:
         print("Done.")
@@ -1280,11 +1444,11 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
         if max_correlation_value >= threshold:
             print(f"\tMaximum correlation ({np.round(max_correlation_value, 3)}) found at sample {index} " +
-                  f"(timestamp {t}).")
+                  f"(timestamp {sign}{t}).")
 
         else:
-            print(f"\tNo correlation over threshold found (max correlation: {np.round(max_correlation_value, 3)} " +
-                  f") found at sample {index} (timestamp {t}).")
+            print(f"\tNo correlation over threshold found (max correlation: {np.round(max_correlation_value, 3)}" +
+                  f") found at sample {index} (timestamp {sign}{t}).")
 
         print(f"\nComplete delay finding function executed in: {dt.datetime.now() - time_before_function}")
 
@@ -1330,7 +1494,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
                 resampling_rate=None, window_size_res=1e7, overlap_ratio_res=0.5, resampling_mode="cubic",
                 return_delay_format="index", return_correlation_values=False, threshold=0.9,
                 plot_figure=False, plot_intermediate_steps=False, x_format_figure="auto", path_figures=None,
-                name_figures="figure", verbosity=1):
+                name_figures="figure", mono_channel=0, verbosity=1):
     """This function tries to find the timestamp at which multiple excerpts begins in an array.
     The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
     calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
@@ -1355,7 +1519,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
     .. versionchanged:: 2.4
         Modified the cross-correlation to look for the excerpt at the edges of the first array.
-        Added the new parameter `x_format_figure`, allowing to have HH:MM:SS times on the x axis.
+        Added the new parameter `x_format_figure`, allowing to have HH:MM:SS times on the x-axis.
 
     Important
     ---------
@@ -1389,7 +1553,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
     freq_array: int or float, optional
         The sampling frequency of the array, in Hz (default: 1).
 
-    freq_excerpts: int or float or list(int or float)
+    freq_excerpts: int or float or list(int or float), optional
         The sampling frequency of the excerpts, in Hz (default: 1). This parameter accepts a single value that will be
         applied for each excerpt, or a list of values that has to be the same length as the number of excerpts, with
         each value corresponding to the frequency of the corresponding excerpt.
@@ -1463,7 +1627,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         • ``"interp1d_XXX"`` uses the function `scipy.interpolate.interp1d
           <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`_. The XXX part of the
           parameter can be replaced by ``"linear"``, ``"nearest"``, ``"nearest-up"``, ``"zero"``, "slinear"``,
-          ``"quadratic"``, ``"cubic"``”, ``"previous"``, and ``"next"`` (see the documentation of this function for
+          ``"quadratic"``, ``"cubic"``, ``"previous"``, and ``"next"`` (see the documentation of this function for
           specifics).
 
     threshold: float, optional
@@ -1484,6 +1648,8 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
             • If ``"timedelta"``, the function will return the timestamp in array_1 at which array_2 has the
               highest cross-correlation value as a
               `datetime.timedelta <https://docs.python.org/3/library/datetime.html#timedelta-objects>`_ object.
+              Note that, in the case where the result is negative, the timedelta format may give unexpected display
+              results (-1 second returns -1 days, 86399 seconds).
 
     return_correlation_values: bool, optional
         If `True`, the function returns a second value: the correlation value at the returned delay. This value will
@@ -1512,6 +1678,18 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         The name to give to each figure in the directory set by `path_figures`. The figures will be found in
         `path_figures/name_figures_n.png`, where n is the index of the excerpt in `excerpts`, starting at 1.
 
+    mono_channel: int or str, optional
+        Defines the method to use to convert multiple-channel WAV files to mono, if one of the parameters `array` or
+        `excerpts` contains a path pointing to a WAV file. By default, this parameter value is ``0``: the channel with
+        index 0 in the WAV file is used as the array, while all the other channels are discarded. This value can be any
+        of the channels indices (using ``1`` will preserve the channel with index 1, etc.). This parameter can also
+        take the value ``"average"``: in that case, a new channel is created by averaging the values of all the
+        channels of the WAV file. Note that this parameter applies to all arrays: in the case where you need to select
+        different channels for each WAV file, open the files before calling the function and pass the samples and
+        frequencies as parameters.
+
+        .. versionadded:: 2.9
+
     verbosity: int, optional
         Sets how much feedback the code will provide in the console output:
 
@@ -1535,15 +1713,26 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
     delays = []
     correlation_values = []
 
-    # Introduction
-    if verbosity > 0:
-        print("Trying to find when the excerpts starts in the array.")
-        print(f"\t The main array contains {len(array)} samples, at a rate of {freq_array} Hz.")
-        print(f"\t{len(excerpts)} excerpts to find.")
+    # Tries to open a WAV file if it is a path
+    if isinstance(array, str):
+        if verbosity > 0:
+            print(f"Loading WAV file to array from the path {array}...")
+        if not os.path.exists(array):
+            raise Exception(f"The file passed as parameter for array doesn't exist: {array}")
+
+        audio_wav = wavfile.read(array)
+        freq_array = audio_wav[0]
+        array = _convert_to_mono(audio_wav[1], mono_channel, verbosity)
 
     # Turn list into ndarray
     if isinstance(array, list):
         array = np.array(array)
+
+    # Introduction
+    if verbosity > 0:
+        print("Trying to find when the excerpts starts in the array.")
+        print(f"\t The main array contains {np.size(array)} samples, at a rate of {freq_array} Hz.")
+        print(f"\t{len(excerpts)} excerpts to find.")
 
     # Check that the length of the excerpts equals the length of the frequencies
     if isinstance(freq_excerpts, list):
@@ -1593,18 +1782,29 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         # Get the excerpt
         excerpt = excerpts[i]
 
-        # Turn list into ndarray
-        if isinstance(excerpt, list):
-            excerpt = np.array(excerpt)
-
         # Get the frequency
         if isinstance(freq_excerpts, list):
             freq_excerpt = freq_excerpts[i]
         else:
             freq_excerpt = freq_excerpts
 
+        # Tries to open a WAV file if it is a path
+        if isinstance(excerpt, str):
+            if verbosity > 0:
+                print(f"Loading WAV file to excerpt from the path {excerpt}...")
+            if not os.path.exists(excerpt):
+                raise Exception(f"The file passed as parameter for excerpt doesn't exist: {excerpt}")
+
+            audio_wav = wavfile.read(excerpt)
+            freq_excerpt = audio_wav[0]
+            excerpt = _convert_to_mono(audio_wav[1], mono_channel, verbosity)
+
+        # Turn list into ndarray
+        if isinstance(excerpt, list):
+            excerpt = np.array(excerpt)
+
         if verbosity > 0:
-            print(f"\t The excerpt contains {len(excerpt)} samples, at a rate of {freq_excerpt} Hz.\n")
+            print(f"\t The excerpt contains {np.size(excerpt)} samples, at a rate of {freq_excerpt} Hz.\n")
 
         # Envelope
         if compute_envelope:
@@ -1647,8 +1847,14 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         index_max_correlation_value = np.nanargmax(cross_correlation) - y2.size + 1
         index = int(np.round(index_max_correlation_value * freq_array / rate, 0))
         delay_in_seconds = index_max_correlation_value / rate
-        t = dt.timedelta(days=delay_in_seconds // 86400, seconds=int(delay_in_seconds % 86400),
-                         microseconds=(delay_in_seconds % 1) * 1000000)
+        if delay_in_seconds >= 0:
+            sign = ""
+            t = dt.timedelta(days=delay_in_seconds // 86400, seconds=int(delay_in_seconds % 86400),
+                             microseconds=(delay_in_seconds % 1) * 1000000)
+        else:
+            sign = "-"
+            t = dt.timedelta(days=-delay_in_seconds // 86400, seconds=int(-delay_in_seconds % 86400),
+                             microseconds=(-delay_in_seconds % 1) * 1000000)
 
         if verbosity > 0:
             print("Done.")
@@ -1656,11 +1862,11 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
             if max_correlation_value >= threshold:
                 print(f"\tMaximum correlation ({np.round(max_correlation_value, 3)}) found at sample {index} " +
-                      f"(timestamp {t}).")
+                      f"(timestamp {sign}{t}).")
 
             else:
                 print(f"\tNo correlation over threshold found (max correlation: {np.round(max_correlation_value, 3)})" +
-                      f" found at sample {index} (timestamp {t}).")
+                      f" found at sample {index} (timestamp {sign}{t}).")
 
             print(f"\nComplete delay finding function executed in: {dt.datetime.now() - time_before_function}")
 

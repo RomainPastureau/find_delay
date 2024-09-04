@@ -37,14 +37,23 @@ Once it is installed, you can import find_delay into your script via:
 
 You can then use :doc:`find_delay.find_delay() <find_delay>` or :doc:`find_delay.find_delays() <find_delays>`.
 
+.. important::
+   The proper name of the package is ``find_delay``, with an **underscore**. Use it when importing the package in any of
+   your projects. However, PIP (the Package Installer for Python) automatically converts underscores to dashes when
+   creating packages, to uniformize with other programming languages. Hence, when installing the package in an
+   environment, you should run ```pip install find-delay``` (with a dash). Note that calling
+   ```pip install find_delay``` (with an underscore) should also work most of the time.
+
 How do I use find_delay?
 ------------------------
 To find when an excerpt starts in an array, use the `find_delay` function and fill only the first five parameters:
 
-   * ``array_1``: The array that contains the excerpt
-   * ``array_2``: The excerpt
-   * ``freq_array_1``: The frequency of the array (if it's important, otherwise set it at 1)
-   * ``freq_array_2``: The frequency of the excerpt (it it's important, otherwise set it at 1)
+   * ``array_1``: An array of numbers or the path to a WAV file
+   * ``array_2``: An excerpt of array_1, or the path to a WAV file contained in array_1
+   * ``freq_array_1``: The frequency of the array (if it's important, otherwise set it at 1). If array_1 is a path to
+     a WAV file, you can ignore this parameter.
+   * ``freq_array_2``: The frequency of the excerpt (it it's important, otherwise set it at 1). If array_2 is a path to
+     a WAV file, you can ignore this parameter.
    * ``compute_envelope``: If you are trying to find the delay between two audio files, set on `True`, otherwise
      `False`.
 
@@ -110,12 +119,13 @@ Example 3: audio files, different frequencies
 
 How does it work?
 -----------------
-The function accepts two arrays containing time series - the time series can be of different frequency or amplitude -
-the only condition for the function to work is that the second array should be entirely contained into the first (note:
-if this is not the case, try to run the function with the beginning of the second array only - it is also possible to
-run the function as is, but this implies taking the risk of getting erroneous results).
+The function accepts two arrays containing time series - the time series can be of different frequency or amplitude.
+To obtain better results, make sure that the second time series (the excerpt) is entirely contained into the first -
+notably, you can trim the second array for it to be the case. The function should work if the second array is over one
+of the edges of the first, but the cross-correlation score will never be 1. This implies that, the less amount of the
+second array contained in the second, the more likely the chance of getting an erroneous result.
 
-The function can then calculate the envelope of the time series (recommended for audio files) and apply a band-pass
+The function can calculate the envelope of the time series (recommended for audio files) and apply a band-pass
 filter to the result.
 
 The function can also resample the arrays (necessary when the two time series do not have the same frequency).
@@ -135,6 +145,7 @@ Indices and tables
    find_delays
    private_functions
    version_history
+   faq
 
 * :ref:`genindex`
 * :ref:`modindex`

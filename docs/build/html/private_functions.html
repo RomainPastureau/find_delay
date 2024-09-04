@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="./">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Private functions &mdash; find_delay 2.8 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
-      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
+      <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
+
+  
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -79,6 +81,13 @@
 <li class="toctree-l2"><a class="reference internal" href="version_history.html#id11">1.2 (2024-04-17)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="version_history.html#id12">1.1 (2024-04-16)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="version_history.html#id13">1.0 (2024-04-12)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-is-the-name-of-the-package-find-delay-when-installing-and-find-delay-when-importing">Why is the name of the package find-delay when installing, and find_delay when importing?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#i-want-to-use-find-delay-with-audio-files-but-my-audio-files-are-not-wav">I want to use find_delay with audio files, but my audio files are not WAV…</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#i-found-an-issue-how-can-i-contact-the-developers">I found an issue! How can I contact the developers?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#i-have-an-idea-for-improvement">I have an idea for improvement!</a></li>
 </ul>
 </li>
 </ul>
@@ -172,7 +181,7 @@ without overlap.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>array_length_or_array</strong> (<em>list</em><em>(</em><em>int</em><em> or </em><em>float</em><em>) or </em><em>np.array</em><em>(</em><em>int</em><em> or </em><em>float</em><em>) or </em><em>int</em>) – An array of numerical values, or its length.</p></li>
 <li><p><strong>window_size</strong> (<em>int</em>) – The number of array elements in each window.</p></li>
-<li><p><strong>overlap_ratio</strong> (<em>int</em>) – The ratio of array elements overlapping between each window and the next.</p></li>
+<li><p><strong>overlap_ratio</strong> (<em>float</em>) – The ratio, between 0 and 1, of array elements overlapping between each window and the next.</p></li>
 <li><p><strong>add_incomplete_window</strong> (<em>bool</em>) – If set on <code class="docutils literal notranslate"><span class="pre">True</span></code>, the last window will be included even if its size is smaller than <code class="docutils literal notranslate"><span class="pre">window_size</span></code>.
 Otherwise, it will be ignored.</p></li>
 </ul>
@@ -283,7 +292,7 @@ Polynomial) via <a class="reference external" href="https://docs.scipy.org/doc/s
 be prone to imprecision if the downsampling factor is not an integer divider of the original frequency.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;interp1d_XXX&quot;</span></code> uses the function <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html">scipy.interpolate.interp1d</a>. The XXX part of the
 parameter can be replaced by <code class="docutils literal notranslate"><span class="pre">&quot;linear&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;nearest&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;nearest-up&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;zero&quot;</span></code>, “slinear”<code class="docutils literal notranslate"><span class="pre">,</span>
-<span class="pre">``&quot;quadratic&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;cubic&quot;</span></code>”, <code class="docutils literal notranslate"><span class="pre">&quot;previous&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;next&quot;</span></code> (see the documentation of this function for
+<span class="pre">``&quot;quadratic&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;cubic&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;previous&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;next&quot;</span></code> (see the documentation of this function for
 specifics).</p></li>
 </ul>
 </p></li>
@@ -364,7 +373,7 @@ Polynomial) via <a class="reference external" href="https://docs.scipy.org/doc/s
 be prone to imprecision if the downsampling factor is not an integer divider of the original frequency.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;interp1d_XXX&quot;</span></code> uses the function <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html">scipy.interpolate.interp1d</a>. The XXX part of the
 parameter can be replaced by <code class="docutils literal notranslate"><span class="pre">&quot;linear&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;nearest&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;nearest-up&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;zero&quot;</span></code>, “slinear”<code class="docutils literal notranslate"><span class="pre">,</span>
-<span class="pre">``&quot;quadratic&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;cubic&quot;</span></code>”, <code class="docutils literal notranslate"><span class="pre">&quot;previous&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;next&quot;</span></code> (see the documentation of this function for
+<span class="pre">``&quot;quadratic&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;cubic&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;previous&quot;</span></code>, and <code class="docutils literal notranslate"><span class="pre">&quot;next&quot;</span></code> (see the documentation of this function for
 specifics).</p></li>
 </ul>
 </p></li>
@@ -410,7 +419,7 @@ Corrected the figure saving to a file and prevented overwriting the same figure 
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 2.2: </span>Arrays with different amplitudes now appear scaled on the aligned arrays graph.
-Added a second y axis to the aligned arrays graph.</p>
+Added a second y-axis to the aligned arrays graph.</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 2.3: </span>Corrected the figure saving to a file.
@@ -418,82 +427,57 @@ If <cite>plot_intermediate_steps</cite> is <cite>False</cite>, the two graphs �
 of each other instead of side-by-side.</p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 2.4: </span>Added the new parameter <cite>x_format_figure</cite>, allowing to have HH:MM:SS times on the x axis.
+<p><span class="versionmodified changed">Changed in version 2.4: </span>Added the new parameter <cite>x_format_figure</cite>, allowing to have HH:MM:SS times on the x-axis.
 Modified the scaling of the aligned arrays figure to be more accurate.</p>
 </div>
-<dl class="simple">
-<dt>array_1: np.array</dt><dd><p>The first array involved in the cross-correlation.</p>
-</dd>
-<dt>array_2: np.array</dt><dd><p>The second array involved in the cross-correlation, being allegedly an excerpt from the first.</p>
-</dd>
-<dt>freq_array_1: int or float</dt><dd><p>The sampling rate of <cite>array_1</cite>.</p>
-</dd>
-<dt>freq_array_2: int or float</dt><dd><p>The sampling rate of <cite>array_2</cite>.</p>
-</dd>
-<dt>name_array_1: str</dt><dd><p>The name of the first array; will be “Array 1” for <cite>find_delay</cite> and “Array” for <cite>find_delays</cite>.</p>
-</dd>
-<dt>name_array_2: str</dt><dd><p>The name of the second array; will be “Array 2” for <cite>find_delay</cite> and “Excerpt n” for <cite>find_delays</cite>, with n
-being the index of the excerpt in the folder.</p>
-</dd>
-<dt>envelope_1: np.array</dt><dd><p>The envelope of <cite>array_1</cite> (if calculated).</p>
-</dd>
-<dt>envelope_2: np.array</dt><dd><p>The envelope of <cite>array_2</cite> (if calculated).</p>
-</dd>
-<dt>y1: np.array</dt><dd><p>The resampled <cite>array_1</cite> or <cite>envelope_1</cite> (if calculated).</p>
-</dd>
-<dt>y2: np.array</dt><dd><p>The resampled <cite>array_2</cite> or <cite>envelope_2</cite> (if calculated).</p>
-</dd>
-<dt>compute_envelope: bool</dt><dd><p>A boolean describing if the envelope has been computed or not.</p>
-</dd>
-<dt>window_size_env: int</dt><dd><p>The size of the windows in which the arrays were cut for the envelope calculation.</p>
-</dd>
-<dt>overlap_ratio_env: float</dt><dd><p>The ratio of overlapping between each envelope window with the previous and the next windows.</p>
-</dd>
-<dt>filter_below: int, float or None</dt><dd><p>The lower limit of the bandpass filter applied to the envelopes.</p>
-</dd>
-<dt>filter_over: int, float or None</dt><dd><p>The upper limit of the bandpass filter applied to the envelopes.</p>
-</dd>
-<dt>resampling_rate: int, float or None</dt><dd><p>The rate at which the arrays or the envelopes have been resampled.</p>
-</dd>
-<dt>window_size_res: int</dt><dd><p>The size of the windows in which the arrays or envelopes were cut for the resampling.</p>
-</dd>
-<dt>overlap_ratio_res: float</dt><dd><p>The ratio of overlapping between each resampling window with the previous and the next windows.</p>
-</dd>
-<dt>cross-correlation: np.array</dt><dd><p>The array containing the correlation values for each lag between the two arrays.</p>
-</dd>
-<dt>threshold: float</dt><dd><p>The threshold of the maximum correlation value between the two arrays, relative to the maximum
-correlation value between the excerpt and itself.</p>
-</dd>
-<dt>return_delay_format: str</dt><dd><p>Indicates the format of the displayed delay, either <code class="docutils literal notranslate"><span class="pre">&quot;index&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ms&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;s&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;timedelta&quot;</span></code>.</p>
-</dd>
-<dt>return_value: int, float or timedelta</dt><dd><p>The value of the delay in the format specified by the previous parameter.</p>
-</dd>
-<dt>max_correlation_value: float</dt><dd><p>The maximum correlation value from the cross-correlation.</p>
-</dd>
-<dt>index_max_correlation_value: int</dt><dd><p>The index at which the maximum correlation value can be found in the cross-correlation array.</p>
-</dd>
-<dt>plot_figure: bool</dt><dd><p>If set on <cite>True</cite>, plots the figure in a Matplotlib window.</p>
-</dd>
-<dt>path_figure: str or None</dt><dd><p>If set, saves the figure at the given path.</p>
-</dd>
-<dt>name_figure: str or None</dt><dd><p>If set, considers that <cite>path_figure</cite> is the directory where to save the figure, and <cite>name_figure</cite> is the name
-of the file.</p>
-</dd>
-<dt>plot_intermediate_steps: bool</dt><dd><p>If set on <cite>True</cite>, plots the original audio clips, the envelopes and the resampled arrays (if calculated) besides
-the cross-correlation.</p>
-</dd>
-<dt>x_format_figure: str</dt><dd><p>If set on <cite>“time”</cite>, the values on the x axes of the output will take the HH:MM:SS format (or MM:SS if the time
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>array_1</strong> (<em>np.array</em>) – The first array involved in the cross-correlation.</p></li>
+<li><p><strong>array_2</strong> (<em>np.array</em>) – The second array involved in the cross-correlation, being allegedly an excerpt from the first.</p></li>
+<li><p><strong>freq_array_1</strong> (<em>int</em><em> or </em><em>float</em>) – The sampling rate of <cite>array_1</cite>.</p></li>
+<li><p><strong>freq_array_2</strong> (<em>int</em><em> or </em><em>float</em>) – The sampling rate of <cite>array_2</cite>.</p></li>
+<li><p><strong>name_array_1</strong> (<em>str</em>) – The name of the first array; will be “Array 1” for <cite>find_delay</cite> and “Array” for <cite>find_delays</cite>.</p></li>
+<li><p><strong>name_array_2</strong> (<em>str</em>) – The name of the second array; will be “Array 2” for <cite>find_delay</cite> and “Excerpt n” for <cite>find_delays</cite>, with n
+being the index of the excerpt in the folder.</p></li>
+<li><p><strong>envelope_1</strong> (<em>np.array</em>) – The envelope of <cite>array_1</cite> (if calculated).</p></li>
+<li><p><strong>envelope_2</strong> (<em>np.array</em>) – The envelope of <cite>array_2</cite> (if calculated).</p></li>
+<li><p><strong>y1</strong> (<em>np.array</em>) – The resampled <cite>array_1</cite> or <cite>envelope_1</cite> (if calculated).</p></li>
+<li><p><strong>y2</strong> (<em>np.array</em>) – The resampled <cite>array_2</cite> or <cite>envelope_2</cite> (if calculated).</p></li>
+<li><p><strong>compute_envelope</strong> (<em>bool</em>) – A boolean describing if the envelope has been computed or not.</p></li>
+<li><p><strong>window_size_env</strong> (<em>int</em>) – The size of the windows in which the arrays were cut for the envelope calculation.</p></li>
+<li><p><strong>overlap_ratio_env</strong> (<em>float</em>) – The ratio of overlapping between each envelope window with the previous and the next windows.</p></li>
+<li><p><strong>filter_below</strong> (<em>int</em><em>, </em><em>float</em><em> or </em><em>None</em>) – The lower limit of the bandpass filter applied to the envelopes.</p></li>
+<li><p><strong>filter_over</strong> (<em>int</em><em>, </em><em>float</em><em> or </em><em>None</em>) – The upper limit of the bandpass filter applied to the envelopes.</p></li>
+<li><p><strong>resampling_rate</strong> (<em>int</em><em>, </em><em>float</em><em> or </em><em>None</em>) – The rate at which the arrays or the envelopes have been resampled.</p></li>
+<li><p><strong>window_size_res</strong> (<em>int</em>) – The size of the windows in which the arrays or envelopes were cut for the resampling.</p></li>
+<li><p><strong>overlap_ratio_res</strong> (<em>float</em>) – The ratio of overlapping between each resampling window with the previous and the next windows.</p></li>
+<li><p><strong>cross-correlation</strong> (<em>np.array</em>) – The array containing the correlation values for each lag between the two arrays.</p></li>
+<li><p><strong>threshold</strong> (<em>float</em>) – The threshold of the maximum correlation value between the two arrays, relative to the maximum
+correlation value between the excerpt and itself.</p></li>
+<li><p><strong>return_delay_format</strong> (<em>str</em>) – Indicates the format of the displayed delay, either <code class="docutils literal notranslate"><span class="pre">&quot;index&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ms&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;s&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;timedelta&quot;</span></code>.</p></li>
+<li><p><strong>return_value</strong> (<em>int</em><em>, </em><em>float</em><em> or </em><em>timedelta</em>) – The value of the delay in the format specified by the previous parameter.</p></li>
+<li><p><strong>max_correlation_value</strong> (<em>float</em>) – The maximum correlation value from the cross-correlation.</p></li>
+<li><p><strong>index_max_correlation_value</strong> (<em>int</em>) – The index at which the maximum correlation value can be found in the cross-correlation array.</p></li>
+<li><p><strong>plot_figure</strong> (<em>bool</em>) – If set on <cite>True</cite>, plots the figure in a Matplotlib window.</p></li>
+<li><p><strong>path_figure</strong> (<em>str</em><em> or </em><em>None</em>) – If set, saves the figure at the given path.</p></li>
+<li><p><strong>name_figure</strong> (<em>str</em><em> or </em><em>None</em>) – If set, considers that <cite>path_figure</cite> is the directory where to save the figure, and <cite>name_figure</cite> is the name
+of the file.</p></li>
+<li><p><strong>plot_intermediate_steps</strong> (<em>bool</em>) – If set on <cite>True</cite>, plots the original audio clips, the envelopes and the resampled arrays (if calculated) besides
+the cross-correlation.</p></li>
+<li><p><strong>x_format_figure</strong> (<em>str</em>) – If set on <cite>“time”</cite>, the values on the x axes of the output will take the HH:MM:SS format (or MM:SS if the time
 series are less than one hour long). If set on <cite>“float”</cite>, the values on the x axes will be displayed as float
 (unit: second). If set on <cite>“auto”</cite> (default), the format of the values on the x axes will be defined depending
-on the value of <cite>return_delay_format</cite>.</p>
-</dd>
-<dt>verbosity: int</dt><dd><p>Sets how much feedback the code will provide in the console output:</p>
-<ul class="simple">
+on the value of <cite>return_delay_format</cite>.</p></li>
+<li><p><strong>verbosity</strong> (<em>int</em>) – <p>Sets how much feedback the code will provide in the console output:</p>
+<ul>
 <li><p><em>0: Silent mode.</em> The code won’t provide any feedback, apart from error messages.</p></li>
 <li><p><em>1: Normal mode</em> (default). The code will provide essential feedback such as progression markers and
 current steps.</p></li>
 <li><p><em>2: Chatty mode.</em> The code will provide all possible information on the events happening. Note that this
 may clutter the output and slow down the execution.</p></li>
+</ul>
+</p></li>
 </ul>
 </dd>
 </dl>
