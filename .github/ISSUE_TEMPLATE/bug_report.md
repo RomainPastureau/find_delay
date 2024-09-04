@@ -2,8 +2,8 @@
 name: Bug report
 about: Create a report to help us improve
 title: ''
-labels: ''
-assignees: ''
+labels: bug
+assignees: RomainPastureau
 
 ---
 
@@ -20,18 +20,12 @@ Steps to reproduce the behavior:
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Files**
+If applicable, add links to a sample audio file you used that led to your issue. If you do not want to share your audio files or if they contain sensitive information, prefer a complete description in the paragraphs above.
 
-**Desktop (please complete the following information):**
+**Device information**
  - OS: [e.g. iOS]
  - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
-
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
  - Version [e.g. 22]
 
 **Additional context**
