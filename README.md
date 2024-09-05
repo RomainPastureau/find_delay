@@ -1,4 +1,4 @@
-# find_delay 2.10
+# find_delay 2.11
 [![Documentation Status](https://readthedocs.org/projects/find-delay/badge/?version=latest)](https://find-delay.readthedocs.io/en/latest/?badge=latest)
 
 [PyPI page](https://pypi.org/project/find-delay/)
@@ -23,8 +23,9 @@ You can also run demos/demo.py to get four examples (in that case, you will need
 the repository and place them in the same folder for examples 3 and 4).
 
 ## Quick use for audio files
-To find when an excerpt starts in an audio file, use the `find_delay` function and fill only the first four parameters;
-leave the other parameters default (just set `plot_figure = True` if you want to visualize the output of the function).
+To find when an excerpt starts in an audio file, use the `find_delay` function and fill only the first two parameters, 
+by indicating the path to the corresponding WAV files; leave the other parameters default (just set `plot_figure = True`
+if you want to visualize the output of the function).
 
 ## Specifics
 The function accepts two arrays containing time series - the time series can be of different frequency or amplitude.
@@ -94,9 +95,10 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 ![Delay between an audio file and an excerpt from it](https://raw.githubusercontent.com/RomainPastureau/find_delay/package/demos/figure_3.png)
 
 ### Latest version
-*2.10 (2024-09-05)*
-* Corrected critical bug in stereo-to-mono conversion
-* Added WAV tests
+*2.11 (2024-09-05)*
+-----------------
+* Corrected bug that prevented figures to appear
+* Added more WAV tests
 
 [See version history](https://find-delay.readthedocs.io/en/latest/version_history.html)
 

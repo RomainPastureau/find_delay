@@ -5,5 +5,8 @@ demos/find_delay_3.py
 demos/*.wav
 tests/non_github_tests.py
 tests/figure_1.png
+tests/figure_2.png
+tests/figure_3.png
+tests/figures
 /src/find_delay/__pycache__
 /tests/__pycache__

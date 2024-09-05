@@ -7,6 +7,8 @@ Current version: 2.10 (2024-09-05)
 
 Version history
 ---------------
+2.11 (2024-09-05) · Corrected bug that prevented figures to appear
+                  · Added more WAV tests
 2.10 (2024-09-05) · Corrected critical bug in stereo-to-mono conversion
                   · Added WAV tests
 2.9 (2024-09-05) · Added the possibility to pass paths to WAV files as parameters of `find_delay` and `find_delays`
@@ -717,7 +719,8 @@ def _convert_to_mono(audio_data, mono_channel, verbosity=1):
 
     # If mono_channel is "average"
     elif mono_channel == "average":
-        mono_array = np.mean(audio_data[1], 1)
+        print(audio_data)
+        mono_array = np.mean(audio_data, 1)
 
     # Any other case
     else:
@@ -1061,13 +1064,13 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     index_start_array_2 = 0
     if index_max_correlation_value < 0:
         if resampling_rate is None:
-            index_start_array_2 = -index_max_correlation_value
+            index_start_array_2 = int(-index_max_correlation_value)
         else:
-            index_start_array_2 = -index_max_correlation_value * freq_array_2 / resampling_rate
+            index_start_array_2 = int(-index_max_correlation_value * freq_array_2 / resampling_rate)
 
     index_end_array_2 = len(array_2)
     if resampling_rate is None and index_max_correlation_value + len(array_2) > len(array_1):
-        index_end_array_2 = len(array_1) - index_max_correlation_value
+        index_end_array_2 = int(len(array_1) - index_max_correlation_value)
     elif resampling_rate is not None:
         if index_max_correlation_value * freq_array_1 / resampling_rate + \
             len(array_2) * freq_array_1 / freq_array_2 > len(array_1):
@@ -1161,14 +1164,14 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
     Parameters
     ----------
-    array_1: list, np.ndarray or str
+    array_1: list, numpy.ndarray or str
         A first array of samples, or a string containing the path to a WAV file. In this case, the parameter
         `freq_array_1` will be ignored and extracted from the WAV file. Note that if the WAV file contains more than one
-        channel, the function will turn the WAV to mono by only keeping the channel with index 0.
+        channel, the function will turn the WAV to mono, using the method described by the parameter `mono_channel`.
 
         .. versionchanged:: 2.9
 
-    array_2: list, np.ndarray or str
+    array_2: list, numpy.ndarray or str
         An second array of samples, smaller than or of equal size to the first one, that is allegedly an excerpt
         from the first one. The amplitude, frequency or values do not have to match exactly the ones from the first
         array. The parameter can also be a string containing the path to a WAV file (see description of parameter
@@ -1177,10 +1180,12 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         .. versionchanged:: 2.9
 
     freq_array_1: int or float, optional
-        The sampling frequency of the first array, in Hz (default: 1).
+        The sampling frequency of the first array, in Hz (default: 1). This parameter is ignored if array_1 is a path to
+        a WAV file.
 
     freq_array_2: int or float, optional
-        The sampling frequency of the second array, in Hz (default: 1).
+        The sampling frequency of the second array, in Hz (default: 1). This parameter is ignore is array_2 is a path to
+        a WAV file.
 
     compute_envelope: bool, optional
         If `True` (default), calculates the envelope of the array values before performing the cross-correlation.
@@ -1520,6 +1525,10 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         Modified the cross-correlation to look for the excerpt at the edges of the first array.
         Added the new parameter `x_format_figure`, allowing to have HH:MM:SS times on the x-axis.
 
+    .. versionchanged:: 2.9
+        array and excerpts can now be strings containing paths to WAV files.
+        Added the parameter mono_channel.
+
     Important
     ---------
     Because it is easy to get confused: this function returns the timestamp in array where each excerpt begins. This
@@ -1541,21 +1550,29 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
     Parameters
     ----------
-    array: list or np.ndarray
-        An array of samples.
+    array: list, numpy.ndarray or str
+        An array of samples, or a string containing the path to a WAV file. In this case, the parameter
+        `freq_array` will be ignored and extracted from the WAV file. Note that if the WAV file contains more than one
+        channel, the function will turn the WAV to mono, using the method described by the parameter `mono_channel`.
 
-    excerpts: list(list or np.ndarray)
-        A list of excerpts, each being an array of samples. Each excerpt should be smaller than or of equal size to the
-        array in which to locate it. The amplitude, frequency or values do not have to match exactly the ones from the
-        first array.
+        .. versionchanged:: 2.9
+
+    excerpts: list(list, numpy.ndarray or str)
+        A list of excerpts, each being an array of samples, a path to a WAV file, or a mix of both. Each excerpt should
+        be smaller than or of equal size to the array in which to locate it. The amplitude, frequency or values do not
+        have to match exactly the ones from the first array.
+
+        .. versionchanged:: 2.9
 
     freq_array: int or float, optional
-        The sampling frequency of the array, in Hz (default: 1).
+        The sampling frequency of the array, in Hz (default: 1). This parameter can be ignored if the parameter `array`
+        is the path to a WAV file.
 
     freq_excerpts: int or float or list(int or float), optional
         The sampling frequency of the excerpts, in Hz (default: 1). This parameter accepts a single value that will be
         applied for each excerpt, or a list of values that has to be the same length as the number of excerpts, with
-        each value corresponding to the frequency of the corresponding excerpt.
+        each value corresponding to the frequency of the corresponding excerpt. This parameter can be ignored if all
+        the values in the parameter `excerpts` are paths to a WAV file.
 
     compute_envelope: bool, optional
         If `True` (default), calculates the envelope of the array values before performing the cross-correlation.

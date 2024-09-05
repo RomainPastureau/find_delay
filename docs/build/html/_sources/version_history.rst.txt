@@ -1,6 +1,11 @@
 Version history
 ===============
 
+2.11 (2024-09-05)
+-----------------
+* Corrected bug that prevented figures to appear
+* Added more WAV tests
+
 2.10 (2024-09-05)
 -----------------
 * Corrected critical bug in stereo-to-mono conversion
