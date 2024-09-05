@@ -3,10 +3,12 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.9 (2024-09-05)
+Current version: 2.10 (2024-09-05)
 
 Version history
 ---------------
+2.10 (2024-09-05) · Corrected critical bug in stereo-to-mono conversion
+                  · Added WAV tests
 2.9 (2024-09-05) · Added the possibility to pass paths to WAV files as parameters of `find_delay` and `find_delays`
                  · Added the parameter mono_channel describing the method for converting multiple-channel audio to mono
                  · Added the function _convert_to_mono to perform the conversion to mono
@@ -701,8 +703,8 @@ def _convert_to_mono(audio_data, mono_channel, verbosity=1):
                 Please choose a channel between 0 and {np.size(audio_data[1]) - 1}.""")
 
         # If the audio data is already mono
-        if np.size(audio_data[1]) == 1:
-            mono_array = audio_data[1]
+        elif np.size(audio_data[1]) == 1:
+            mono_array = audio_data
             if verbosity > 0:
                 print(f"\tThe audio data is already in mono, no conversion necessary.")
 
@@ -1365,9 +1367,6 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         print("Trying to find when the second array starts in the first.")
         print(f"\t The first array contains {np.size(array_1)} samples, at a rate of {freq_array_1} Hz.")
         print(f"\t The second array contains {np.size(array_2)} samples, at a rate of {freq_array_2} Hz.\n")
-
-    if len(array_1) * freq_array_1 > len(array_2) * freq_array_2:
-        pass
 
     number_of_plots = 2
     if plot_intermediate_steps:

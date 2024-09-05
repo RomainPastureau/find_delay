@@ -1,8 +1,7 @@
 """Tests both functions."""
 
 import unittest
-import find_delay
-#from find_delay import find_delay, find_delays, _get_number_of_windows
+from find_delay import find_delay, find_delays
 import random
 
 
@@ -22,7 +21,7 @@ class Tests(unittest.TestCase):
         array_2_len = random.randint(5, array_1_len - array_2_start - 5)
         array_2 = array_1[array_2_start:array_2_start + array_2_len]
         print(f"Creating excerpt with length {array_2_len}, starting at {array_2_start}.")
-        delay = find_delay.find_delay(array_1, array_2, compute_envelope=False)
+        delay = find_delay(array_1, array_2, compute_envelope=False)
 
         assert(delay == array_2_start)
 
@@ -42,14 +41,58 @@ class Tests(unittest.TestCase):
         for i in range(number_of_excerpts):
             excerpt_start = random.randint(0, array_len - 5)
             excerpts_start.append(excerpt_start)
-            excerpt_len = random.randint(5, array_len - excerpt_start - 5)
+            excerpt_len = random.randint(5, array_len - excerpt_start)
             excerpts.append(array[excerpt_start:excerpt_start + excerpt_len])
             print(f"Creating excerpt with length {excerpt_len}, starting at {excerpt_start}.")
-        delays = find_delay.find_delays(array, excerpts, compute_envelope=False)
+        delays = find_delays(array, excerpts, compute_envelope=False)
 
         for i in range(number_of_excerpts):
             assert(delays[i] == excerpts_start[i])
 
+    def test_wav(self):
+        """Performs tests with WAV files."""
+
+        # Excerpt at 2000 ms
+        delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                                            "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                                            return_correlation_value=True)
+        assert(delay == 96002)
+        assert(round(corr, 3) == 0.984)
+
+        # Excerpt at 2000 ms, 6ch
+        delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                                            "test_wav/test_excerpt_2000ms_inside_6ch_48000Hz.wav",
+                                            return_correlation_value=True)
+        assert(delay == 96002)
+        assert(round(corr, 3) == 0.984)
+
+        # Excerpt at 2000 ms, 44100 Hz
+        delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                                            "test_wav/test_excerpt_2000ms_inside_2ch_44100Hz.wav",
+                                            resampling_rate=1000, return_correlation_value=True)
+        assert(delay == 96000)
+        assert(round(corr, 3) == 0.982)
+
+        # Excerpt starting 500 ms before the onset
+        delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                                            "test_wav/test_excerpt_2000ms_onset_-500_2ch_48000Hz.wav",
+                                            return_correlation_value=True)
+        assert(delay == -24001)
+        assert(round(corr, 3) == 0.977)
+
+        # Excerpt ending 500 ms before the offset, mono
+        delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                                            "test_wav/test_excerpt_2000ms_onset_-500_1ch_48000Hz.wav",
+                                            return_correlation_value=True)
+        assert(delay == -24001)
+        assert(round(corr, 3) == 0.977)
+
+        # Excerpt ending 500 ms after the offset
+        delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                                            "test_wav/test_excerpt_2000ms_offset_+500_2ch_48000Hz.wav",
+                                            return_correlation_value=True)
+        assert(delay == 216002)
+        assert(round(corr, 3) == 0.966)
 
 if __name__ == "__main__":
     unittest.main()

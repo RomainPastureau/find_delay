@@ -64,23 +64,26 @@
 <li class="toctree-l2"><a class="reference internal" href="#find_delay.find_delay._get_envelope"><code class="docutils literal notranslate"><span class="pre">_get_envelope()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#find_delay.find_delay._resample_window"><code class="docutils literal notranslate"><span class="pre">_resample_window()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#find_delay.find_delay._resample"><code class="docutils literal notranslate"><span class="pre">_resample()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#find_delay.find_delay._convert_to_mono"><code class="docutils literal notranslate"><span class="pre">_convert_to_mono()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#find_delay.find_delay._create_figure"><code class="docutils literal notranslate"><span class="pre">_create_figure()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="version_history.html">Version history</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id1">2.8 (2024-06-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id2">2.7 (2024-05-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id3">2.6 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id4">2.5 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id5">2.4 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id6">2.3 (2024-05-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id7">2.2 (2024-05-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id8">2.1 (2024-04-25)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id9">2.0 (2024-04-24)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id10">1.3 (2024-04-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id11">1.2 (2024-04-17)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id12">1.1 (2024-04-16)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id13">1.0 (2024-04-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id1">2.10 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id2">2.9 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id3">2.8 (2024-06-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id4">2.7 (2024-05-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id5">2.6 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id6">2.5 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id7">2.4 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id8">2.3 (2024-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id9">2.2 (2024-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id10">2.1 (2024-04-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id11">2.0 (2024-04-24)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id12">1.3 (2024-04-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id13">1.2 (2024-04-17)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id14">1.1 (2024-04-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id15">1.0 (2024-04-12)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a><ul>
@@ -401,6 +404,46 @@ may clutter the output and slow down the execution.</p></li>
 these operations, the algorithm only <strong>estimates</strong> the real values of the samples. You should then consider
 the upsampling (and the downsampling, to a lesser extent) with care.</p>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="find_delay.find_delay._convert_to_mono">
+<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">_convert_to_mono</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mono_channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay._convert_to_mono" title="Link to this definition"></a></dt>
+<dd><p>Converts an audio array to mono.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 2.9.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>audio_data</strong> (<em>np.array</em><em> (</em><em>1D</em><em> or </em><em>2D</em><em>)</em>) – The parameter data resulting from reading a WAV file with
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.wavfile.read.html">scipy.io.wavfile.read</a>.</p></li>
+<li><p><strong>mono_channel</strong> (<em>int</em><em> or </em><em>str</em><em>, </em><em>optional</em>) – Defines the method to use to convert multiple-channel WAV files to mono, if one of the parameters <cite>array1</cite> or
+<cite>array2</cite> is a path pointing to a WAV file. By default, this parameter value is <code class="docutils literal notranslate"><span class="pre">0</span></code>: the channel with index 0
+in the WAV file is used as the array, while all the other channels are discarded. This value can be any
+of the channels indices (using <code class="docutils literal notranslate"><span class="pre">1</span></code> will preserve the channel with index 1, etc.). This parameter can also
+take the value <code class="docutils literal notranslate"><span class="pre">&quot;average&quot;</span></code>: in that case, a new channel is created by averaging the values of all the
+channels of the WAV file. Note that this parameter applies to both arrays: in the case where you need to select
+different channels for each WAV file, open the files before calling the function and pass the samples and
+frequencies as parameters.</p></li>
+<li><p><strong>verbosity</strong> (<em>int</em>) – <p>Sets how much feedback the code will provide in the console output:</p>
+<ul>
+<li><p><em>0: Silent mode.</em> The code won’t provide any feedback, apart from error messages.</p></li>
+<li><p><em>1: Normal mode</em> (default). The code will provide essential feedback such as progression markers and
+current steps.</p></li>
+<li><p><em>2: Chatty mode.</em> The code will provide all possible information on the events happening. Note that this
+may clutter the output and slow down the execution.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A 1D numpy array containing the audio converted to mono.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

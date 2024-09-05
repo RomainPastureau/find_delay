@@ -1,6 +1,11 @@
 Version history
 ===============
 
+2.10 (2024-09-05)
+-----------------
+* Corrected critical bug in stereo-to-mono conversion
+* Added WAV tests
+
 2.9 (2024-09-05)
 ----------------
 * Added the possibility to pass paths to WAV files as parameters of `find_delay` and `find_delays`

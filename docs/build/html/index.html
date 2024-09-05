@@ -64,23 +64,26 @@
 <li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._get_envelope"><code class="docutils literal notranslate"><span class="pre">_get_envelope()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._resample_window"><code class="docutils literal notranslate"><span class="pre">_resample_window()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._resample"><code class="docutils literal notranslate"><span class="pre">_resample()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._convert_to_mono"><code class="docutils literal notranslate"><span class="pre">_convert_to_mono()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._create_figure"><code class="docutils literal notranslate"><span class="pre">_create_figure()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="version_history.html">Version history</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id1">2.8 (2024-06-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id2">2.7 (2024-05-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id3">2.6 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id4">2.5 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id5">2.4 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id6">2.3 (2024-05-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id7">2.2 (2024-05-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id8">2.1 (2024-04-25)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id9">2.0 (2024-04-24)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id10">1.3 (2024-04-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id11">1.2 (2024-04-17)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id12">1.1 (2024-04-16)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id13">1.0 (2024-04-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id1">2.10 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id2">2.9 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id3">2.8 (2024-06-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id4">2.7 (2024-05-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id5">2.6 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id6">2.5 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id7">2.4 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id8">2.3 (2024-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id9">2.2 (2024-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id10">2.1 (2024-04-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id11">2.0 (2024-04-24)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id12">1.3 (2024-04-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id13">1.2 (2024-04-17)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id14">1.1 (2024-04-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id15">1.0 (2024-04-12)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a><ul>
@@ -153,10 +156,12 @@ environment, you should run <code class="docutils literal notranslate"><span cla
 <p>To find when an excerpt starts in an array, use the <cite>find_delay</cite> function and fill only the first five parameters:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">array_1</span></code>: The array that contains the excerpt</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">array_2</span></code>: The excerpt</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">freq_array_1</span></code>: The frequency of the array (if it’s important, otherwise set it at 1)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">freq_array_2</span></code>: The frequency of the excerpt (it it’s important, otherwise set it at 1)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">array_1</span></code>: An array of numbers or the path to a WAV file</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">array_2</span></code>: An excerpt of array_1, or the path to a WAV file contained in array_1</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">freq_array_1</span></code>: The frequency of the array (if it’s important, otherwise set it at 1). If array_1 is a path to
+a WAV file, you can ignore this parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">freq_array_2</span></code>: The frequency of the excerpt (it it’s important, otherwise set it at 1). If array_2 is a path to
+a WAV file, you can ignore this parameter.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">compute_envelope</span></code>: If you are trying to find the delay between two audio files, set on <cite>True</cite>, otherwise
 <cite>False</cite>.</p></li>
 </ul>
@@ -217,11 +222,12 @@ If you need to find multiple excerpts into one big array, call <a class="referen
 </section>
 <section id="how-does-it-work">
 <h2>How does it work?<a class="headerlink" href="#how-does-it-work" title="Link to this heading"></a></h2>
-<p>The function accepts two arrays containing time series - the time series can be of different frequency or amplitude -
-the only condition for the function to work is that the second array should be entirely contained into the first (note:
-if this is not the case, try to run the function with the beginning of the second array only - it is also possible to
-run the function as is, but this implies taking the risk of getting erroneous results).</p>
-<p>The function can then calculate the envelope of the time series (recommended for audio files) and apply a band-pass
+<p>The function accepts two arrays containing time series - the time series can be of different frequency or amplitude.
+To obtain better results, make sure that the second time series (the excerpt) is entirely contained into the first -
+notably, you can trim the second array for it to be the case. The function should work if the second array is over one
+of the edges of the first, but the cross-correlation score will never be 1. This implies that, the less amount of the
+second array contained in the second, the more likely the chance of getting an erroneous result.</p>
+<p>The function can calculate the envelope of the time series (recommended for audio files) and apply a band-pass
 filter to the result.</p>
 <p>The function can also resample the arrays (necessary when the two time series do not have the same frequency).</p>
 <p>Finally, the function performs the cross-correlation between the two arrays.</p>
@@ -247,23 +253,26 @@ function can also return this correlation value).</p>
 <li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._get_envelope"><code class="docutils literal notranslate"><span class="pre">_get_envelope()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._resample_window"><code class="docutils literal notranslate"><span class="pre">_resample_window()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._resample"><code class="docutils literal notranslate"><span class="pre">_resample()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._convert_to_mono"><code class="docutils literal notranslate"><span class="pre">_convert_to_mono()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.find_delay._create_figure"><code class="docutils literal notranslate"><span class="pre">_create_figure()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="version_history.html">Version history</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id1">2.8 (2024-06-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id2">2.7 (2024-05-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id3">2.6 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id4">2.5 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id5">2.4 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id6">2.3 (2024-05-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id7">2.2 (2024-05-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id8">2.1 (2024-04-25)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id9">2.0 (2024-04-24)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id10">1.3 (2024-04-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id11">1.2 (2024-04-17)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id12">1.1 (2024-04-16)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id13">1.0 (2024-04-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id1">2.10 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id2">2.9 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id3">2.8 (2024-06-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id4">2.7 (2024-05-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id5">2.6 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id6">2.5 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id7">2.4 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id8">2.3 (2024-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id9">2.2 (2024-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id10">2.1 (2024-04-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id11">2.0 (2024-04-24)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id12">1.3 (2024-04-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id13">1.2 (2024-04-17)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id14">1.1 (2024-04-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id15">1.0 (2024-04-12)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a><ul>

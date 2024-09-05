@@ -1,4 +1,4 @@
-# find_delay 2.9
+# find_delay 2.10
 [![Documentation Status](https://readthedocs.org/projects/find-delay/badge/?version=latest)](https://find-delay.readthedocs.io/en/latest/?badge=latest)
 
 [PyPI page](https://pypi.org/project/find-delay/)
@@ -94,17 +94,9 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 ![Delay between an audio file and an excerpt from it](https://raw.githubusercontent.com/RomainPastureau/find_delay/package/demos/figure_3.png)
 
 ### Latest version
-**2.9 (2024-09-05)**
-* Added the possibility to pass paths to WAV files as parameters of `find_delay` and `find_delays`
-* Added the parameter mono_channel describing the method for converting multiple-channel audio to mono
-* Added the function _convert_to_mono to perform the conversion to mono
-* Corrected the display of negative delays when they are in timedelta format. A delay of -1 second
-  will now print `-0:00:01` instead of `-1 day, 23:59:59`.
-* Corrected a bug preventing the figure to display when the excerpt is found at the edges of the first
-  array
-* Closed the figure at the end of _create_figure to prevent warnings
-* Added an FAQ page in the documentation
-* Corrected typos and type errors in the documentation
+*2.10 (2024-09-05)*
+* Corrected critical bug in stereo-to-mono conversion
+* Added WAV tests
 
 [See version history](https://find-delay.readthedocs.io/en/latest/version_history.html)
 
