@@ -23,6 +23,7 @@ extensions = [
     'sphinx.ext.duration',
     'sphinx.ext.napoleon',
     'sphinx.ext.autodoc',
+    'sphinx_rtd_dark_mode',
     'sphinx_tabs.tabs',
     'sphinx_copybutton',
 ]
@@ -31,6 +32,7 @@ templates_path = ['_templates']
 exclude_patterns = []
 
 html_theme = 'sphinx_rtd_theme'
+default_dark_mode = False
 
 html_theme_options = {
     "style_nav_header_background": '#99cc00',
