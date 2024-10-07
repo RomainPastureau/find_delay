@@ -106,3 +106,4 @@ If you detect any bug, please [open an issue](https://github.com/RomainPastureau
 
 Thanks! 🦆
 
+<a href="https://www.buymeacoffee.com/romainpastureau" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-green.png" alt="Buy Me A Coffee" height="41" width="174"></a>
