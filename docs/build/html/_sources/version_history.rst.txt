@@ -1,6 +1,19 @@
 Version history
 ===============
 
+2.12 (2024-11-16)
+-----------------
+* Modified the cross-correlation function to prevent numpy runtime warnings
+* The parameter resampling_rate can now be set on "auto", which is also the new default
+* Corrected the linear resampling that had two parameters inverted
+* Moved the cross-correlation to a function _cross_correlation to avoid repeating code
+* Passing an array or an excerpt with more than one dimension now throws an exception
+* Added one test to test the previous exception
+* Prevented "Getting the Hilbert transform..." to appear when verbosity=0
+* Added the parameter add_tabs for all functions with verbosity
+* Removed the version history from the find_delay file to gain space
+* Corrected the documentation
+
 2.11 (2024-09-05)
 -----------------
 * Corrected bug that prevented figures to appear

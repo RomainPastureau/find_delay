@@ -185,11 +185,23 @@ class Tests(unittest.TestCase):
                                      "test_wav/test_excerpt_2000ms_onset_-500_1ch_48000Hz.wav",
                                      "test_wav/test_excerpt_2000ms_offset_+500_2ch_48000Hz.wav"],
                                     resampling_rate=1000, return_correlation_values=True,
-                                    path_figures="figures/wav/", name_figures="figure_delays")
+                                    path_figures="figures/wav/", name_figures="figure_delays", verbosity=2)
 
         assert (delays == [96000, 96000, 96000, -24000, -24000, 216000])
         assert (np.all(np.round(corrs, 3) == [0.982, 0.982, 0.982, 0.977, 0.977, 0.965]))
 
+    def test_stereo_exception(self):
+        """With both arrays being stereo, checks that the function find_delay returns an exception."""
+        wav_full = wavfile.read("test_wav/test_full_2ch_48000Hz.wav")
+        freq_full = wav_full[0]
+        array_full = wav_full[1]
+
+        # Excerpt at 2000 ms - we keep the two channels
+        wav_excerpt1 = wavfile.read("test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav")
+        freq_excerpt1 = wav_excerpt1[0]
+        array_excerpt1 = wav_excerpt1[1]
+
+        self.assertRaises(Exception, find_delay, array_full, array_excerpt1, freq_full, freq_excerpt1)
 
 if __name__ == "__main__":
     unittest.main()

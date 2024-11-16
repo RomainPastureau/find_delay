@@ -1,4 +1,4 @@
-# find_delay 2.11
+# find_delay 2.12
 [![Documentation Status](https://readthedocs.org/projects/find-delay/badge/?version=latest)](https://find-delay.readthedocs.io/en/latest/?badge=latest)
 
 [PyPI page](https://pypi.org/project/find-delay/)
@@ -95,10 +95,19 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 ![Delay between an audio file and an excerpt from it](https://raw.githubusercontent.com/RomainPastureau/find_delay/package/demos/figure_3.png)
 
 ### Latest version
-*2.11 (2024-09-05)*
+*2.12 (2024-11-16)*
 -----------------
-* Corrected bug that prevented figures to appear
-* Added more WAV tests
+
+* Modified the cross-correlation function to prevent numpy runtime warnings
+* The parameter resampling_rate can now be set on "auto", which is also the new default
+* Corrected the linear resampling that had two parameters inverted
+* Moved the cross-correlation to a function _cross_correlation to avoid repeating code
+* Passing an array or an excerpt with more than one dimension now throws an exception
+* Added one test to test the previous exception
+* Prevented "Getting the Hilbert transform..." to appear when verbosity=0
+* Added the parameter add_tabs for all functions with verbosity
+* Removed the version history from the find_delay file to gain space
+* Corrected the documentation
 
 [See version history](https://find-delay.readthedocs.io/en/latest/version_history.html)
 

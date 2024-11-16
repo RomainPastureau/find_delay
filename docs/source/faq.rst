@@ -24,6 +24,25 @@ To avoid this, you can also try to open your file directly in Python, as long as
 and their frequency. You can look into `pydub <https://pypi.org/project/pydub/>`_ or
 `audio2numpy <https://pypi.org/project/audio2numpy/>`_.
 
+How does the function work for audio files?
+-------------------------------------------
+When trying to find the delay between two audio files, the function actually performs a cross-correlation of the
+envelope of the two audio files. The envelope of the two audios is first calculated, using the absolute values of the
+Hilbert transform (from scipy) over multiple overlapping windows. Then, the center values of each window is concatenated
+to obtain an envelope that is, in most cases, over 99% correlated to an envelope calculated from the full audio; the
+advantage is that this method is way much faster.
+
+Tests performed on audio excerpts with an overlap of 0.5 and windows 50 000 samples long resulted in a 99.84% precision
+and a 99.99998 % correlation with the envelope calculated on the full duration of the audio, for a very significant
+time and memory usage gain - especially for very long files.
+
+Once the envelope is calculated for both files, the function performs a cross-correlation; essentially, a correlation is
+performed for each delay of an audio compared to the other. The delay matching the highest correlation value is then
+returned.
+
+Please note that the parameters of find_delay allow to manually set the envelope window size and overlap and the cross-
+correlation threshold value.
+
 I found an issue! How can I contact the developers?
 ---------------------------------------------------
 If you found a bug, or if the package is not functioning as expected,

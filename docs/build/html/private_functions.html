@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Private functions &mdash; find_delay 2.11 documentation</title>
+  <title>Private functions &mdash; find_delay 2.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -20,12 +20,12 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=2de06f63"></script>
+        <script src="_static/documentation_options.js?v=1a18e509"></script>
         <script src="_static/doctools.js?v=9a2dae69"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script src="_static/clipboard.min.js?v=a7894cd8"></script>
         <script src="_static/copybutton.js?v=f281be69"></script>
-        <script src="_static/dark_mode_js/default_dark.js?v=fd565c74"></script>
+        <script src="_static/dark_mode_js/default_light.js?v=c2e647ce"></script>
         <script src="_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -68,32 +68,35 @@
 <li class="toctree-l2"><a class="reference internal" href="#find_delay.find_delay._get_envelope"><code class="docutils literal notranslate"><span class="pre">_get_envelope()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#find_delay.find_delay._resample_window"><code class="docutils literal notranslate"><span class="pre">_resample_window()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#find_delay.find_delay._resample"><code class="docutils literal notranslate"><span class="pre">_resample()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#find_delay.find_delay._cross_correlation"><code class="docutils literal notranslate"><span class="pre">_cross_correlation()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#find_delay.find_delay._convert_to_mono"><code class="docutils literal notranslate"><span class="pre">_convert_to_mono()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#find_delay.find_delay._create_figure"><code class="docutils literal notranslate"><span class="pre">_create_figure()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="version_history.html">Version history</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id1">2.11 (2024-09-05)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id2">2.10 (2024-09-05)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id3">2.9 (2024-09-05)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id4">2.8 (2024-06-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id5">2.7 (2024-05-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id6">2.6 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id7">2.5 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id8">2.4 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id9">2.3 (2024-05-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id10">2.2 (2024-05-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id11">2.1 (2024-04-25)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id12">2.0 (2024-04-24)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id13">1.3 (2024-04-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id14">1.2 (2024-04-17)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id15">1.1 (2024-04-16)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id16">1.0 (2024-04-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id1">2.12 (2024-11-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id2">2.11 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id3">2.10 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id4">2.9 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id5">2.8 (2024-06-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id6">2.7 (2024-05-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id7">2.6 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id8">2.5 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id9">2.4 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id10">2.3 (2024-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id11">2.2 (2024-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id12">2.1 (2024-04-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id13">2.0 (2024-04-24)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id14">1.3 (2024-04-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id15">1.2 (2024-04-17)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id16">1.1 (2024-04-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id17">1.0 (2024-04-12)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#why-is-the-name-of-the-package-find-delay-when-installing-and-find-delay-when-importing">Why is the name of the package find-delay when installing, and find_delay when importing?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#i-want-to-use-find-delay-with-audio-files-but-my-audio-files-are-not-wav">I want to use find_delay with audio files, but my audio files are not WAV…</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-does-the-function-work-for-audio-files">How does the function work for audio files?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#i-found-an-issue-how-can-i-contact-the-developers">I found an issue! How can I contact the developers?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#i-have-an-idea-for-improvement">I have an idea for improvement!</a></li>
 </ul>
@@ -128,7 +131,7 @@
 <h1>Private functions<a class="headerlink" href="#private-functions" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="find_delay.find_delay._filter_frequencies">
-<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">_filter_frequencies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_below</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_over</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay._filter_frequencies" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">_filter_frequencies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_below</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_over</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_tabs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay._filter_frequencies" title="Link to this definition"></a></dt>
 <dd><p>Applies a low-pass, high-pass or band-pass filter to the data in the attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">samples</span></code>.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 1.0.</span></p>
@@ -139,12 +142,12 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array</strong> (<em>list</em><em> or </em><em>np.ndarray</em>) – An array of samples.</p></li>
-<li><p><strong>frequency</strong> (<em>int</em><em> or </em><em>float</em>) – The sampling frequency of the array, in Hz.</p></li>
-<li><p><strong>filter_below</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – The value below which you want to filter the data. If set on None or 0, this parameter will be ignored.
+<li><p><strong>array</strong> (list|`np.ndarray &lt;<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html">https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html</a>&gt;`_) – An array of samples.</p></li>
+<li><p><strong>frequency</strong> (<em>int</em><em>|</em><em>float</em>) – The sampling frequency of the array, in Hz.</p></li>
+<li><p><strong>filter_below</strong> (<em>float</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – The value below which you want to filter the data. If set on None or 0, this parameter will be ignored.
 If this parameter is the only one provided, a high-pass filter will be applied to the samples; if
 <code class="docutils literal notranslate"><span class="pre">filter_over</span></code> is also provided, a band-pass filter will be applied to the samples.</p></li>
-<li><p><strong>filter_over</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – The value over which you want to filter the data. If set on None or 0, this parameter will be ignored.
+<li><p><strong>filter_over</strong> (<em>float</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – The value over which you want to filter the data. If set on None or 0, this parameter will be ignored.
 If this parameter is the only one provided, a low-pass filter will be applied to the samples; if
 <code class="docutils literal notranslate"><span class="pre">filter_below</span></code> is also provided, a band-pass filter will be applied to the samples.</p></li>
 <li><p><strong>verbosity</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Sets how much feedback the code will provide in the console output:</p>
@@ -156,13 +159,19 @@ current steps.</p></li>
 may clutter the output and slow down the execution.</p></li>
 </ul>
 </p></li>
+<li><p><strong>add_tabs</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
+other functions to encapsulate the verbosity outputs by indenting them.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 2.12.</span></p>
+</div>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The array with filtered values.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.array</p>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html">np.ndarray</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -187,10 +196,11 @@ without overlap.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array_length_or_array</strong> (<em>list</em><em>(</em><em>int</em><em> or </em><em>float</em><em>) or </em><em>np.array</em><em>(</em><em>int</em><em> or </em><em>float</em><em>) or </em><em>int</em>) – An array of numerical values, or its length.</p></li>
+<li><p><strong>array_length_or_array</strong> (<em>numpy.ndarray</em><em>|</em><em>list</em><em>|</em><em>int</em>) – An array of numerical values, or its length.</p></li>
 <li><p><strong>window_size</strong> (<em>int</em>) – The number of array elements in each window.</p></li>
-<li><p><strong>overlap_ratio</strong> (<em>float</em>) – The ratio, between 0 and 1, of array elements overlapping between each window and the next.</p></li>
-<li><p><strong>add_incomplete_window</strong> (<em>bool</em>) – If set on <code class="docutils literal notranslate"><span class="pre">True</span></code>, the last window will be included even if its size is smaller than <code class="docutils literal notranslate"><span class="pre">window_size</span></code>.
+<li><p><strong>overlap_ratio</strong> (<em>float</em><em>, </em><em>optional</em>) – The ratio, between 0 (inclusive, default) and 1 (exclusive), of array elements overlapping between each window
+and the next.</p></li>
+<li><p><strong>add_incomplete_window</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set on <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), the last window will be included even if its size is smaller than <code class="docutils literal notranslate"><span class="pre">window_size</span></code>.
 Otherwise, it will be ignored.</p></li>
 </ul>
 </dd>
@@ -205,9 +215,12 @@ Otherwise, it will be ignored.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="find_delay.find_delay._get_envelope">
-<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">_get_envelope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_below</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_over</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay._get_envelope" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">_get_envelope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_below</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_over</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_tabs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay._get_envelope" title="Link to this definition"></a></dt>
 <dd><p>Calculates the envelope of an array, and returns it. The function can also optionally perform a band-pass
-filtering, if the corresponding parameters are provided.</p>
+filtering, if the corresponding parameters are provided. To calculate the envelope, the function calculates the
+absolute values of the
+<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.hilbert.html">scipy.signal.hilbert</a> transform
+of each window of the envelope.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 1.0.</span></p>
 </div>
@@ -226,24 +239,25 @@ filtering, if the corresponding parameters are provided.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array</strong> (<em>list</em><em> or </em><em>np.ndarray</em>) – An array of samples.</p></li>
-<li><p><strong>frequency</strong> (<em>int</em><em> or </em><em>float</em>) – The sampling frequency of the array, in Hz.</p></li>
-<li><p><strong>window_size</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – <p>The size of the windows (in samples) in which to cut the array to calculate the envelope. Cutting large arrays
+<li><p><strong>array</strong> (<em>numpy.ndarray</em><em>|</em><em>list</em>) – An array of samples.</p></li>
+<li><p><strong>frequency</strong> (<em>int</em><em>|</em><em>float</em>) – The sampling frequency of the array, in Hz.</p></li>
+<li><p><strong>window_size</strong> (<em>int</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – <p>The size of the windows (in samples) in which to cut the array to calculate the envelope. Cutting large arrays
 into windows allows to speed up the computation. If this parameter is set on <cite>None</cite>, the window size will be set
-on the number of samples. A good value for this parameter is generally 1 million. If this parameter is set on 0,
-on None or on a number of samples bigger than the amount of elements in the array, the window size is set on
-the length of the samples.</p>
+on the number of samples. A good value for this parameter is generally 1 million (default). If this parameter is
+set on 0, on <cite>None</cite> or on a number of samples bigger than the amount of elements in the array, the window size
+is set on the length of the samples.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 2.1.</span></p>
 </div>
 </p></li>
-<li><p><strong>overlap_ratio</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – The ratio of samples overlapping between each window. If this parameter is not <cite>None</cite>, each window will
+<li><p><strong>overlap_ratio</strong> (<em>float</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – The ratio of samples overlapping between each window. If this parameter is not <cite>None</cite>, each window will
 overlap with the previous (and, logically, the next) for an amount of samples equal to the number of samples in
 a window times the overlap ratio. Then, only the central values of each window will be preserved and
 concatenated; this allows to discard any “edge” effect due to the windowing. If the parameter is set on <cite>None</cite>
-or 0, the windows will not overlap.</p></li>
-<li><p><strong>filter_below</strong> (<em>int</em><em>, </em><em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If not <code class="docutils literal notranslate"><span class="pre">None</span></code> nor 0, this value will be provided as the lowest frequency of the band-pass filter.</p></li>
-<li><p><strong>filter_over</strong> (<em>int</em><em>, </em><em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – If not <code class="docutils literal notranslate"><span class="pre">None</span></code> nor 0, this value will be provided as the highest frequency of the band-pass filter.</p></li>
+or 0, the windows will not overlap. Default value: 0.5 (each window will overlap at 50% with the previous and
+the next).</p></li>
+<li><p><strong>filter_below</strong> (<em>int</em><em>|</em><em>float</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – If not <cite>None</cite> (default) nor 0, this value will be provided as the lowest frequency of the band-pass filter.</p></li>
+<li><p><strong>filter_over</strong> (<em>int</em><em>|</em><em>float</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – If not <cite>None</cite> (default) nor 0, this value will be provided as the highest frequency of the band-pass filter.</p></li>
 <li><p><strong>verbosity</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Sets how much feedback the code will provide in the console output:</p>
 <ul>
 <li><p><em>0: Silent mode.</em> The code won’t provide any feedback, apart from error messages.</p></li>
@@ -253,20 +267,27 @@ current steps.</p></li>
 may clutter the output and slow down the execution.</p></li>
 </ul>
 </p></li>
+<li><p><strong>add_tabs</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
+other functions to encapsulate the verbosity outputs by indenting them.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 2.12.</span></p>
+</div>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The envelope of the original array.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.array</p>
+<dd class="field-odd"><p><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html">np.ndarray</a></p>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="find_delay.find_delay._resample_window">
-<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">_resample_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_timestamps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampled_timestamps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_start_original</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_end_original</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_start_resampled</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_end_resampled</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay._resample_window" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">_resample_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_timestamps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampled_timestamps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_start_original</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_end_original</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_start_resampled</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_end_resampled</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_tabs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay._resample_window" title="Link to this definition"></a></dt>
 <dd><p>Performs and returns the resampling on a subarray of samples.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 1.0.</span></p>
@@ -277,9 +298,9 @@ may clutter the output and slow down the execution.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array</strong> (<em>list</em><em> or </em><em>np.ndarray</em>) – An array of samples.</p></li>
-<li><p><strong>original_timestamps</strong> (<em>list</em><em> or </em><em>np.ndarray</em>) – An array containing the timestamps for each sample of the original array.</p></li>
-<li><p><strong>resampled_timestamps</strong> (<em>list</em><em> or </em><em>np.ndarray</em>) – An array containing the timestamps for each desired sample in the resampled array.</p></li>
+<li><p><strong>array</strong> (<em>numpy.ndarray</em><em>|</em><em>list</em>) – An array of samples.</p></li>
+<li><p><strong>original_timestamps</strong> (<em>numpy.ndarray</em><em>|</em><em>list</em>) – An array containing the timestamps for each sample of the original array.</p></li>
+<li><p><strong>resampled_timestamps</strong> (<em>numpy.ndarray</em><em>|</em><em>list</em>) – An array containing the timestamps for each desired sample in the resampled array.</p></li>
 <li><p><strong>index_start_original</strong> (<em>int</em>) – The index in the array where the window starts.</p></li>
 <li><p><strong>index_end_original</strong> (<em>int</em>) – The index in the array where the window ends.</p></li>
 <li><p><strong>index_start_resampled</strong> (<em>int</em>) – The index in the resampled array where the window starts.</p></li>
@@ -289,7 +310,7 @@ may clutter the output and slow down the execution.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;linear&quot;</span></code> performs a linear
 <a class="reference external" href="https://numpy.org/devdocs/reference/generated/numpy.interp.html">numpy.interp</a> interpolation. This method,
 though simple, may not be very precise for upsampling naturalistic stimuli.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;cubic&quot;</span></code> performs a cubic interpolation via <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.CubicSpline.html">scipy.interpolate.CubicSpline</a>. This method,
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;cubic&quot;</span></code> (default) performs a cubic interpolation via <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.CubicSpline.html">scipy.interpolate.CubicSpline</a>. This method,
 while smoother than the linear interpolation, may lead to unwanted oscillations nearby strong variations in
 the data.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;pchip&quot;</span></code> performs a monotonic cubic spline interpolation (Piecewise Cubic Hermite Interpolating
@@ -313,20 +334,27 @@ current steps.</p></li>
 may clutter the output and slow down the execution.</p></li>
 </ul>
 </p></li>
+<li><p><strong>add_tabs</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
+other functions to encapsulate the verbosity outputs by indenting them.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 2.12.</span></p>
+</div>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The envelope of the original array.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>np.array</p>
+<dd class="field-odd"><p><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html">np.ndarray</a></p>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="find_delay.find_delay._resample">
-<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">_resample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay._resample" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">_resample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_tabs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay._resample" title="Link to this definition"></a></dt>
 <dd><p>Resamples an array to the <cite>resampling_frequency</cite> parameter. It first creates a new set of timestamps at the
 desired frequency, and then interpolates the original data to the new timestamps.</p>
 <div class="versionadded">
@@ -347,30 +375,31 @@ desired frequency, and then interpolates the original data to the new timestamps
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array</strong> (<em>list</em><em> or </em><em>np.ndarray</em>) – An array of samples.</p></li>
-<li><p><strong>original_frequency</strong> (<em>int</em><em> or </em><em>float</em>) – The sampling frequency of the array, in Hz.</p></li>
-<li><p><strong>resampling_frequency</strong> (<em>int</em><em> or </em><em>float</em>) – The frequency at which you want to resample the array, in Hz. A frequency of 4 will return samples
+<li><p><strong>array</strong> (<em>numpy.ndarray</em><em>|</em><em>list</em>) – An array of samples.</p></li>
+<li><p><strong>original_frequency</strong> (<em>int</em><em>|</em><em>float</em>) – The sampling frequency of the array, in Hz.</p></li>
+<li><p><strong>resampling_frequency</strong> (<em>int</em><em>|</em><em>float</em>) – The frequency at which you want to resample the array, in Hz. A frequency of 4 will return samples
 at 0.25 s intervals.</p></li>
-<li><p><strong>window_size</strong> (<em>int</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – <p>The size of the windows (in samples) in which to cut the array before resampling. Cutting large arrays
+<li><p><strong>window_size</strong> (<em>int</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – <p>The size of the windows (in samples) in which to cut the array before resampling. Cutting large arrays
 into windows allows to speed up the computation. If this parameter is set on <cite>None</cite>, the window size will be set
-on the number of samples. A good value for this parameter is generally 10 million. If this parameter is set on
-0, on None or on a number of samples bigger than the amount of elements in the array, the window size is set on
-the length of the samples.</p>
+on the number of samples. A good value for this parameter is generally 10 million (default). If this parameter
+is set on 0, on None or on a number of samples bigger than the amount of elements in the array, the window size
+is set on the length of the samples.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 2.1.</span></p>
 </div>
 </p></li>
-<li><p><strong>overlap_ratio</strong> (<em>float</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – The ratio of samples overlapping between each window. If this parameter is not <cite>None</cite>, each window will
+<li><p><strong>overlap_ratio</strong> (<em>float</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – The ratio of samples overlapping between each window. If this parameter is not <cite>None</cite>, each window will
 overlap with the previous (and, logically, the next) for an amount of samples equal to the number of samples in
 a window times the overlap ratio. Then, only the central values of each window will be preserved and
 concatenated; this allows to discard any “edge” effect due to the windowing. If the parameter is set on <cite>None</cite>
-or 0, the windows will not overlap.</p></li>
+or 0, the windows will not overlap. Default value: 0.5 (each window will overlap at 50% with the previous and
+the next).</p></li>
 <li><p><strong>method</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>This parameter allows for various values:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;linear&quot;</span></code> performs a linear
 <a class="reference external" href="https://numpy.org/devdocs/reference/generated/numpy.interp.html">numpy.interp</a> interpolation. This method,
 though simple, may not be very precise for upsampling naturalistic stimuli.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">&quot;cubic&quot;</span></code> performs a cubic interpolation via <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.CubicSpline.html">scipy.interpolate.CubicSpline</a>. This method,
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;cubic&quot;</span></code> (default) performs a cubic interpolation via <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.CubicSpline.html">scipy.interpolate.CubicSpline</a>. This method,
 while smoother than the linear interpolation, may lead to unwanted oscillations nearby strong variations in
 the data.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;pchip&quot;</span></code> performs a monotonic cubic spline interpolation (Piecewise Cubic Hermite Interpolating
@@ -394,13 +423,20 @@ current steps.</p></li>
 may clutter the output and slow down the execution.</p></li>
 </ul>
 </p></li>
+<li><p><strong>add_tabs</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
+other functions to encapsulate the verbosity outputs by indenting them.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 2.12.</span></p>
+</div>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The resampled array.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>array</p>
+<dd class="field-odd"><p><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html">np.ndarray</a></p>
+</p>
 </dd>
 </dl>
 <div class="admonition warning">
@@ -412,8 +448,76 @@ the upsampling (and the downsampling, to a lesser extent) with care.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="find_delay.find_delay._cross_correlation">
+<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">_cross_correlation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_y1_original</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_delay_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_tabs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay._cross_correlation" title="Link to this definition"></a></dt>
+<dd><p>Performs a normalized cross-correlation between two arrays.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 2.12.</span></p>
+</div>
+<dl>
+<dt>y1: <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html">np.ndarray</a></dt><dd><p>The first array to cross-correlate.</p>
+</dd>
+<dt>y2: <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html">np.ndarray</a></dt><dd><p>The second array to cross-correlate.</p>
+</dd>
+<dt>rate: int|float</dt><dd><p>The frequency rate of the two arrays.</p>
+</dd>
+<dt>freq_y1_original: int|float</dt><dd><p>The original frequency rate of y1, before resampling.</p>
+</dd>
+<dt>threshold: float</dt><dd><p>The threshold of the minimum correlation value between the two arrays to accept a delay as a solution. If
+multiple delays are over threshold, the delay with the maximum correlation value will be returned. This value
+should be between 0 and 1; if the maximum found value is below the threshold, the function will return <cite>None</cite>
+instead of a timestamp.</p>
+</dd>
+<dt>return_delay_format: str, optional</dt><dd><p>This parameter can be either <code class="docutils literal notranslate"><span class="pre">&quot;index&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ms&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;s&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;timedelta&quot;</span></code>:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">&quot;index&quot;</span></code> (default), the function will return the index in array_1 at which array_2 has the highest
+cross-correlation value.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">&quot;ms&quot;</span></code>, the function will return the timestamp in array_1, in milliseconds, at which array_2 has the
+highest cross-correlation value.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">&quot;s&quot;</span></code>, the function will return the timestamp in array_1, in seconds, at which array_2 has the
+highest cross-correlation value.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">&quot;timedelta&quot;</span></code>, the function will return the timestamp in array_1 at which array_2 has the
+highest cross-correlation value as a
+<a class="reference external" href="https://docs.python.org/3/library/datetime.html#timedelta-objects">datetime.timedelta</a> object.
+Note that, in the case where the result is negative, the timedelta format may give unexpected display
+results (-1 second returns -1 days, 86399 seconds).</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt>verbosity: int, optional</dt><dd><p>Sets how much feedback the code will provide in the console output:</p>
+<ul class="simple">
+<li><p><em>0: Silent mode.</em> The code won’t provide any feedback, apart from error messages.</p></li>
+<li><p><em>1: Normal mode</em> (default). The code will provide essential feedback such as progression markers and
+current steps.</p></li>
+<li><p><em>2: Chatty mode.</em> The code will provide all possible information on the events happening. Note that this
+may clutter the output and slow down the execution.</p></li>
+</ul>
+</dd>
+<dt>add_tabs: int, optional</dt><dd><p>Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
+other functions to encapsulate the verbosity outputs by indenting them.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 2.12.</span></p>
+</div>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html">np.ndarray</a> – The normalized cross-correlation array.</p></li>
+<li><p><em>int|float|timedelta|None</em> – The sample index, timestamp or timedelta of y1 at which y2 can be found (defined by the parameter
+return_delay_format), or <cite>None</cite> if y1 is not contained in y2.</p></li>
+<li><p><em>float</em> – The max correlation value from the normalized cross-correlation array.</p></li>
+<li><p><em>int</em> – The index of this max correlation value in the normalized cross-correlation array.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="find_delay.find_delay._convert_to_mono">
-<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">_convert_to_mono</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mono_channel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay._convert_to_mono" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">_convert_to_mono</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mono_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_tabs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay._convert_to_mono" title="Link to this definition"></a></dt>
 <dd><p>Converts an audio array to mono.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 2.9.</span></p>
@@ -421,9 +525,9 @@ the upsampling (and the downsampling, to a lesser extent) with care.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>audio_data</strong> (<em>np.array</em><em> (</em><em>1D</em><em> or </em><em>2D</em><em>)</em>) – The parameter data resulting from reading a WAV file with
+<li><p><strong>audio_data</strong> – The parameter data resulting from reading a WAV file with
 <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.wavfile.read.html">scipy.io.wavfile.read</a>.</p></li>
-<li><p><strong>mono_channel</strong> (<em>int</em><em> or </em><em>str</em><em>, </em><em>optional</em>) – Defines the method to use to convert multiple-channel WAV files to mono, if one of the parameters <cite>array1</cite> or
+<li><p><strong>mono_channel</strong> (<em>int</em><em>|</em><em>str</em><em>, </em><em>optional</em>) – Defines the method to use to convert multiple-channel WAV files to mono, if one of the parameters <cite>array1</cite> or
 <cite>array2</cite> is a path pointing to a WAV file. By default, this parameter value is <code class="docutils literal notranslate"><span class="pre">0</span></code>: the channel with index 0
 in the WAV file is used as the array, while all the other channels are discarded. This value can be any
 of the channels indices (using <code class="docutils literal notranslate"><span class="pre">1</span></code> will preserve the channel with index 1, etc.). This parameter can also
@@ -431,7 +535,7 @@ take the value <code class="docutils literal notranslate"><span class="pre">&quo
 channels of the WAV file. Note that this parameter applies to both arrays: in the case where you need to select
 different channels for each WAV file, open the files before calling the function and pass the samples and
 frequencies as parameters.</p></li>
-<li><p><strong>verbosity</strong> (<em>int</em>) – <p>Sets how much feedback the code will provide in the console output:</p>
+<li><p><strong>verbosity</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Sets how much feedback the code will provide in the console output:</p>
 <ul>
 <li><p><em>0: Silent mode.</em> The code won’t provide any feedback, apart from error messages.</p></li>
 <li><p><em>1: Normal mode</em> (default). The code will provide essential feedback such as progression markers and
@@ -439,6 +543,12 @@ current steps.</p></li>
 <li><p><em>2: Chatty mode.</em> The code will provide all possible information on the events happening. Note that this
 may clutter the output and slow down the execution.</p></li>
 </ul>
+</p></li>
+<li><p><strong>add_tabs</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
+other functions to encapsulate the verbosity outputs by indenting them.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 2.12.</span></p>
+</div>
 </p></li>
 </ul>
 </dd>
@@ -453,7 +563,7 @@ may clutter the output and slow down the execution.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="find_delay.find_delay._create_figure">
-<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">_create_figure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_array_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_array_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_array_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_array_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envelope_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envelope_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_envelope</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_below</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_over</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_correlation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_delay_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_correlation_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_max_correlation_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_figure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_figure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_figure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_intermediate_steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_format_figure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay._create_figure" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">find_delay.find_delay.</span></span><span class="sig-name descname"><span class="pre">_create_figure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_array_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_array_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_array_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_array_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envelope_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envelope_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_envelope</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_env</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_below</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_over</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_correlation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_delay_format</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_correlation_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_max_correlation_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_figure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_figure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_figure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_intermediate_steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_format_figure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_tabs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay._create_figure" title="Link to this definition"></a></dt>
 <dd><p>Creates and/or saves a figure given the parameters of the find_delay function.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 1.1.</span></p>
@@ -481,35 +591,35 @@ Modified the scaling of the aligned arrays figure to be more accurate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array_1</strong> (<em>np.array</em>) – The first array involved in the cross-correlation.</p></li>
-<li><p><strong>array_2</strong> (<em>np.array</em>) – The second array involved in the cross-correlation, being allegedly an excerpt from the first.</p></li>
-<li><p><strong>freq_array_1</strong> (<em>int</em><em> or </em><em>float</em>) – The sampling rate of <cite>array_1</cite>.</p></li>
-<li><p><strong>freq_array_2</strong> (<em>int</em><em> or </em><em>float</em>) – The sampling rate of <cite>array_2</cite>.</p></li>
+<li><p><strong>array_1</strong> – The first array involved in the cross-correlation.</p></li>
+<li><p><strong>array_2</strong> – The second array involved in the cross-correlation, being allegedly an excerpt from the first.</p></li>
+<li><p><strong>freq_array_1</strong> (<em>int</em><em>|</em><em>float</em>) – The sampling rate of <cite>array_1</cite>.</p></li>
+<li><p><strong>freq_array_2</strong> (<em>in</em><em>|</em><em>float</em>) – The sampling rate of <cite>array_2</cite>.</p></li>
 <li><p><strong>name_array_1</strong> (<em>str</em>) – The name of the first array; will be “Array 1” for <cite>find_delay</cite> and “Array” for <cite>find_delays</cite>.</p></li>
 <li><p><strong>name_array_2</strong> (<em>str</em>) – The name of the second array; will be “Array 2” for <cite>find_delay</cite> and “Excerpt n” for <cite>find_delays</cite>, with n
 being the index of the excerpt in the folder.</p></li>
-<li><p><strong>envelope_1</strong> (<em>np.array</em>) – The envelope of <cite>array_1</cite> (if calculated).</p></li>
-<li><p><strong>envelope_2</strong> (<em>np.array</em>) – The envelope of <cite>array_2</cite> (if calculated).</p></li>
-<li><p><strong>y1</strong> (<em>np.array</em>) – The resampled <cite>array_1</cite> or <cite>envelope_1</cite> (if calculated).</p></li>
-<li><p><strong>y2</strong> (<em>np.array</em>) – The resampled <cite>array_2</cite> or <cite>envelope_2</cite> (if calculated).</p></li>
+<li><p><strong>envelope_1</strong> – The envelope of <cite>array_1</cite> (if calculated).</p></li>
+<li><p><strong>envelope_2</strong> – The envelope of <cite>array_2</cite> (if calculated).</p></li>
+<li><p><strong>y1</strong> – The resampled <cite>array_1</cite> or <cite>envelope_1</cite> (if calculated).</p></li>
+<li><p><strong>y2</strong> – The resampled <cite>array_2</cite> or <cite>envelope_2</cite> (if calculated).</p></li>
 <li><p><strong>compute_envelope</strong> (<em>bool</em>) – A boolean describing if the envelope has been computed or not.</p></li>
 <li><p><strong>window_size_env</strong> (<em>int</em>) – The size of the windows in which the arrays were cut for the envelope calculation.</p></li>
 <li><p><strong>overlap_ratio_env</strong> (<em>float</em>) – The ratio of overlapping between each envelope window with the previous and the next windows.</p></li>
-<li><p><strong>filter_below</strong> (<em>int</em><em>, </em><em>float</em><em> or </em><em>None</em>) – The lower limit of the bandpass filter applied to the envelopes.</p></li>
-<li><p><strong>filter_over</strong> (<em>int</em><em>, </em><em>float</em><em> or </em><em>None</em>) – The upper limit of the bandpass filter applied to the envelopes.</p></li>
-<li><p><strong>resampling_rate</strong> (<em>int</em><em>, </em><em>float</em><em> or </em><em>None</em>) – The rate at which the arrays or the envelopes have been resampled.</p></li>
+<li><p><strong>filter_below</strong> (<em>int</em><em>|</em><em>float</em><em>|</em><em>None</em>) – The lower limit of the bandpass filter applied to the envelopes.</p></li>
+<li><p><strong>filter_over</strong> (<em>int</em><em>|</em><em>float</em><em>|</em><em>None</em>) – The upper limit of the bandpass filter applied to the envelopes.</p></li>
+<li><p><strong>resampling_rate</strong> (<em>int</em><em>|</em><em>float</em><em>|</em><em>None</em>) – The rate at which the arrays or the envelopes have been resampled.</p></li>
 <li><p><strong>window_size_res</strong> (<em>int</em>) – The size of the windows in which the arrays or envelopes were cut for the resampling.</p></li>
 <li><p><strong>overlap_ratio_res</strong> (<em>float</em>) – The ratio of overlapping between each resampling window with the previous and the next windows.</p></li>
-<li><p><strong>cross-correlation</strong> (<em>np.array</em>) – The array containing the correlation values for each lag between the two arrays.</p></li>
+<li><p><strong>cross-correlation</strong> – The array containing the correlation values for each lag between the two arrays.</p></li>
 <li><p><strong>threshold</strong> (<em>float</em>) – The threshold of the maximum correlation value between the two arrays, relative to the maximum
 correlation value between the excerpt and itself.</p></li>
 <li><p><strong>return_delay_format</strong> (<em>str</em>) – Indicates the format of the displayed delay, either <code class="docutils literal notranslate"><span class="pre">&quot;index&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ms&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;s&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;timedelta&quot;</span></code>.</p></li>
-<li><p><strong>return_value</strong> (<em>int</em><em>, </em><em>float</em><em> or </em><em>timedelta</em>) – The value of the delay in the format specified by the previous parameter.</p></li>
+<li><p><strong>return_value</strong> (<em>int</em><em>|</em><em>float</em><em>|</em><em>timedelta</em>) – The value of the delay in the format specified by the previous parameter.</p></li>
 <li><p><strong>max_correlation_value</strong> (<em>float</em>) – The maximum correlation value from the cross-correlation.</p></li>
 <li><p><strong>index_max_correlation_value</strong> (<em>int</em>) – The index at which the maximum correlation value can be found in the cross-correlation array.</p></li>
 <li><p><strong>plot_figure</strong> (<em>bool</em>) – If set on <cite>True</cite>, plots the figure in a Matplotlib window.</p></li>
-<li><p><strong>path_figure</strong> (<em>str</em><em> or </em><em>None</em>) – If set, saves the figure at the given path.</p></li>
-<li><p><strong>name_figure</strong> (<em>str</em><em> or </em><em>None</em>) – If set, considers that <cite>path_figure</cite> is the directory where to save the figure, and <cite>name_figure</cite> is the name
+<li><p><strong>path_figure</strong> (<em>str</em><em>|</em><em>None</em>) – If set, saves the figure at the given path.</p></li>
+<li><p><strong>name_figure</strong> (<em>str</em><em>|</em><em>None</em>) – If set, considers that <cite>path_figure</cite> is the directory where to save the figure, and <cite>name_figure</cite> is the name
 of the file.</p></li>
 <li><p><strong>plot_intermediate_steps</strong> (<em>bool</em>) – If set on <cite>True</cite>, plots the original audio clips, the envelopes and the resampled arrays (if calculated) besides
 the cross-correlation.</p></li>
@@ -525,6 +635,12 @@ current steps.</p></li>
 <li><p><em>2: Chatty mode.</em> The code will provide all possible information on the events happening. Note that this
 may clutter the output and slow down the execution.</p></li>
 </ul>
+</p></li>
+<li><p><strong>add_tabs</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
+other functions to encapsulate the verbosity outputs by indenting them.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 2.12.</span></p>
+</div>
 </p></li>
 </ul>
 </dd>
