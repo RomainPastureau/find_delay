@@ -1,12 +1,12 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "find_delay"
 version = "2.13"
 authors = [
-  { name="Romain Pastureau", email="r.pastureau@bcbl.eu" },
+  {name = "Romain Pastureau", email = "r.pastureau@bcbl.eu"},
 ]
 description = "Calculate the delay between two arrays"
 readme = "README.md"
