@@ -1,16 +1,26 @@
 Version history
 ===============
 
+2.13 (2024-12-15)
+-----------------
+* Corrected a bug that led to wrong behaviour when the parameters `window_size_res` and `window_size_env` are equal to
+  `None`.
+* Separated the private functions from find_delay.py to their own file, `private_functions.py`.
+* When saving a figure, the function `_create_figure` now creates the subdirectories from `path_figure` that do not
+  exist instead of returning an error.
+* Added two new parameters for `find_delay` and `find_delays` allowing to name the arrays on the figure.
+* Added one new test.
+
 2.12 (2024-11-16)
 -----------------
 * Modified the cross-correlation function to prevent numpy runtime warnings
-* The parameter resampling_rate can now be set on "auto", which is also the new default
+* The parameter resampling_rate can now be set on `"auto"`, which is also the new default
 * Corrected the linear resampling that had two parameters inverted
-* Moved the cross-correlation to a function _cross_correlation to avoid repeating code
+* Moved the cross-correlation to a function `_cross_correlation` to avoid repeating code
 * Passing an array or an excerpt with more than one dimension now throws an exception
 * Added one test to test the previous exception
-* Prevented "Getting the Hilbert transform..." to appear when verbosity=0
-* Added the parameter add_tabs for all functions with verbosity
+* Prevented "Getting the Hilbert transform..." to appear when `verbosity=0`
+* Added the parameter `add_tabs` for all functions with verbosity
 * Removed the version history from the find_delay file to gain space
 * Corrected the documentation
 
@@ -27,8 +37,8 @@ Version history
 2.9 (2024-09-05)
 ----------------
 * Added the possibility to pass paths to WAV files as parameters of `find_delay` and `find_delays`
-* Added the parameter mono_channel describing the method for converting multiple-channel audio to mono
-* Added the function _convert_to_mono to perform the conversion to mono
+* Added the parameter `mono_channel` describing the method for converting multiple-channel audio to mono
+* Added the function `_convert_to_mono` to perform the conversion to mono
 * Corrected the display of negative delays when they are in timedelta format. A delay of -1 second
   will now print `-0:00:01` instead of `-1 day, 23:59:59`.
 * Corrected a bug preventing the figure to display when the excerpt is found at the edges of the first

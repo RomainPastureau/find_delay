@@ -203,5 +203,17 @@ class Tests(unittest.TestCase):
 
         self.assertRaises(Exception, find_delay, array_full, array_excerpt1, freq_full, freq_excerpt1)
 
+    def test_resample_window_none(self):
+        """Tests that when the parameter `window_res` is set on `None`, the expected behaviour is triggered:
+        the whole array is selected."""
+
+        # Excerpt at 2000 ms
+        delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                                 "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                                 resampling_rate=1000, window_size_res=None, return_correlation_value=True,
+                                 path_figure="figures/wav/figure_1.png", verbosity=0)
+        assert (delay == 96000)
+        assert (round(corr, 3) == 0.982)
+
 if __name__ == "__main__":
     unittest.main()
