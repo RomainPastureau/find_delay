@@ -1,6 +1,11 @@
 Version history
 ===============
 
+2.14 (2024-12-17)
+-----------------
+* Corrected a critical bug that prevented to load the module.
+* Corrected a bug that prevented the name of the excerpts to properly appear in `find_delays` if they were set.
+
 2.13 (2024-12-15)
 -----------------
 * Corrected a bug that led to wrong behaviour when the parameters `window_size_res` and `window_size_env` are equal to

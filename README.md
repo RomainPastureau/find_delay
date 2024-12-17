@@ -1,4 +1,4 @@
-# find_delay 2.13
+# find_delay 2.14
 [![Documentation Status](https://readthedocs.org/projects/find-delay/badge/?version=latest)](https://find-delay.readthedocs.io/en/latest/?badge=latest)
 
 [PyPI page](https://pypi.org/project/find-delay/)
@@ -95,16 +95,10 @@ find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
 ![Delay between an audio file and an excerpt from it](https://raw.githubusercontent.com/RomainPastureau/find_delay/package/demos/figure_3.png)
 
 ### Latest version
-*2.13 (2024-12-15)*
+*2.14 (2024-12-17)*
 -----------------
-
-* Corrected a bug that led to wrong behaviour when the parameters `window_size_res` and `window_size_env` are equal to
-  `None`.
-* Separated the private functions from find_delay.py to their own file, `private_functions.py`.
-* When saving a figure, the function `_create_figure` now creates the subdirectories from `path_figure` that do not
-  exist instead of returning an error.
-* Added two new parameters for `find_delay` and `find_delays` allowing to name the arrays on the figure.
-* Added one new test.
+* Corrected a critical bug that prevented to load the module.
+* Corrected a bug that prevented the name of the excerpts to properly appear in `find_delays` if they were set.
 
 [See version history](https://find-delay.readthedocs.io/en/latest/version_history.html)
 

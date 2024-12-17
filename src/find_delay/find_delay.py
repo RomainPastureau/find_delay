@@ -3,7 +3,7 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.12 (2024-11-16)
+Current version: 2.14 (2024-12-17)
 """
 import datetime as dt
 import os
@@ -814,12 +814,14 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
         # Plot and/or save the figure
         if plot_figure is not None or path_figures is not None:
-            if name_excerpts is str:
+            if isinstance(name_excerpts, str):
                 name_excerpt = f"{name_excerpts} {str(i + 1)}"
-            elif name_excerpts is list:
+            elif isinstance(name_excerpts, list):
                 name_excerpt = name_excerpts[i]
+            else:
+                name_excerpt = None
 
-            _create_figure(array, excerpt, freq_array, freq_excerpt, name_array, "Excerpt " + str(i + 1), envelope_array,
+            _create_figure(array, excerpt, freq_array, freq_excerpt, name_array, name_excerpt, envelope_array,
                            envelope_excerpt, y1, y2, compute_envelope, window_size_env, overlap_ratio_env,
                            filter_below, filter_over, resampling_rate, window_size_res, overlap_ratio_res,
                            cross_correlation_normalized, threshold, number_of_plots, return_delay_format, return_value,
