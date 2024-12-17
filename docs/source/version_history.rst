@@ -8,7 +8,8 @@ Version history
 
 2.13 (2024-12-15)
 -----------------
-[YANKED VERSION: Critical bug preventing to load the module]
+*YANKED VERSION: Critical bug preventing to load the module*
+
 * Corrected a bug that led to wrong behaviour when the parameters `window_size_res` and `window_size_env` are equal to
   `None`.
 * Separated the private functions from find_delay.py to their own file, `private_functions.py`.
@@ -37,13 +38,15 @@ Version history
 
 2.10 (2024-09-05)
 -----------------
-[YANKED VERSION: Critical bug preventing the figures to appear]
+*YANKED VERSION: Critical bug preventing the figures to appear*
+
 * Corrected critical bug in stereo-to-mono conversion
 * Added WAV tests
 
 2.9 (2024-09-05)
 ----------------
-[YANKED VERSION: Critical bug in stereo-to-mono conversion]
+*YANKED VERSION: Critical bug in stereo-to-mono conversion*
+
 * Added the possibility to pass paths to WAV files as parameters of `find_delay` and `find_delays`
 * Added the parameter `mono_channel` describing the method for converting multiple-channel audio to mono
 * Added the function `_convert_to_mono` to perform the conversion to mono
