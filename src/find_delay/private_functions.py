@@ -701,7 +701,6 @@ def _convert_to_mono(audio_data, mono_channel=0, verbosity=1, add_tabs=0):
 
     # If mono_channel is "average"
     elif mono_channel == "average":
-        print(audio_data)
         mono_array = np.mean(audio_data, 1)
 
     # Any other case
@@ -841,7 +840,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
                    resampling_rate, window_size_res, overlap_ratio_res, cross_correlation, threshold,
                    number_of_plots, return_delay_format, return_value, max_correlation_value,
                    index_max_correlation_value, plot_figure, path_figure, name_figure, plot_intermediate_steps,
-                   x_format_figure, verbosity, add_tabs):
+                   x_format_figure, dark_mode, verbosity, add_tabs):
     """
     Creates and/or saves a figure given the parameters of the find_delay function.
 
@@ -963,6 +962,10 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         (unit: second). If set on `"auto"` (default), the format of the values on the x axes will be defined depending
         on the value of `return_delay_format`.
 
+    dark_mode: bool, optional
+        If set on `True`, uses the `dark_background theme from matplotlib <https://matplotlib.org/stable/gallery/style_sheets/dark_background.html>`_
+        (default: `False`).
+
     verbosity: int
         Sets how much feedback the code will provide in the console output:
 
@@ -980,6 +983,11 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     """
 
     t = add_tabs * "\t"
+
+    if dark_mode:
+        plt.style.use('dark_background')
+    else:
+        plt.style.use('default')
 
     # Figure creation
     if plot_intermediate_steps:
@@ -1005,6 +1013,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     if x_format_figure == "auto" and return_delay_format in ["s", "ms", "timedelta"]:
         x_format_figure = "time"
 
+    if x_format_figure == "time":
         t_array_1 = np.array(t_array_1 * 1000000, dtype="datetime64[us]")
         t_array_2 = np.array(t_array_2 * 1000000, dtype="datetime64[us]")
         t_res_1 = np.array(t_res_1 * 1000000, dtype="datetime64[us]")
@@ -1148,6 +1157,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         ax[0].set_title(title)
         ax[0].set_ylim(np.nanmin(cross_correlation), 1.5)
         ax[0].plot(t_cc, cross_correlation, color="green")
+        ax[0] = set_label_time_figure(ax[0])
     text = ""
     if return_delay_format == "index":
         text = "Sample "
@@ -1157,7 +1167,10 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
 
     if max_correlation_value >= threshold:
         text += " · Correlation value: " + str(round(max_correlation_value, 3))
-        bbox_props = dict(boxstyle="square,pad=0.3", fc="#99cc00", ec="k", lw=0.72)
+        if dark_mode:
+            bbox_props = dict(boxstyle="square,pad=0.3", fc="green", ec="k", lw=0.72)
+        else:
+            bbox_props = dict(boxstyle="square,pad=0.3", fc="#99cc00", ec="k", lw=0.72)
     else:
         text += " · Correlation value (below threshold): " + str(round(max_correlation_value, 3))
         bbox_props = dict(boxstyle="square,pad=0.3", fc="#ff0000", ec="k", lw=0.72)
@@ -1239,7 +1252,8 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
 
     if path_figure is not None:
         directory, _ = os.path.split(path_figure)
-        os.makedirs(directory, exist_ok=True)
+        if len(directory) != 0:
+            os.makedirs(directory, exist_ok=True)
         if name_figure is not None:
             if verbosity > 0:
                 print(f"\n{t}Saving the graph under {os.path.join(path_figure, name_figure)}...", end=" ")

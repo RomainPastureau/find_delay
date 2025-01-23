@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find the delay of the audio on the MISC channel of an MEG recording &mdash; find_delay 2.15 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/dark_mode_css/general.css?v=c0a7eb24" />
+      <link rel="stylesheet" type="text/css" href="../_static/dark_mode_css/dark.css?v=70edf1c7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d19175c4"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/dark_mode_js/default_light.js?v=c2e647ce"></script>
+      <script src="../_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Version history" href="../version_history.html" />
+    <link rel="prev" title="Find the delay between two audio files" href="delay_audio_files.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #99cc00" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            find_delay
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../find_delay.html">find_delay</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../find_delay.html#find_delay.find_delay"><code class="docutils literal notranslate"><span class="pre">find_delay()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../find_delays.html">find_delays</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../find_delays.html#find_delay.find_delays"><code class="docutils literal notranslate"><span class="pre">find_delays()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../private_functions.html">Private functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../private_functions.html#find_delay.private_functions._filter_frequencies"><code class="docutils literal notranslate"><span class="pre">_filter_frequencies()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../private_functions.html#find_delay.private_functions._get_number_of_windows"><code class="docutils literal notranslate"><span class="pre">_get_number_of_windows()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../private_functions.html#find_delay.private_functions._get_envelope"><code class="docutils literal notranslate"><span class="pre">_get_envelope()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../private_functions.html#find_delay.private_functions._resample_window"><code class="docutils literal notranslate"><span class="pre">_resample_window()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../private_functions.html#find_delay.private_functions._resample"><code class="docutils literal notranslate"><span class="pre">_resample()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../private_functions.html#find_delay.private_functions._cross_correlation"><code class="docutils literal notranslate"><span class="pre">_cross_correlation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../private_functions.html#find_delay.private_functions._convert_to_mono"><code class="docutils literal notranslate"><span class="pre">_convert_to_mono()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../private_functions.html#find_delay.private_functions._create_figure"><code class="docutils literal notranslate"><span class="pre">_create_figure()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="delay_audio_files.html">Find the delay between two audio files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="delay_audio_files.html#mono-stereo-files">Mono/stereo files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="delay_audio_files.html#audio-files-with-different-frequencies">Audio files with different frequencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="delay_audio_files.html#compute-the-envelope-for-audio-files">Compute the envelope for audio files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="delay_audio_files.html#return-the-delay-in-seconds">Return the delay in seconds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="delay_audio_files.html#plot-the-delay">Plot the delay</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Find the delay of the audio on the MISC channel of an MEG recording</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#procedure">Procedure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#load-the-original-audio">Load the original audio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#isolate-the-audio-on-the-misc-channel">Isolate the audio on the MISC channel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#run-the-find-delay-function">Run the find_delay function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#correct-the-delay-and-save-the-events">Correct the delay and save the events</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../version_history.html">Version history</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id1">2.15 (2025-01-23)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id2">2.14 (2024-12-17)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id3">2.13 (2024-12-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id4">2.12 (2024-11-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id5">2.11 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id6">2.10 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id7">2.9 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id8">2.8 (2024-06-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id9">2.7 (2024-05-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id10">2.6 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id11">2.5 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id12">2.4 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id13">2.3 (2024-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id14">2.2 (2024-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id15">2.1 (2024-04-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id16">2.0 (2024-04-24)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id17">1.3 (2024-04-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id18">1.2 (2024-04-17)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id19">1.1 (2024-04-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_history.html#id20">1.0 (2024-04-12)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#why-is-the-name-of-the-package-find-delay-when-installing-and-find-delay-when-importing">Why is the name of the package find-delay when installing, and find_delay when importing?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#i-want-to-use-find-delay-with-audio-files-but-my-audio-files-are-not-wav">I want to use find_delay with audio files, but my audio files are not WAV…</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#how-does-the-function-work-for-audio-files">How does the function work for audio files?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#the-delay-found-by-the-function-is-erroneous">The delay found by the function is erroneous…</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#i-found-an-issue-how-can-i-contact-the-developers">I found an issue! How can I contact the developers?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../faq.html#i-have-an-idea-for-improvement">I have an idea for improvement!</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #99cc00" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">find_delay</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">Find the delay of the audio on the MISC channel of an MEG recording</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/examples/delay_meg_misc.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="find-the-delay-of-the-audio-on-the-misc-channel-of-an-meg-recording">
+<h1>Find the delay of the audio on the MISC channel of an MEG recording<a class="headerlink" href="#find-the-delay-of-the-audio-on-the-misc-channel-of-an-meg-recording" title="Link to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>The module <code class="docutils literal notranslate"><span class="pre">find_delay</span></code> was originally created to find a robust way to detect the audio delay during MEG
+(magnetoencephalography) experiments. In experiments using audio stimuli, the software (Psychtoolbox, e.g.) sends a
+trigger to the MEG acquisition system, and plays the audio to the participant. Among all the neuro-imaging data
+recorded, one channel, called the MISC channel, records in real time the audio output from the experiment, and syncs
+it to the brain signals.</p>
+<p>The triggers, being sent directly from the software to the acquisition machine, do not account for the delay that might
+occur due to the experiment software or the display hardware. This calls for a correction of the triggers timestamps,
+so that the proper starting point of each trial can be calculated.</p>
+<img alt="../_images/mne_meg_misc_sti.png" src="../_images/mne_meg_misc_sti.png" />
+<p>In the image above, one of the MEG channels, the MISC channel (containing the recorded audio) and the STI channel are
+present. The trigger on the STI channel needs to be corrected and pushed forward to match the moment where the
+audio actually starts.</p>
+</section>
+<section id="procedure">
+<h2>Procedure<a class="headerlink" href="#procedure" title="Link to this heading"></a></h2>
+<p>Using MNE, it is possible to correct the values on the STI channel to correct for the delays, using the function
+<a class="reference external" href="https://mne.tools/stable/generated/mne.io.Raw.html#mne.io.Raw.add_events">add_events</a>.</p>
+<p>To correct for the audio delays, you will need, for each trial, to:
+* Load your original audio as an array
+* Isolate the audio on the MISC channel
+* Run the find_delay function
+* Save the correct events on the STI channel</p>
+<section id="load-the-original-audio">
+<h3>Load the original audio<a class="headerlink" href="#load-the-original-audio" title="Link to this heading"></a></h3>
+<p>If the audio were WAV:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">wavfile</span>
+<span class="n">path_audio</span> <span class="o">=</span> <span class="s2">&quot;path_audio.wav&quot;</span>
+<span class="n">wav</span> <span class="o">=</span> <span class="n">wavfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">path_audio</span><span class="p">)</span>
+<span class="n">wav_freq</span> <span class="o">=</span> <span class="n">wav</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">wav_array</span> <span class="o">=</span> <span class="n">wav</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># This will allow us to get the duration of the trial if the audio length is not constant</span>
+<span class="n">duration</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">wav_array</span><span class="p">)</span> <span class="o">/</span> <span class="n">wav_freq</span>
+</pre></div>
+</div>
+<p>In the case where the stimuli are videos, it is possible to use the module <a class="reference external" href="https://pypi.org/project/moviepy/">moviepy</a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">moviepy</span> <span class="kn">import</span> <span class="n">VideoFileClip</span>
+<span class="n">path_video</span> <span class="o">=</span> <span class="s2">&quot;path_video.mp4&quot;</span>
+<span class="n">mp4_video</span> <span class="o">=</span> <span class="n">VideoFileClip</span><span class="p">(</span><span class="n">path_video</span><span class="p">)</span>
+<span class="n">mp4_audio</span> <span class="o">=</span> <span class="n">mp4_video</span><span class="o">.</span><span class="n">audio</span>
+<span class="n">audio_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">mp4_audio</span><span class="o">.</span><span class="n">iter_frames</span><span class="p">()))[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">duration</span> <span class="o">=</span> <span class="n">mp4_video</span><span class="o">.</span><span class="n">duration</span>
+<span class="n">mp4_video</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Other formats may work with other modules, or might need to be converted beforehand.</p>
+</section>
+<section id="isolate-the-audio-on-the-misc-channel">
+<h3>Isolate the audio on the MISC channel<a class="headerlink" href="#isolate-the-audio-on-the-misc-channel" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mne</span>
+
+<span class="c1"># Load the MEG data</span>
+<span class="n">meg_data</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_raw_fif</span><span class="p">(</span><span class="s2">&quot;path_meg.fif&quot;</span><span class="p">,</span> <span class="n">preload</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Get the events</span>
+<span class="n">events</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">find_events</span><span class="p">(</span><span class="n">meg_data</span><span class="p">,</span> <span class="n">stim_channel</span> <span class="o">=</span> <span class="s2">&quot;STI101&quot;</span><span class="p">,</span> <span class="n">shortest_event</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Get the event matching the first trigger &quot;42&quot; for example</span>
+<span class="n">onset</span> <span class="o">=</span> <span class="p">[</span><span class="n">event</span> <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span> <span class="k">if</span> <span class="n">event</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">42</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">offset</span> <span class="o">=</span> <span class="n">onset</span> <span class="o">+</span> <span class="n">duration</span> <span class="o">*</span> <span class="n">meg_data</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]</span>  <span class="c1"># Beware the sampling rate of your MEG data!</span>
+
+<span class="c1"># Correct the onset and offset for the first_samp value of the MEG data</span>
+<span class="n">abs_onset</span> <span class="o">=</span> <span class="n">onset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">data_original</span><span class="o">.</span><span class="n">first_samp</span>
+<span class="n">abs_offset</span> <span class="o">=</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">data_original</span><span class="o">.</span><span class="n">first_samp</span>
+
+<span class="c1"># Create your audio array from the STI channel</span>
+<span class="n">meg_audio_array</span> <span class="o">=</span> <span class="n">data_original</span><span class="o">.</span><span class="n">pick</span><span class="p">([</span><span class="s2">&quot;MISC001&quot;</span><span class="p">,</span> <span class="s2">&quot;STI101&quot;</span><span class="p">])[:,</span> <span class="n">abs_onset</span><span class="p">:</span><span class="n">abs_offset</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="run-the-find-delay-function">
+<h3>Run the find_delay function<a class="headerlink" href="#run-the-find-delay-function" title="Link to this heading"></a></h3>
+<p>For this step, you may need to set <code class="docutils literal notranslate"><span class="pre">remove_average_array_1</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>, as sometimes the average of the STI channel
+will not be at 0, resulting in erroneous delay values.</p>
+<p>Try to perform your <code class="docutils literal notranslate"><span class="pre">find_delay</span></code> function on the raw data rather than on downsampled data, as low sampled STI channel
+might not allow to detect the delay properly.</p>
+<p>Set a low threshold (e.g. <code class="docutils literal notranslate"><span class="pre">0.1</span></code>) as the STI channel is generally very noisy.</p>
+<p>You can set the output figures in a folder to visually check quickly if the delay is proper for all of your events.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">find_delay</span> <span class="kn">import</span> <span class="n">find_delay</span>
+
+<span class="n">delay</span> <span class="o">=</span> <span class="n">find_delay</span><span class="p">(</span><span class="n">array_1</span> <span class="o">=</span> <span class="n">meg_audio_array</span><span class="p">,</span>
+                   <span class="n">array_2</span> <span class="o">=</span> <span class="n">wav_array</span><span class="p">,</span>
+                   <span class="n">freq_array_1</span> <span class="o">=</span> <span class="n">meg_data</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">],</span>
+                   <span class="n">freq_array_2</span> <span class="o">=</span> <span class="n">wav_freq</span><span class="p">,</span>
+                   <span class="n">resampling_rate</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">meg_data</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">],</span> <span class="n">wav_freq</span><span class="p">),</span>
+                   <span class="n">return_delay_format</span> <span class="o">=</span> <span class="s2">&quot;ms&quot;</span><span class="p">,</span>
+                   <span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="correct-the-delay-and-save-the-events">
+<h3>Correct the delay and save the events<a class="headerlink" href="#correct-the-delay-and-save-the-events" title="Link to this heading"></a></h3>
+<p>Correcting the delays is as simple as replacing the value in the first column of the <code class="docutils literal notranslate"><span class="pre">events</span></code> array that you can get
+from the function <code class="docutils literal notranslate"><span class="pre">mne.find_events</span></code>. Pay attention to your sampling rate: in the function above the delay is returned
+in milliseconds, meaning that if you have a MEG sampling rate different than 1000 Hz, you will need to convert the delay
+to samples.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">events</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">delay</span>
+</pre></div>
+</div>
+<p>Finally, save your events:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">meg_data</span><span class="o">.</span><span class="n">add_events</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">stim_channel</span><span class="o">=</span><span class="s2">&quot;STI101&quot;</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">meg_data</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;path_meg_corrected.fif&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="delay_audio_files.html" class="btn btn-neutral float-left" title="Find the delay between two audio files" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../version_history.html" class="btn btn-neutral float-right" title="Version history" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Romain Pastureau.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

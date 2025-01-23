@@ -32,8 +32,10 @@ if __name__ == "__main__":
                resampling_mode="cubic", plot_figure=True, path_figure="figure_2.png", plot_intermediate_steps=True,
                verbosity=1)
 
-    wav_files = ["i_have_a_dream_full_without_end.wav", "i_have_a_dream_excerpt.wav", "i_have_a_dream_excerpt2.wav",
-                 "i_have_a_dream_excerpt_end.wav", "au_revoir.wav"]
+    wav_files = ["i_have_a_dream_full_without_end.wav",
+                 "i_have_a_dream_excerpt.wav", "i_have_a_dream_excerpt2.wav",
+                 "i_have_a_dream_excerpt_end.wav", "au_revoir.wav",
+                 "i_have_a_dream_full_without_end_+800ms.wav",]
 
     for wav_file in wav_files:
         if not os.path.exists(wav_file):

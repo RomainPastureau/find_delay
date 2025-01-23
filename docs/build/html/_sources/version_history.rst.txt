@@ -1,20 +1,37 @@
 Version history
 ===============
 
+2.15 (2025-01-23)
+-----------------
+* Added the parameters `remove_average_array` in both `find_delay` and `find_delays`
+* Added the parameter `dark_mode` in both `find_delay` and `find_delays`
+* Incorporated the values of `name_array_1`, `name_array_2`, `name_array` and `name_excerpts` in the functions verbosity
+* Removed a print in `_convert_mono()`
+* Corrected a bug that prevented to save a figure if no directory was passed in the parameter
+* Corrected a bug that prevented to see the proper time scale if `x_format_figure` was set on `"time"`
+* Corrected a bug that displayed erroneous times on the x-axis of the cross-correlation subplot
+* Corrected the execution time message that was appearing even if `verbosity` was set on 0
+* Added two example pages in the documentation and linked them in the documentation index page
+* Added a test for the parameter `remove_average`
+* Added a test for the documentation examples
+* Corrected erroneous documentation version number
+
 2.14 (2024-12-17)
 -----------------
-* Corrected a critical bug that prevented to load the module.
-* Corrected a bug that prevented the name of the excerpts to properly appear in `find_delays` if they were set.
+* Corrected a critical bug that prevented to load the module
+* Corrected a bug that prevented the name of the excerpts to properly appear in `find_delays` if they were set
 
 2.13 (2024-12-15)
 -----------------
+*YANKED VERSION: Critical bug preventing to load the module*
+
 * Corrected a bug that led to wrong behaviour when the parameters `window_size_res` and `window_size_env` are equal to
-  `None`.
-* Separated the private functions from find_delay.py to their own file, `private_functions.py`.
+  `None`
+* Separated the private functions from find_delay.py to their own file, `private_functions.py`
 * When saving a figure, the function `_create_figure` now creates the subdirectories from `path_figure` that do not
-  exist instead of returning an error.
-* Added two new parameters for `find_delay` and `find_delays` allowing to name the arrays on the figure.
-* Added one new test.
+  exist instead of returning an error
+* Added two new parameters for `find_delay` and `find_delays` allowing to name the arrays on the figure
+* Added one new test
 
 2.12 (2024-11-16)
 -----------------
@@ -36,11 +53,15 @@ Version history
 
 2.10 (2024-09-05)
 -----------------
+*YANKED VERSION: Critical bug preventing the figures to appear*
+
 * Corrected critical bug in stereo-to-mono conversion
 * Added WAV tests
 
 2.9 (2024-09-05)
 ----------------
+*YANKED VERSION: Critical bug in stereo-to-mono conversion*
+
 * Added the possibility to pass paths to WAV files as parameters of `find_delay` and `find_delays`
 * Added the parameter `mono_channel` describing the method for converting multiple-channel audio to mono
 * Added the function `_convert_to_mono` to perform the conversion to mono

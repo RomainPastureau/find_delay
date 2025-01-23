@@ -3,7 +3,7 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.14 (2024-12-17)
+Current version: 2.15 (2025-01-23)
 """
 import datetime as dt
 import os
@@ -13,11 +13,11 @@ from scipy.io import wavfile
 from .private_functions import _convert_to_mono, _get_envelope, _resample, _cross_correlation, _create_figure
 
 def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelope=True, window_size_env=1e6,
-               overlap_ratio_env=0.5, filter_below=None, filter_over=50, resampling_rate="auto",
-               window_size_res=1e7, overlap_ratio_res=0.5, resampling_mode="cubic",
-               return_delay_format="index", return_correlation_value=False, threshold=0.9,
+               overlap_ratio_env=0.5, filter_below=None, filter_over=50, resampling_rate="auto", window_size_res=1e7,
+               overlap_ratio_res=0.5, resampling_mode="cubic", remove_average_array_1=False,
+               remove_average_array_2=False, return_delay_format="index", return_correlation_value=False, threshold=0.9,
                plot_figure=False, plot_intermediate_steps=False, x_format_figure="auto", path_figure=None,
-               mono_channel=0, name_array_1="Array 1", name_array_2="Array 2", verbosity=1, add_tabs=0):
+               mono_channel=0, name_array_1="Array 1", name_array_2="Array 2", dark_mode=False, verbosity=1, add_tabs=0):
     """This function tries to find the timestamp at which an excerpt (array_2) begins in a time series (array_1).
     The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
     calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
@@ -48,6 +48,11 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
     .. versionchanged:: 2.13
         Added the parameters name_array_1 and name_array_2, allowing to customize the name of the arrays on the figure.
+
+    .. versionchanged:: 2.15
+        Added the parameters `remove_average_array_1` and `remove_average_array_2`, allowing to remove the average for
+        the corresponding arrays.
+        Added the parameter `dark_mode`.
 
     Important
     ---------
@@ -171,11 +176,17 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
           ``"quadratic"``, ``"cubic"``, ``"previous"``, and ``"next"`` (see the documentation of this function for
           specifics).
 
-    threshold: float, optional
-        The threshold of the minimum correlation value between the two arrays to accept a delay as a solution. If
-        multiple delays are over threshold, the delay with the maximum correlation value will be returned. This value
-        should be between 0 and 1; if the maximum found value is below the threshold, the function will return `None`
-        instead of a timestamp.
+    remove_average_array_1: bool, optional
+        If set on `True`, removes the average value from all the values in `array_1`. A typical use-case for this
+        parameter is if an audio array is not centered around 0. Default: `False`.
+
+        .. versionadded:: 2.15
+
+    remove_average_array_2: bool, optional
+        If set on `True`, removes the average value from all the values in `array_2`. A typical use-case for this
+        parameter is if an audio array is not centered around 0. Default: `False`.
+
+        .. versionadded:: 2.15
 
     return_delay_format: str, optional
         This parameter can be either ``"index"``, ``"ms"``, ``"s"``, or ``"timedelta"``:
@@ -195,6 +206,12 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     return_correlation_value: bool, optional
         If `True`, the function returns a second value: the correlation value at the returned delay. This value will
         be None if it is below the specified threshold.
+
+    threshold: float, optional
+        The threshold of the minimum correlation value between the two arrays to accept a delay as a solution. If
+        multiple delays are over threshold, the delay with the maximum correlation value will be returned. This value
+        should be between 0 and 1; if the maximum found value is below the threshold, the function will return `None`
+        instead of a timestamp.
 
     plot_figure: bool, optional
         If set on `True`, plots a graph showing the result of the cross-correlation using Matplotlib. Note that plotting
@@ -236,6 +253,12 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         The name of the second array, as it will appear on the figure (default: "Array 2").
 
         .. versionadded:: 2.13
+
+    dark_mode: bool, optional
+        If set on `True`, uses the `dark_background theme from matplotlib <https://matplotlib.org/stable/gallery/style_sheets/dark_background.html>`_
+        (default: `False`).
+
+        .. versionadded:: 2.15
 
     verbosity: int, optional
         Sets how much feedback the code will provide in the console output:
@@ -280,7 +303,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         if verbosity > 0:
             print(f"{t}Loading WAV file to array_2 from the path {array_2}...")
         if not os.path.exists(array_2):
-            raise Exception(f"The file passed as parameter for array_1 doesn't exist: {array_2}")
+            raise Exception(f"The file passed as parameter for array_2 doesn't exist: {array_2}")
 
         audio_wav = wavfile.read(array_2)
         freq_array_2 = audio_wav[0]
@@ -294,21 +317,35 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
     # Introduction
     if verbosity > 0:
-        print(f"{t}Trying to find when the second array starts in the first.")
-        print(f"{t}\tThe first array contains {np.size(array_1)} samples, at a rate of {freq_array_1} Hz.")
-        print(f"{t}\tThe second array contains {np.size(array_2)} samples, at a rate of {freq_array_2} Hz.\n")
+        print(f"{t}Trying to find when {name_array_2} starts in {name_array_1}.")
+        print(f"{t}\tThe first array {name_array_1} contains {np.size(array_1)} samples, at a rate of "
+              f"{freq_array_1} Hz.")
+        print(f"{t}\tThe second array {name_array_2} contains {np.size(array_2)} samples, at a rate of "
+              f"{freq_array_2} Hz.\n")
+
+    # Remove the average if needed
+    if remove_average_array_1:
+        mean = np.mean(array_1)
+        array_1 = array_1 - mean
+        if verbosity > 1:
+            print(f"Removing the average {mean} off {name_array_1}.")
+    if remove_average_array_2:
+        mean = np.mean(array_2)
+        array_2 = array_2 - mean
+        if verbosity > 1:
+            print(f"Removing the average {mean} off {name_array_2}.")
 
     number_of_plots = 2
     if plot_intermediate_steps:
         number_of_plots += 2
 
     if len(array_1.shape) > 1:
-        raise Exception(f"array_1 has more than one dimension: its shape is {array_1.shape}. To perform the " +
+        raise Exception(f"{name_array_1} has more than one dimension: its shape is {array_1.shape}. To perform the " +
                         f"find_delay function, each array must be 1-dimensional. If you are trying to find the " +
                         f"delay between two audio files, make sure that your files are in mono, or select one of " +
                         f"the channels.")
     if len(array_2.shape) > 1:
-        raise Exception(f"array_2 has more than one dimension: its shape is {array_2.shape}. To perform the " +
+        raise Exception(f"{name_array_2} has more than one dimension: its shape is {array_2.shape}. To perform the " +
                         f"find_delay function, each array must be 1-dimensional. If you are trying to find the " +
                         f"delay between two audio files, make sure that your files are in mono, or select one of " +
                         f"the channels.")
@@ -320,12 +357,12 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
             number_of_plots += 2
 
         if verbosity > 0:
-            print(f"{t}Getting the envelope from array 1...")
+            print(f"{t}Getting the envelope from {name_array_1}...")
 
         envelope_1 = _get_envelope(array_1, freq_array_1, window_size_env, overlap_ratio_env, filter_below, filter_over,
                                    verbosity, add_tabs)
         if verbosity > 0:
-            print(f"{t}Getting the envelope from array 2...")
+            print(f"{t}Getting the envelope from {name_array_2}...")
         envelope_2 = _get_envelope(array_2, freq_array_2, window_size_env, overlap_ratio_env, filter_below, filter_over,
                                    verbosity, add_tabs)
         if verbosity > 0:
@@ -346,11 +383,11 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
         rate = resampling_rate
         if verbosity > 0:
-            print(f"{t}Resampling array 1...")
+            print(f"{t}Resampling {name_array_1}...")
         y1 = _resample(envelope_1, freq_array_1, resampling_rate, window_size_res, overlap_ratio_res, resampling_mode,
                        verbosity, add_tabs)
         if verbosity > 0:
-            print(f"{t}Resampling array 2...")
+            print(f"{t}Resampling {name_array_2}...")
         y2 = _resample(envelope_2, freq_array_2, resampling_rate, window_size_res, overlap_ratio_res, resampling_mode,
                        verbosity, add_tabs)
         if verbosity > 0:
@@ -370,7 +407,8 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     max_correlation_value = values[2]
     index_max_correlation_value = values[3]
 
-    print(f"\n{t}Complete delay finding function executed in: {dt.datetime.now() - time_before_function}")
+    if verbosity > 0:
+        print(f"\n{t}Complete delay finding function executed in: {dt.datetime.now() - time_before_function}")
 
     # Plot and/or save the figure
     if plot_figure is not None or path_figure is not None:
@@ -379,7 +417,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
                        resampling_rate, window_size_res, overlap_ratio_res, cross_correlation_normalized, threshold,
                        number_of_plots, return_delay_format, return_value, max_correlation_value,
                        index_max_correlation_value, plot_figure, path_figure, None, plot_intermediate_steps,
-                       x_format_figure, verbosity, add_tabs)
+                       x_format_figure, dark_mode, verbosity, add_tabs)
 
     if max_correlation_value >= threshold:
 
@@ -399,10 +437,10 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope=True,
                 window_size_env=1e6, overlap_ratio_env=0.5, filter_below=None, filter_over=50,
                 resampling_rate="auto", window_size_res=1e7, overlap_ratio_res=0.5, resampling_mode="cubic",
-                return_delay_format="index", return_correlation_values=False, threshold=0.9,
-                plot_figure=False, plot_intermediate_steps=False, x_format_figure="auto", path_figures=None,
-                name_figures="figure", mono_channel=0, name_array="Array", name_excerpts="Excerpt", verbosity=1,
-                add_tabs=0):
+                remove_average_array=False, remove_average_excerpts=False, return_delay_format="index",
+                return_correlation_values=False, threshold=0.9, plot_figure=False, plot_intermediate_steps=False,
+                x_format_figure="auto", path_figures=None, name_figures="figure", mono_channel=0, name_array="Array",
+                name_excerpts="Excerpt", dark_mode=False, verbosity=1, add_tabs=0):
     """This function tries to find the timestamp at which multiple excerpts begins in an array.
     The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
     calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
@@ -435,6 +473,11 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
     .. versionchanged:: 2.13
         Added the parameters name_array and name_excerpts, allowing to customize the name of the arrays on the figure.
+
+    .. versionchanged:: 2.15
+        Added the parameters `remove_average_array` and `remove_average_excerpts`, allowing to remove the average for
+        the corresponding arrays.
+        Added the parameter `dark_mode`.
 
     Important
     ---------
@@ -561,11 +604,17 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
           ``"quadratic"``, ``"cubic"``, ``"previous"``, and ``"next"`` (see the documentation of this function for
           specifics).
 
-    threshold: float, optional
-        The threshold of the minimum correlation value between the two arrays to accept a delay as a solution. If
-        multiple delays are over threshold, the delay with the maximum correlation value will be returned. This value
-        should be between 0 and 1; if the maximum found value is below the threshold, the function will return `None`
-        instead of a timestamp.
+    remove_average_array: bool, optional
+        If set on `True`, removes the average value from all the values in `array`. A typical use-case for this
+        parameter is if an audio array is not centered around 0. Default: `False`.
+
+        .. versionadded:: 2.15
+
+    remove_average_excerpts: bool, optional
+        If set on `True`, removes the average value from all the values in all the excerpts. A typical use-case for this
+        parameter is if an audio array is not centered around 0. Default: `False`.
+
+        .. versionadded:: 2.15
 
     return_delay_format: str, optional
         This parameter can be either ``"index"``, ``"ms"``, ``"s"``, or ``"timedelta"``:
@@ -585,6 +634,12 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
     return_correlation_values: bool, optional
         If `True`, the function returns a second value: the correlation value at the returned delay. This value will
         be None if it is below the specified threshold.
+
+    threshold: float, optional
+        The threshold of the minimum correlation value between the two arrays to accept a delay as a solution. If
+        multiple delays are over threshold, the delay with the maximum correlation value will be returned. This value
+        should be between 0 and 1; if the maximum found value is below the threshold, the function will return `None`
+        instead of a timestamp.
 
     plot_figure: bool, optional
         If set on `True`, plots a graph showing the result of the cross-correlation using Matplotlib. Note that plotting
@@ -633,6 +688,12 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
         .. versionadded:: 2.13
 
+    dark_mode: bool, optional
+        If set on `True`, uses the `dark_background theme from matplotlib <https://matplotlib.org/stable/gallery/style_sheets/dark_background.html>`_
+        (default: `False`).
+
+        .. versionadded:: 2.15
+
     verbosity: int, optional
         Sets how much feedback the code will provide in the console output:
 
@@ -668,7 +729,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         if verbosity > 0:
             print(f"{t}Loading WAV file to array from the path {array}...")
         if not os.path.exists(array):
-            raise Exception(f"The file passed as parameter for array doesn't exist: {array}")
+            raise Exception(f"The file passed as parameter for {name_array} doesn't exist: {array}")
 
         audio_wav = wavfile.read(array)
         freq_array = audio_wav[0]
@@ -686,9 +747,16 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
     # Introduction
     if verbosity > 0:
-        print(f"{t}Trying to find when the excerpts starts in the array.")
-        print(f"{t}\tThe main array contains {np.size(array)} samples, at a rate of {freq_array} Hz.")
+        print(f"{t}Trying to find when the excerpts starts in {name_array}.")
+        print(f"{t}\tThe main array {name_array} contains {np.size(array)} samples, at a rate of {freq_array} Hz.")
         print(f"{t}\t{len(excerpts)} excerpts to find.")
+
+    # Remove the average if needed
+    if remove_average_array:
+        mean = np.mean(array)
+        array = array - mean
+        if verbosity > 1:
+            print(f"Removing the average {mean} off the array {name_array}.")
 
     # Check that the length of the excerpts equals the length of the frequencies
     if isinstance(freq_excerpts, list):
@@ -711,7 +779,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         if plot_intermediate_steps:
             number_of_plots += 2
         if verbosity > 0:
-            print(f"{t}Getting the envelope from the array...")
+            print(f"{t}Getting the envelope from the array {name_array}...")
         envelope_array = _get_envelope(array, freq_array, window_size_env, overlap_ratio_env, filter_below, filter_over,
                                        verbosity, add_tabs)
         if verbosity > 0:
@@ -731,7 +799,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
         rate = resampling_rate
         if verbosity > 0:
-            print(f"{t}Resampling array...")
+            print(f"{t}Resampling array {name_array}...")
         y1 = _resample(envelope_array, freq_array, resampling_rate, window_size_res, overlap_ratio_res, resampling_mode,
                        verbosity, add_tabs)
         if verbosity > 0:
@@ -742,12 +810,25 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
     for i in range(len(excerpts)):
 
+        if isinstance(name_excerpts, str):
+            name_excerpt = f"{name_excerpts} {str(i + 1)}"
+        elif isinstance(name_excerpts, list):
+            name_excerpt = name_excerpts[i]
+        else:
+            name_excerpt = None
+
         # Introduction
         if verbosity > 0:
-            print(f"\n{t}Excerpt {i + 1}/{len(excerpts)}")
+            print(f"\n{t}Excerpt {i + 1}/{len(excerpts)}: {name_excerpt}")
 
         # Get the excerpt
         excerpt = excerpts[i]
+
+        if remove_average_excerpts:
+            mean = np.mean(excerpt)
+            excerpt = excerpt - mean
+            if verbosity > 1:
+                print(f"Removing the average {mean} off the excerpt {name_excerpt}.")
 
         # Get the frequency
         if isinstance(freq_excerpts, list):
@@ -760,7 +841,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
             if verbosity > 0:
                 print(f"{t}Loading WAV file to excerpt from the path {excerpt}...")
             if not os.path.exists(excerpt):
-                raise Exception(f"The file passed as parameter for excerpt doesn't exist: {excerpt}")
+                raise Exception(f"The file passed as parameter for excerpt {name_excerpt} doesn't exist: {excerpt}")
 
             audio_wav = wavfile.read(excerpt)
             freq_excerpt = audio_wav[0]
@@ -777,12 +858,13 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
                             f"the channels.")
 
         if verbosity > 0:
-            print(f"{t}\tThe excerpt contains {np.size(excerpt)} samples, at a rate of {freq_excerpt} Hz.\n")
+            print(f"{t}\tThe excerpt {name_excerpt} contains {np.size(excerpt)} samples, at a rate of "
+                  f"{freq_excerpt} Hz.\n")
 
         # Envelope
         if compute_envelope:
             if verbosity > 0:
-                print(f"\t{t}Getting the envelope from the excerpt {i+1}...")
+                print(f"\t{t}Getting the envelope from the excerpt {name_excerpt}...")
             envelope_excerpt = _get_envelope(excerpt, freq_excerpt, window_size_env, overlap_ratio_env, filter_below,
                                              filter_over, verbosity, add_tabs+1)
             if verbosity > 0:
@@ -794,7 +876,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         if resampling_rate is not None:
             rate = resampling_rate
             if verbosity > 0:
-                print(f"\t{t}Resampling excerpt...")
+                print(f"\t{t}Resampling excerpt {name_excerpt}...")
             y2 = _resample(envelope_excerpt, freq_excerpt, resampling_rate, window_size_res, overlap_ratio_res,
                            resampling_mode, verbosity, add_tabs + 1)
             if verbosity > 0:
@@ -814,19 +896,13 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
         # Plot and/or save the figure
         if plot_figure is not None or path_figures is not None:
-            if isinstance(name_excerpts, str):
-                name_excerpt = f"{name_excerpts} {str(i + 1)}"
-            elif isinstance(name_excerpts, list):
-                name_excerpt = name_excerpts[i]
-            else:
-                name_excerpt = None
-
             _create_figure(array, excerpt, freq_array, freq_excerpt, name_array, name_excerpt, envelope_array,
                            envelope_excerpt, y1, y2, compute_envelope, window_size_env, overlap_ratio_env,
                            filter_below, filter_over, resampling_rate, window_size_res, overlap_ratio_res,
                            cross_correlation_normalized, threshold, number_of_plots, return_delay_format, return_value,
                            max_correlation_value, index_max_correlation_value, plot_figure, path_figures, name_figures
-                           + "_" + str(i + 1) + ".png", plot_intermediate_steps, x_format_figure, verbosity, add_tabs+1)
+                           + "_" + str(i + 1) + ".png", plot_intermediate_steps, x_format_figure, dark_mode, verbosity,
+                           add_tabs+1)
 
         if max_correlation_value >= threshold:
 
@@ -844,7 +920,8 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
             else:
                 delays.append(None)
 
-    print(f"\n{t}Complete delay finding function executed in: {dt.datetime.now() - time_before_function}")
+    if verbosity > 0:
+        print(f"\n{t}Complete delay finding function executed in: {dt.datetime.now() - time_before_function}")
 
     if return_correlation_values:
         return delays, correlation_values

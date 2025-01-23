@@ -190,6 +190,34 @@ class Tests(unittest.TestCase):
         assert (delays == [96000, 96000, 96000, -24000, -24000, 216000])
         assert (np.all(np.round(corrs, 3) == [0.982, 0.982, 0.982, 0.977, 0.977, 0.965]))
 
+    def test_wav_paths_examples(self):
+        """Tests the examples from the documentation."""
+        delay = find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                           "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav")
+        assert (delay == 96002)
+
+        delay = find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                           "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav", mono_channel="average")
+        assert (delay == 96002)
+
+        delay = (find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                            "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                            return_delay_format="timedelta",
+                            plot_figure=True, plot_intermediate_steps=True,
+                            verbosity=1))
+
+        assert (delay.total_seconds() == 2.000042)
+
+        delay = find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                           "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                           return_delay_format="timedelta",
+                           plot_figure=True,
+                           plot_intermediate_steps=True,
+                           path_figure="../docs/source/images/figure_example.png",
+                           x_format_figure="time",
+                           name_array_1="Original",
+                           name_array_2="Excerpt")
+
     def test_stereo_exception(self):
         """With both arrays being stereo, checks that the function find_delay returns an exception."""
         wav_full = wavfile.read("test_wav/test_full_2ch_48000Hz.wav")
@@ -214,6 +242,44 @@ class Tests(unittest.TestCase):
                                  path_figure="figures/wav/figure_1.png", verbosity=0)
         assert (delay == 96000)
         assert (round(corr, 3) == 0.982)
+
+    def test_remove_average(self):
+        """Tests that when the parameters `remove_average` is set on `True`, it doesn't break the normal
+        flow and works for data that doesn't have an average around 0."""
+
+        # Normal files
+        wav_full = wavfile.read("test_wav/test_full_2ch_48000Hz.wav")
+        freq_full = wav_full[0]
+        array_full = wav_full[1][:, 0]
+        wav_excerpt1 = wavfile.read("test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav")
+        freq_excerpt1 = wav_excerpt1[0]
+        array_excerpt1 = wav_excerpt1[1][:, 0]
+
+        delay, corr = find_delay(array_full, array_excerpt1, freq_full, freq_excerpt1, remove_average_array_1=True,
+                                 remove_average_array_2=True, return_correlation_value=True, verbosity=2)
+        assert (delay == 95999)
+        assert (round(corr, 3) == 0.981)
+
+        # Modified file
+        array_excerpt1 = array_excerpt1 - 10000
+
+        delay, corr = find_delay(array_full, array_excerpt1, freq_full, freq_excerpt1, remove_average_array_1=True,
+                                 remove_average_array_2=True, return_correlation_value=True, verbosity=2)
+        assert (delay == 95999)
+        assert (round(corr, 3) == 0.981)
+
+    def test_dark_mode(self):
+        # Excerpt at 2000 ms
+        delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                                 "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                                 return_correlation_value=True, plot_figure=True, dark_mode=True)
+        assert (delay == 96002)
+        assert (round(corr, 3) == 0.984)
+
+    def test_big_chunks(self):
+        find_delay("../demos/i_have_a_dream_full_without_end.wav",
+                   "../demos/i_have_a_dream_full_without_end_+800ms.wav",
+                   plot_figure=True, return_delay_format="ms")
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,4 +1,4 @@
-# find_delay 2.14
+# find_delay 2.15
 [![Documentation Status](https://readthedocs.org/projects/find-delay/badge/?version=latest)](https://find-delay.readthedocs.io/en/latest/?badge=latest)
 
 [PyPI page](https://pypi.org/project/find-delay/)
@@ -75,30 +75,31 @@ find_delay(array_1, array_2, 100000 / np.pi, 6000 / (np.pi / 4),
 
 ### Delay between an audio file and an excerpt from it
 ```
-audio_path = "i_have_a_dream_full.wav"
-audio_wav = wavfile.read(audio_path)
-audio_frequency = audio_wav[0]
-audio_array = audio_wav[1][:, 0]  # Turn to mono
-
-excerpt_path = "i_have_a_dream_excerpt.wav"
-excerpt_wav = wavfile.read(excerpt_path)
-excerpt_frequency = excerpt_wav[0]
-excerpt_array = excerpt_wav[1][:, 0]  # Turn to mono
-
-find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
-           compute_envelope=True, window_size_env=1e6, overlap_ratio_env=0.5,
-           resampling_rate=1000, window_size_res=1e7, overlap_ratio_res=0.5, return_delay_format="timedelta",
-           resampling_mode="cubic", plot_figure=True, path_figure="figure_3.png", plot_intermediate_steps=True,
+find_delay("i_have_a_dream_full_speech.wav", "i_have_a_dream_excerpt.wav",
+           return_delay_format="timedelta",
+           plot_figure=True, path_figure="figure_3.png", plot_intermediate_steps=True,
            verbosity=1)
 ```
 
 ![Delay between an audio file and an excerpt from it](https://raw.githubusercontent.com/RomainPastureau/find_delay/package/demos/figure_3.png)
 
+[Find more examples here!](https://find-delay.readthedocs.io/en/latest/examples/delay_audio_files.html)
+
 ### Latest version
-*2.14 (2024-12-17)*
+*2.15 (2025-01-23)*
 -----------------
-* Corrected a critical bug that prevented to load the module.
-* Corrected a bug that prevented the name of the excerpts to properly appear in `find_delays` if they were set.
+* Added the parameters `remove_average_array` in both `find_delay` and `find_delays`
+* Added the parameter `dark_mode` in both `find_delay` and `find_delays`
+* Incorporated the values of `name_array_1`, `name_array_2`, `name_array` and `name_excerpts` in the functions verbosity
+* Removed a print in `_convert_mono()`
+* Corrected a bug that prevented to save a figure if no directory was passed in the parameter
+* Corrected a bug that prevented to see the proper time scale if `x_format_figure` was set on `"time"`
+* Corrected a bug that displayed erroneous times on the x-axis of the cross-correlation subplot
+* Corrected the execution time message that was appearing even if `verbosity` was set on 0
+* Added two example pages in the documentation and linked them in the documentation index page
+* Added a test for the parameter `remove_average`
+* Added a test for the documentation examples
+* Corrected erroneous documentation version number
 
 [See version history](https://find-delay.readthedocs.io/en/latest/version_history.html)
 

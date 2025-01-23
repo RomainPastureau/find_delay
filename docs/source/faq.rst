@@ -43,6 +43,15 @@ returned.
 Please note that the parameters of find_delay allow to manually set the envelope window size and overlap and the cross-
 correlation threshold value.
 
+The delay found by the function is erroneous...
+-----------------------------------------------
+This can happen for a number of reasons:
+* You are working with audio files and did not set `compute_envelope` on `True`.
+* The average value for one array is not the same as the other: you need to normalize your files. Try to set the
+  parameters `remove_average_array_1` and `remove_average_array_2` on `True`.
+* The sampling rate of the data is too low. Especially if you are working with audio files or neuro-imaging data, arrays
+  down-sampled lower than 1000 Hz will be significantly harder to correlate.
+
 I found an issue! How can I contact the developers?
 ---------------------------------------------------
 If you found a bug, or if the package is not functioning as expected,

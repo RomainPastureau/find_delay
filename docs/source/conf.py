@@ -12,9 +12,9 @@ sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src')))
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'find_delay'
-copyright = '2024, Romain Pastureau'
+copyright = '2025, Romain Pastureau'
 author = 'Romain Pastureau'
-release = '2.14'
+release = '2.15'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

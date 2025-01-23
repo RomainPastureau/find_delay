@@ -1,5 +1,5 @@
 .. find_delay documentation master file, created by
-   sphinx-quickstart on Wed May  8 18:21:32 2024.
+   sphinx-quickstart on Wed 8 May 2024 18:21:32.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
@@ -67,7 +67,7 @@ Examples
 
 Example 1: two arrays of random numbers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+romain.pastureau@proton.me
 .. code-block:: python
 
    array_1 = [24, 70, 28, 59, 13, 97, 63, 30, 89, 4, 8, 15, 16, 23, 42, 37, 70, 18, 59, 48, 41, 83, 99, 6, 24, 86]
@@ -99,23 +99,17 @@ Example 3: audio files, different frequencies
 
 .. code-block:: python
 
-    audio_path = "i_have_a_dream_full_speech.wav"
-    audio_wav = wavfile.read(audio_path)
-    audio_frequency = audio_wav[0]
-    audio_array = audio_wav[1][:, 0]  # Turn to mono
-
-    excerpt_path = "i_have_a_dream_excerpt.wav"
-    excerpt_wav = wavfile.read(excerpt_path)
-    excerpt_frequency = excerpt_wav[0]
-    excerpt_array = excerpt_wav[1][:, 0]  # Turn to mono
-
-    find_delay(audio_array, excerpt_array, audio_frequency, excerpt_frequency,
-               compute_envelope=True, window_size_env=1e6, overlap_ratio_env=0.5,
-               resampling_rate=1000, window_size_res=1e7, overlap_ratio_res=0.5, return_delay_format="timedelta",
-               resampling_mode="cubic", plot_figure=True, path_figure="figure_3.png",
-               plot_intermediate_steps=True, verbosity=1)
+    find_delay("i_have_a_dream_full_speech.wav", "i_have_a_dream_excerpt.wav",
+               return_delay_format="timedelta",
+               plot_figure=True, path_figure="figure_3.png", plot_intermediate_steps=True,
+               verbosity=1)
 
 .. image:: ../../demos/figure_3.png
+
+More examples
+^^^^^^^^^^^^^
+:doc:`Find the delay between two audio files <examples/delay_audio_files>`
+:doc:`Find the delay of the audio on the MISC channel of an MEG recording <examples/delay_meg_misc>`
 
 How does it work?
 -----------------
@@ -144,6 +138,7 @@ Indices and tables
    find_delay
    find_delays
    private_functions
+   examples
    version_history
    faq
 

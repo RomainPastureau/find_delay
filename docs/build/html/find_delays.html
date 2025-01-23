@@ -1,12 +1,14 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>find_delays &mdash; find_delay 2.13 documentation</title>
+  <title>find_delays &mdash; find_delay 2.15 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
       <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
       <link rel="stylesheet" type="text/css" href="_static/css/custom.css" />
@@ -14,19 +16,15 @@
       <link rel="stylesheet" type="text/css" href="_static/dark_mode_css/dark.css?v=70edf1c7" />
 
   
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=be606110"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-        <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-        <script src="_static/copybutton.js?v=f281be69"></script>
-        <script src="_static/dark_mode_js/default_light.js?v=c2e647ce"></script>
-        <script src="_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=d19175c4"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+      <script src="_static/dark_mode_js/default_light.js?v=c2e647ce"></script>
+      <script src="_static/dark_mode_js/theme_switcher.js?v=358d3910"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -73,32 +71,56 @@
 <li class="toctree-l2"><a class="reference internal" href="private_functions.html#find_delay.private_functions._create_figure"><code class="docutils literal notranslate"><span class="pre">_create_figure()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/delay_audio_files.html">Find the delay between two audio files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/delay_audio_files.html#mono-stereo-files">Mono/stereo files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/delay_audio_files.html#audio-files-with-different-frequencies">Audio files with different frequencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/delay_audio_files.html#compute-the-envelope-for-audio-files">Compute the envelope for audio files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/delay_audio_files.html#return-the-delay-in-seconds">Return the delay in seconds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/delay_audio_files.html#plot-the-delay">Plot the delay</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="examples/delay_meg_misc.html">Find the delay of the audio on the MISC channel of an MEG recording</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples/delay_meg_misc.html#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples/delay_meg_misc.html#procedure">Procedure</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="examples/delay_meg_misc.html#load-the-original-audio">Load the original audio</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/delay_meg_misc.html#isolate-the-audio-on-the-misc-channel">Isolate the audio on the MISC channel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/delay_meg_misc.html#run-the-find-delay-function">Run the find_delay function</a></li>
+<li class="toctree-l4"><a class="reference internal" href="examples/delay_meg_misc.html#correct-the-delay-and-save-the-events">Correct the delay and save the events</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="version_history.html">Version history</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id1">2.14 (2024-12-17)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id2">2.13 (2024-12-15)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id3">2.12 (2024-11-16)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id4">2.11 (2024-09-05)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id5">2.10 (2024-09-05)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id6">2.9 (2024-09-05)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id7">2.8 (2024-06-19)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id8">2.7 (2024-05-09)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id9">2.6 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id10">2.5 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id11">2.4 (2024-05-08)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id12">2.3 (2024-05-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id13">2.2 (2024-05-02)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id14">2.1 (2024-04-25)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id15">2.0 (2024-04-24)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id16">1.3 (2024-04-18)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id17">1.2 (2024-04-17)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id18">1.1 (2024-04-16)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version_history.html#id19">1.0 (2024-04-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id1">2.15 (2025-01-23)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id2">2.14 (2024-12-17)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id3">2.13 (2024-12-15)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id4">2.12 (2024-11-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id5">2.11 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id6">2.10 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id7">2.9 (2024-09-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id8">2.8 (2024-06-19)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id9">2.7 (2024-05-09)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id10">2.6 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id11">2.5 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id12">2.4 (2024-05-08)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id13">2.3 (2024-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id14">2.2 (2024-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id15">2.1 (2024-04-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id16">2.0 (2024-04-24)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id17">1.3 (2024-04-18)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id18">1.2 (2024-04-17)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id19">1.1 (2024-04-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_history.html#id20">1.0 (2024-04-12)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#why-is-the-name-of-the-package-find-delay-when-installing-and-find-delay-when-importing">Why is the name of the package find-delay when installing, and find_delay when importing?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#i-want-to-use-find-delay-with-audio-files-but-my-audio-files-are-not-wav">I want to use find_delay with audio files, but my audio files are not WAV…</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-does-the-function-work-for-audio-files">How does the function work for audio files?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#the-delay-found-by-the-function-is-erroneous">The delay found by the function is erroneous…</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#i-found-an-issue-how-can-i-contact-the-developers">I found an issue! How can I contact the developers?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#i-have-an-idea-for-improvement">I have an idea for improvement!</a></li>
 </ul>
@@ -133,7 +155,7 @@
 <h1>find_delays<a class="headerlink" href="#find-delays" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="find_delay.find_delays">
-<span class="sig-prename descclassname"><span class="pre">find_delay.</span></span><span class="sig-name descname"><span class="pre">find_delays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excerpts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_excerpts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_envelope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_below</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_over</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_delay_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_correlation_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_intermediate_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_format_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_figures</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_figures</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'figure'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mono_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Array'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_excerpts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Excerpt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_tabs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delays" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">find_delay.</span></span><span class="sig-name descname"><span class="pre">find_delays</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excerpts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_excerpts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_envelope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_below</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_over</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_average_array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_average_excerpts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_delay_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_correlation_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_intermediate_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_format_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_figures</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_figures</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'figure'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mono_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_array</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Array'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_excerpts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Excerpt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_tabs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delays" title="Link to this definition"></a></dt>
 <dd><p>This function tries to find the timestamp at which multiple excerpts begins in an array.
 The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
 calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
@@ -166,6 +188,11 @@ Added the parameter mono_channel.</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 2.13: </span>Added the parameters name_array and name_excerpts, allowing to customize the name of the arrays on the figure.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 2.15: </span>Added the parameters <cite>remove_average_array</cite> and <cite>remove_average_excerpts</cite>, allowing to remove the average for
+the corresponding arrays.
+Added the parameter <cite>dark_mode</cite>.</p>
 </div>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -276,10 +303,18 @@ parameter can be replaced by <code class="docutils literal notranslate"><span cl
 specifics).</p></li>
 </ul>
 </p></li>
-<li><p><strong>threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – The threshold of the minimum correlation value between the two arrays to accept a delay as a solution. If
-multiple delays are over threshold, the delay with the maximum correlation value will be returned. This value
-should be between 0 and 1; if the maximum found value is below the threshold, the function will return <cite>None</cite>
-instead of a timestamp.</p></li>
+<li><p><strong>remove_average_array</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>If set on <cite>True</cite>, removes the average value from all the values in <cite>array</cite>. A typical use-case for this
+parameter is if an audio array is not centered around 0. Default: <cite>False</cite>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 2.15.</span></p>
+</div>
+</p></li>
+<li><p><strong>remove_average_excerpts</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>If set on <cite>True</cite>, removes the average value from all the values in all the excerpts. A typical use-case for this
+parameter is if an audio array is not centered around 0. Default: <cite>False</cite>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 2.15.</span></p>
+</div>
+</p></li>
 <li><p><strong>return_delay_format</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>This parameter can be either <code class="docutils literal notranslate"><span class="pre">&quot;index&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ms&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;s&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;timedelta&quot;</span></code>:</p>
 <blockquote>
 <div><ul>
@@ -299,6 +334,10 @@ results (-1 second returns -1 days, 86399 seconds).</p></li>
 </p></li>
 <li><p><strong>return_correlation_values</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <cite>True</cite>, the function returns a second value: the correlation value at the returned delay. This value will
 be None if it is below the specified threshold.</p></li>
+<li><p><strong>threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – The threshold of the minimum correlation value between the two arrays to accept a delay as a solution. If
+multiple delays are over threshold, the delay with the maximum correlation value will be returned. This value
+should be between 0 and 1; if the maximum found value is below the threshold, the function will return <cite>None</cite>
+instead of a timestamp.</p></li>
 <li><p><strong>plot_figure</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set on <cite>True</cite>, plots a graph showing the result of the cross-correlation using Matplotlib. Note that plotting
 the figure causes an interruption of the code execution.</p></li>
 <li><p><strong>plot_intermediate_steps</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set on <cite>True</cite>, plots the original arrays, the envelopes (if calculated) and the resampled arrays (if
@@ -336,6 +375,12 @@ name will be applied to all the excerpts, followed by the excerpt index (plus on
 each element of the list should name each excerpt.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 2.13.</span></p>
+</div>
+</p></li>
+<li><p><strong>dark_mode</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>If set on <cite>True</cite>, uses the <a class="reference external" href="https://matplotlib.org/stable/gallery/style_sheets/dark_background.html">dark_background theme from matplotlib</a>
+(default: <cite>False</cite>).</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 2.15.</span></p>
 </div>
 </p></li>
 <li><p><strong>verbosity</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Sets how much feedback the code will provide in the console output:</p>
@@ -379,7 +424,7 @@ return_delay_format), or <cite>None</cite> if array1 is not contained in array2.
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Romain Pastureau.</p>
+    <p>&#169; Copyright 2025, Romain Pastureau.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
