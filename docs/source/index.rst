@@ -67,7 +67,7 @@ Examples
 
 Example 1: two arrays of random numbers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-romain.pastureau@proton.me
+
 .. code-block:: python
 
    array_1 = [24, 70, 28, 59, 13, 97, 63, 30, 89, 4, 8, 15, 16, 23, 42, 37, 70, 18, 59, 48, 41, 83, 99, 6, 24, 86]
