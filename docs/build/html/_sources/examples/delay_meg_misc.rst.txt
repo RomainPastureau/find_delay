@@ -25,6 +25,7 @@ Using MNE, it is possible to correct the values on the STI channel to correct fo
 `add_events <https://mne.tools/stable/generated/mne.io.Raw.html#mne.io.Raw.add_events>`_.
 
 To correct for the audio delays, you will need, for each trial, to:
+
 * Load your original audio as an array
 * Isolate the audio on the MISC channel
 * Run the find_delay function

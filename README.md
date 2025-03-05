@@ -1,4 +1,4 @@
-# find_delay 2.15
+# find_delay 2.16
 [![Documentation Status](https://readthedocs.org/projects/find-delay/badge/?version=latest)](https://find-delay.readthedocs.io/en/latest/?badge=latest)
 
 [PyPI page](https://pypi.org/project/find-delay/)
@@ -42,10 +42,15 @@ which to find the second array in the first by selecting the delay with the maxi
 function can also return this correlation value).
 
 ## Dependencies
-* **Matplotlib** for the plots
-* **Numpy** for handling the numerical arrays
-* **Scipy** for loading the WAV files, performing the resampling, calculating the envelope, and applying a band-pass 
-  filter.
+̀̀* **Python >= 3.8** (>= 2019-10-14)
+* **Numpy >= 1.16** (>= 2019-01-14) for handling the numerical arrays
+* **Scipy >= 1.5** (>= 2020-19-21) for loading the WAV files, performing the resampling, calculating the envelope, and 
+  applying a band-pass filter.
+* **Matplotlib >= 3.2** (>= 2020-04-03) for the plots
+
+The indicated minimum versions are for ensuring environment compatibility with other modules - using the most updated
+versions of Python and the required modules is recommended as older versions may not be supported or be subject to
+vulnerabilities.
 
 ## Examples
 ### Delay between two numerical time series
@@ -86,20 +91,12 @@ find_delay("i_have_a_dream_full_speech.wav", "i_have_a_dream_excerpt.wav",
 [Find more examples here!](https://find-delay.readthedocs.io/en/latest/examples/delay_audio_files.html)
 
 ### Latest version
-*2.15 (2025-01-23)*
+*2.16 (2025-03-05)*
 -----------------
-* Added the parameters `remove_average_array` in both `find_delay` and `find_delays`
-* Added the parameter `dark_mode` in both `find_delay` and `find_delays`
-* Incorporated the values of `name_array_1`, `name_array_2`, `name_array` and `name_excerpts` in the functions verbosity
-* Removed a print in `_convert_mono()`
-* Corrected a bug that prevented to save a figure if no directory was passed in the parameter
-* Corrected a bug that prevented to see the proper time scale if `x_format_figure` was set on `"time"`
-* Corrected a bug that displayed erroneous times on the x-axis of the cross-correlation subplot
-* Corrected the execution time message that was appearing even if `verbosity` was set on 0
-* Added two example pages in the documentation and linked them in the documentation index page
-* Added a test for the parameter `remove_average`
-* Added a test for the documentation examples
-* Corrected erroneous documentation version number
+* Downgraded the requirements for Numpy (from 1.25.0 to 1.16.0), Scipy (from 1.11.0 to 1.5) and Matplotlib (from 3.7 to 
+  3.2) in order to ensure compatibility with older environments. Note: working with deprecated versions of modules is
+  not recommended as they can include security issues. 
+* Removed the test files from the tar.gz, allowing to lower its size to 470 KB.
 
 [See version history](https://find-delay.readthedocs.io/en/latest/version_history.html)
 

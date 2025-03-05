@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.abspath(os.path.join('..', '..', 'src')))
 project = 'find_delay'
 copyright = '2025, Romain Pastureau'
 author = 'Romain Pastureau'
-release = '2.15'
+release = '2.16'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

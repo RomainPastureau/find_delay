@@ -1,0 +1,6 @@
+exclude demos/au_revoir.wav
+exclude demos/i_have_a_dream_excerpt.wav
+exclude demos/i_have_a_dream_excerpt2.wav
+exclude demos/i_have_a_dream_excerpt_end.wav
+exclude demos/i_have_a_dream_full_without_end.wav
+exclude demos/i_have_a_dream_full_without_end_+800ms.wav

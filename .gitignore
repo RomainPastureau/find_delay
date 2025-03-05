@@ -2,7 +2,6 @@ demos/find_delay_2.py
 demos/find_delay_3.py
 .idea/
 .venv/
-demos/*.wav
 tests/non_github_tests.py
 tests/figure_1.png
 tests/figure_2.png

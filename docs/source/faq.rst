@@ -46,6 +46,7 @@ correlation threshold value.
 The delay found by the function is erroneous...
 -----------------------------------------------
 This can happen for a number of reasons:
+
 * You are working with audio files and did not set `compute_envelope` on `True`.
 * The average value for one array is not the same as the other: you need to normalize your files. Try to set the
   parameters `remove_average_array_1` and `remove_average_array_2` on `True`.

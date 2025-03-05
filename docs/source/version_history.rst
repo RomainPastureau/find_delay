@@ -1,6 +1,15 @@
 Version history
 ===============
 
+2.16 (2025-03-05)
+-----------------
+*2.16 (2025-03-05)*
+-----------------
+* Downgraded the requirements for Numpy (from 1.25.0 to 1.16.0), Scipy (from 1.11.0 to 1.5) and Matplotlib (from 3.7 to
+  3.2) in order to ensure compatibility with older environments. Note: working with deprecated versions of modules is
+  not recommended as they can include security issues.
+* Removed the test files from the tar.gz, allowing to lower its size to 470 KB.
+
 2.15 (2025-01-23)
 -----------------
 * Added the parameters `remove_average_array` in both `find_delay` and `find_delays`

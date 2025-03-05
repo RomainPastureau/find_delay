@@ -3,7 +3,7 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.15 (2025-01-23)
+Current version: 2.16 (2025-03-05)
 """
 import datetime as dt
 import os
