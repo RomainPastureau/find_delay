@@ -711,11 +711,12 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
     Returns
     -------
-    int|float|timedelta|None
-        The sample index, timestamp or timedelta of array1 at which array2 can be found (defined by the parameter
-        return_delay_format), or `None` if array1 is not contained in array2.
-    float|None, optional
-        Optionally, if return_correlation_value is `True`, the correlation value at the corresponding index/timestamp.
+    list(int|float|timedelta|None)
+        A list of the sample index, timestamp or timedelta of array1 at which array2 can be found (defined by the
+        parameter return_delay_format), or `None` if array1 is not contained in array2.
+    list(float|None, optional)
+        Optionally, if return_correlation_value is `True`, a list of the correlation values at the corresponding
+        index/timestamp.
     """
 
     time_before_function = dt.datetime.now()
