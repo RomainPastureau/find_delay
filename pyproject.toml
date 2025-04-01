@@ -6,10 +6,10 @@ build-backend = "hatchling.build"
 name = "find_delay"
 version = "2.16"
 authors = [
-  {name = "Romain Pastureau", email = "r.pastureau@bcbl.eu"},
+  {name = "Romain Pastureau", email = "find_delay@proton.me"},
 ]
 maintainers = [
-  {name = "Romain Pastureau", email = "r.pastureau@bcbl.eu"},
+  {name = "Romain Pastureau", email = "find_delay@proton.me"},
 ]
 description = "Calculate the delay between two arrays"
 readme = "README.md"
