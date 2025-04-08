@@ -3,21 +3,24 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.16 (2025-03-05)
+Current version: 2.17a (2025-04-08)
 """
 import datetime as dt
 import os
 import numpy as np
 from scipy.io import wavfile
 
-from .private_functions import _convert_to_mono, _get_envelope, _resample, _cross_correlation, _create_figure
+from .private_functions import _convert_to_mono, _get_envelope, _resample, _cross_correlation, _create_figure, \
+    _cross_correlation_segment
+
 
 def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelope=True, window_size_env=1e6,
                overlap_ratio_env=0.5, filter_below=None, filter_over=50, resampling_rate="auto", window_size_res=1e7,
                overlap_ratio_res=0.5, resampling_mode="cubic", remove_average_array_1=False,
                remove_average_array_2=False, return_delay_format="index", return_correlation_value=False, threshold=0.9,
-               plot_figure=False, plot_intermediate_steps=False, x_format_figure="auto", path_figure=None,
-               mono_channel=0, name_array_1="Array 1", name_array_2="Array 2", dark_mode=False, verbosity=1, add_tabs=0):
+               min_delay=None, max_delay=None, plot_figure=False, plot_intermediate_steps=False,
+               x_format_figure="auto", path_figure=None, mono_channel=0, name_array_1="Array 1", name_array_2="Array 2",
+               dark_mode=False, verbosity=1, add_tabs=0):
     """This function tries to find the timestamp at which an excerpt (array_2) begins in a time series (array_1).
     The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
     calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
@@ -53,6 +56,9 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         Added the parameters `remove_average_array_1` and `remove_average_array_2`, allowing to remove the average for
         the corresponding arrays.
         Added the parameter `dark_mode`.
+
+    .. versionchanged:: 2.17
+        Added the parameters `min_delay` and `max_delay`, allowing to limit the search to a specific range of delays.
 
     Important
     ---------
@@ -212,6 +218,14 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         multiple delays are over threshold, the delay with the maximum correlation value will be returned. This value
         should be between 0 and 1; if the maximum found value is below the threshold, the function will return `None`
         instead of a timestamp.
+
+    min_delay: int|float|None, optional
+        The lower limit of the sample or time range in which to look for the highest correlation value. This parameter
+        must be specified in the same unit as ``return_delay_format``.
+
+    max_delay: int|float|None, optional
+        The upper limit of the sample or time range in which to look for the highest correlation value. This parameter
+        must be specified in the same unit as ``return_delay_format``.
 
     plot_figure: bool, optional
         If set on `True`, plots a graph showing the result of the cross-correlation using Matplotlib. Note that plotting
@@ -407,6 +421,19 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     max_correlation_value = values[2]
     index_max_correlation_value = values[3]
 
+    cross_correlation_segment = None
+    if min_delay is not None or max_delay is not None:
+        values = _cross_correlation_segment(array_2, freq_array_1, resampling_rate, cross_correlation_normalized,
+                                            min_delay, max_delay, return_delay_format, threshold, verbosity, add_tabs)
+        cross_correlation_segment = values[0]
+        return_value = values[1]
+        max_correlation_value = values[2]
+        index_max_correlation_value = values[3]
+        cross_correlation_start = values[4]
+    else:
+        cross_correlation_segment = None
+        cross_correlation_start = None
+
     if verbosity > 0:
         print(f"\n{t}Complete delay finding function executed in: {dt.datetime.now() - time_before_function}")
 
@@ -414,10 +441,11 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     if plot_figure is not None or path_figure is not None:
         _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, name_array_2, envelope_1, envelope_2,
                        y1, y2, compute_envelope, window_size_env, overlap_ratio_env, filter_below, filter_over,
-                       resampling_rate, window_size_res, overlap_ratio_res, cross_correlation_normalized, threshold,
-                       number_of_plots, return_delay_format, return_value, max_correlation_value,
-                       index_max_correlation_value, plot_figure, path_figure, None, plot_intermediate_steps,
-                       x_format_figure, dark_mode, verbosity, add_tabs)
+                       resampling_rate, window_size_res, overlap_ratio_res, cross_correlation_normalized,
+                       cross_correlation_segment, cross_correlation_start, threshold, number_of_plots,
+                       return_delay_format, return_value, max_correlation_value, index_max_correlation_value,
+                       plot_figure, path_figure, None, plot_intermediate_steps, x_format_figure, dark_mode,
+                       verbosity, add_tabs)
 
     if max_correlation_value >= threshold:
 
@@ -438,9 +466,9 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
                 window_size_env=1e6, overlap_ratio_env=0.5, filter_below=None, filter_over=50,
                 resampling_rate="auto", window_size_res=1e7, overlap_ratio_res=0.5, resampling_mode="cubic",
                 remove_average_array=False, remove_average_excerpts=False, return_delay_format="index",
-                return_correlation_values=False, threshold=0.9, plot_figure=False, plot_intermediate_steps=False,
-                x_format_figure="auto", path_figures=None, name_figures="figure", mono_channel=0, name_array="Array",
-                name_excerpts="Excerpt", dark_mode=False, verbosity=1, add_tabs=0):
+                return_correlation_values=False, threshold=0.9, min_delay=None, max_delay=None, plot_figure=False,
+                plot_intermediate_steps=False, x_format_figure="auto", path_figures=None, name_figures="figure",
+                mono_channel=0, name_array="Array", name_excerpts="Excerpt", dark_mode=False, verbosity=1, add_tabs=0):
     """This function tries to find the timestamp at which multiple excerpts begins in an array.
     The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
     calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
@@ -640,6 +668,14 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         multiple delays are over threshold, the delay with the maximum correlation value will be returned. This value
         should be between 0 and 1; if the maximum found value is below the threshold, the function will return `None`
         instead of a timestamp.
+
+    min_delay: int|float|None, optional
+        The lower limit of the sample or time range in which to look for the highest correlation value. This parameter
+        must be specified in the same unit as ``return_delay_format``.
+
+    max_delay: int|float|None, optional
+        The upper limit of the sample or time range in which to look for the highest correlation value. This parameter
+        must be specified in the same unit as ``return_delay_format``.
 
     plot_figure: bool, optional
         If set on `True`, plots a graph showing the result of the cross-correlation using Matplotlib. Note that plotting
@@ -889,7 +925,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
                                 f"cross-correlation.")
             y2 = envelope_excerpt
 
-        values = _cross_correlation(y1, y2, rate, freq_array, threshold,  return_delay_format, verbosity, add_tabs + 1)
+        values = _cross_correlation(y1, y2, rate, freq_array, threshold, return_delay_format, verbosity, add_tabs + 1)
         cross_correlation_normalized = values[0]
         return_value = values[1]
         max_correlation_value = values[2]

@@ -5,6 +5,7 @@ from find_delay import find_delay, find_delays
 import random
 from scipy.io import wavfile
 import numpy as np
+import datetime as dt
 
 
 class Tests(unittest.TestCase):
@@ -275,6 +276,74 @@ class Tests(unittest.TestCase):
                                  return_correlation_value=True, plot_figure=True, dark_mode=True)
         assert (delay == 96002)
         assert (round(corr, 3) == 0.984)
+
+    def test_return_values_types(self):
+        # Sample
+        wav_full = wavfile.read("test_wav/test_full_2ch_48000Hz.wav")
+        freq_full = wav_full[0]
+        array_full = wav_full[1][:, 0]
+
+        # Excerpt at 2000 ms
+        wav_excerpt1 = wavfile.read("test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav")
+        freq_excerpt1 = wav_excerpt1[0]
+        array_excerpt1 = wav_excerpt1[1][:, 0]
+
+        # No parameter
+        delay, corr = find_delay(array_full, array_excerpt1, freq_full, freq_excerpt1, return_correlation_value=True,
+                                 path_figure="figures/arrays/figure_no_param.png")
+        assert (delay == 96002)
+        assert (round(corr, 3) == 0.984)
+
+        # Index
+        delay, corr = find_delay(array_full, array_excerpt1, freq_full, freq_excerpt1, return_correlation_value=True,
+                                 return_delay_format="index", path_figure="figures/arrays/figure_index.png")
+        assert (delay == 96002)
+        assert (round(corr, 3) == 0.984)
+
+        # Second
+        delay, corr = find_delay(array_full, array_excerpt1, freq_full, freq_excerpt1, return_correlation_value=True,
+                                 return_delay_format="s", path_figure="figures/arrays/figure_sec.png")
+        assert np.isclose(delay, 2 + 2/48000)
+        assert (round(corr, 3) == 0.984)
+
+        # Millisecond
+        delay, corr = find_delay(array_full, array_excerpt1, freq_full, freq_excerpt1, return_correlation_value=True,
+                                 return_delay_format="ms", path_figure="figures/arrays/figure_ms.png")
+        assert np.isclose(delay, 2000 + 2/48)
+        assert (round(corr, 3) == 0.984)
+
+        # Datetime
+        delay, corr = find_delay(array_full, array_excerpt1, freq_full, freq_excerpt1, return_correlation_value=True,
+                                 return_delay_format="timedelta", path_figure="figures/arrays/figure_datetime.png")
+        assert delay == dt.timedelta(seconds=2 + 2/48000)
+        assert (round(corr, 3) == 0.984)
+
+    def test_x_axis_figure(self):
+        delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                                 "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                                 return_correlation_value=True, return_delay_format="s", plot_figure=True,
+                                 plot_intermediate_steps=True)
+
+    def test_min_max_delay(self):
+        array = np.array([10, 6, 3, 4, 9, 8, 16, 23, 12, 1, 0, 9, 6, 3, 7, 6, 5, 1, 0, 4, 9, 24, 42])
+        excerpt = array[5:12]
+
+        delay = find_delay(array, excerpt, compute_envelope=False, plot_figure=True)
+        assert delay == 5
+
+        delay = find_delay(array, excerpt, compute_envelope=False, plot_figure=True, min_delay=10, max_delay=20)
+
+        delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                                 "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                                 return_correlation_value=True, plot_figure=True, plot_intermediate_steps=True)
+        assert (delay == 96002)
+        assert (round(corr, 3) == 0.984)
+
+        delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
+                                 "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                                 return_correlation_value=True, plot_figure=True, plot_intermediate_steps=True,
+                                 min_delay=100000, max_delay=200000)
+        print(delay, corr)
 
     def test_big_chunks(self):
         find_delay("../demos/i_have_a_dream_full_without_end.wav",

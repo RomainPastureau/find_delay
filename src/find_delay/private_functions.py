@@ -835,12 +835,74 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
     return cross_correlation_normalized, return_value, max_correlation_value, index_max_correlation_value
 
 
+def _cross_correlation_segment(array_2, freq_array_1, resampling_rate, cross_correlation_normalized, min_delay,
+                               max_delay, return_delay_format, threshold, verbosity, add_tabs):
+
+    t = add_tabs * "\t"
+    if verbosity > 0:
+        print(f"{t}Getting the max correlation in the defined delay bounds...", end=" ")
+
+    # Get timestamps cross-correlation
+    original_t_cc = (np.arange(0, len(cross_correlation_normalized)) - array_2.size + 1)
+    t_cc = np.copy(original_t_cc)
+
+    if resampling_rate is not None:
+        rate = resampling_rate
+    else:
+        rate = freq_array_1
+
+    if return_delay_format != "index":
+        t_cc = original_t_cc / rate
+        if return_delay_format == "timedelta":
+            t_cc = np.array(t_cc * 1000000, dtype="datetime64[us]")
+        if return_delay_format == "ms":
+            t_cc = t_cc * 1000
+
+    if min_delay is None:
+        min_delay = t_cc[0]
+
+    if max_delay is None:
+        max_delay = t_cc[-1]
+
+    # Get the closest indices to min_delay and max_delay
+    t_cc_min_idx = np.argmin(np.abs(t_cc - min_delay))
+    t_cc_max_idx = np.argmin(np.abs(t_cc - max_delay))
+
+    segment_delay = np.argmax(cross_correlation_normalized[t_cc_min_idx:t_cc_max_idx + 1])
+    segment_delay_corr = np.max(cross_correlation_normalized[t_cc_min_idx:t_cc_max_idx + 1])
+    segment_delay_arg = t_cc[t_cc_min_idx + segment_delay]
+
+    delay_in_seconds = segment_delay_arg / rate
+    if delay_in_seconds >= 0:
+        sign = ""
+        time = dt.timedelta(days=delay_in_seconds // 86400, seconds=int(delay_in_seconds % 86400),
+                         microseconds=(delay_in_seconds % 1) * 1000000)
+    else:
+        sign = "-"
+        time = dt.timedelta(days=-delay_in_seconds // 86400, seconds=int(-delay_in_seconds % 86400),
+                         microseconds=(-delay_in_seconds % 1) * 1000000)
+
+    if verbosity > 0:
+        print("Done.")
+
+        if segment_delay_corr >= threshold:
+            print(f"{t}\tMaximum correlation ({np.round(segment_delay_corr, 3)}) in the range "
+                  f"{min_delay} - {max_delay} found at sample {segment_delay_arg} (timestamp {sign}{time}).")
+
+        else:
+            print(f"{t}\tNo correlation over threshold found (max correlation: {np.round(segment_delay_corr, 3)}" +
+                  f") found at sample {segment_delay_arg} (timestamp {sign}{time}).")
+
+    return (cross_correlation_normalized[t_cc_min_idx:t_cc_max_idx], segment_delay, segment_delay_corr,
+            segment_delay_arg, t_cc_min_idx)
+
+
 def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, name_array_2, envelope_1, envelope_2,
                    y1, y2, compute_envelope, window_size_env, overlap_ratio_env, filter_below, filter_over,
-                   resampling_rate, window_size_res, overlap_ratio_res, cross_correlation, threshold,
-                   number_of_plots, return_delay_format, return_value, max_correlation_value,
-                   index_max_correlation_value, plot_figure, path_figure, name_figure, plot_intermediate_steps,
-                   x_format_figure, dark_mode, verbosity, add_tabs):
+                   resampling_rate, window_size_res, overlap_ratio_res, cross_correlation, cross_correlation_segment,
+                   cross_correlation_start, threshold, number_of_plots, return_delay_format, return_value,
+                   max_correlation_value, index_max_correlation_value, plot_figure, path_figure,
+                   name_figure, plot_intermediate_steps, x_format_figure, dark_mode, verbosity, add_tabs):
     """
     Creates and/or saves a figure given the parameters of the find_delay function.
 
@@ -1013,13 +1075,13 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     if x_format_figure == "auto" and return_delay_format in ["s", "ms", "timedelta"]:
         x_format_figure = "time"
 
-    if x_format_figure == "time":
-        t_array_1 = np.array(t_array_1 * 1000000, dtype="datetime64[us]")
-        t_array_2 = np.array(t_array_2 * 1000000, dtype="datetime64[us]")
-        t_res_1 = np.array(t_res_1 * 1000000, dtype="datetime64[us]")
-        t_res_2 = np.array(t_res_2 * 1000000, dtype="datetime64[us]")
-        t_res_2_aligned = np.array(t_res_2_aligned * 1000000, dtype="datetime64[us]")
-        t_cc = np.array(t_cc * 1000000, dtype="datetime64[us]")
+    # if x_format_figure == "time":
+    #     t_array_1 = np.array(t_array_1 * 1000000, dtype="datetime64[us]")
+    #     t_array_2 = np.array(t_array_2 * 1000000, dtype="datetime64[us]")
+    #     t_res_1 = np.array(t_res_1 * 1000000, dtype="datetime64[us]")
+    #     t_res_2 = np.array(t_res_2 * 1000000, dtype="datetime64[us]")
+    #     t_res_2_aligned = np.array(t_res_2_aligned * 1000000, dtype="datetime64[us]")
+    #     t_cc = np.array(t_cc * 1000000, dtype="datetime64[us]")
 
     # Formatting functions for the x-axis (MM:SS and HH:MM:SS)
     def get_label(value, include_hour=True, include_us=True):
@@ -1039,23 +1101,27 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
                 return "00:00"
 
         # Turn to timedelta
-        td_value = mdates.num2timedelta(value)
+        #td_value = mdates.num2timedelta(value)
+        #seconds = td_value.total_seconds()
 
-        seconds = td_value.total_seconds()
+        seconds = value
         hh = str(int(seconds // 3600)).zfill(2)
         mm = str(int((seconds // 60) % 60)).zfill(2)
         ss = str(int(seconds % 60)).zfill(2)
-
         us = str(int((seconds % 1) * 1000000)).rstrip("0")
 
         label = ""
-        if neg:
-            label += "-"
         if include_hour:
-            label += hh + ":"
-        label += mm + ":" + ss
+            label += hh
+        label += ":" + mm + ":" + ss
         if include_us and us != "":
             label += "." + us
+
+        if include_us and hh == "00":
+            label = label[2:]
+
+        if neg:
+            label = "-" + label
 
         return label
 
@@ -1073,9 +1139,9 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
             formatter = mdates.AutoDateFormatter(ax.xaxis.get_major_locator())
             formatter.scaled[1 / mdates.MUSECONDS_PER_DAY] = get_label_hh_mm_ss
             formatter.scaled[1 / mdates.SEC_PER_DAY] = get_label_hh_mm_ss
-            formatter.scaled[1 / mdates.MINUTES_PER_DAY] = get_label_hh_mm_ss_no_ms
-            formatter.scaled[1 / mdates.HOURS_PER_DAY] = get_label_hh_mm_ss_no_ms
-            formatter.scaled[1] = get_label_hh_mm_ss_no_ms
+            formatter.scaled[1 / mdates.MINUTES_PER_DAY] = get_label_hh_mm_ss
+            formatter.scaled[1 / mdates.HOURS_PER_DAY] = get_label_hh_mm_ss
+            formatter.scaled[1] = get_label_hh_mm_ss
             formatter.scaled[mdates.DAYS_PER_MONTH] = get_label_hh_mm_ss_no_ms
             formatter.scaled[mdates.DAYS_PER_YEAR] = get_label_hh_mm_ss_no_ms
             ax.xaxis.set_major_formatter(formatter)
@@ -1148,16 +1214,28 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     # Cross-correlation
     title = "Cross-correlation"
 
+    if cross_correlation_segment is not None:
+        color_cc = "grey"
+    else:
+        color_cc = "green"
+
     if plot_intermediate_steps:
         ax[i // 2][i % 2].set_title(title)
         ax[i // 2][i % 2].set_ylim(np.nanmin(cross_correlation), 1.5)
-        ax[i // 2][i % 2].plot(t_cc, cross_correlation, color="green")
+        ax[i // 2][i % 2].plot(t_cc, cross_correlation, color=color_cc)
         ax[i // 2][i % 2] = set_label_time_figure(ax[i // 2][i % 2])
+        if cross_correlation_segment is not None:
+            ax[i // 2][i % 2].plot(t_cc[cross_correlation_start:cross_correlation_start + len(
+                cross_correlation_segment)], cross_correlation_segment, color="green")
     else:
         ax[0].set_title(title)
         ax[0].set_ylim(np.nanmin(cross_correlation), 1.5)
-        ax[0].plot(t_cc, cross_correlation, color="green")
+        ax[0].plot(t_cc, cross_correlation, color=color_cc)
         ax[0] = set_label_time_figure(ax[0])
+        if cross_correlation_segment is not None:
+            ax[0].plot(t_cc[cross_correlation_start:cross_correlation_start + len(
+                cross_correlation_segment)], cross_correlation_segment, color="green")
+
     text = ""
     if return_delay_format == "index":
         text = "Sample "
@@ -1209,7 +1287,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         excerpt_in_original = array_1[max(0, index_max_correlation_value):
                                       min(index_max_correlation_value + len(array_2), len(array_1))]
     else:
-        index = int(index_max_correlation_value * freq_array_1 / resampling_rate)
+        index = int(index_max_correlation_value * (freq_array_1 / resampling_rate))
         excerpt_in_original = array_1[max(0, index):
                                       min(index + int(len(array_2) * freq_array_1 / freq_array_2), len(array_1))]
     resampled_timestamps_array2 = t_res_2_aligned[:len(array_2)]
@@ -1228,7 +1306,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     if resampling_rate is None and index_max_correlation_value + len(array_2) > len(array_1):
         index_end_array_2 = int(len(array_1) - index_max_correlation_value)
     elif resampling_rate is not None:
-        if index_max_correlation_value * freq_array_1 / resampling_rate + \
+        if index_max_correlation_value * (freq_array_1 / resampling_rate) + \
             len(array_2) * freq_array_1 / freq_array_2 > len(array_1):
             index_end_array_2 = int(((len(array_1) - index_max_correlation_value * freq_array_1 / resampling_rate) *
                                      freq_array_2 / freq_array_1))

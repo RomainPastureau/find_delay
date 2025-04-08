@@ -1,9 +1,15 @@
 Version history
 ===============
 
+2.17a (2025-04-??)
+------------------
+* The functions now accepts two new parameters, min_delay and max_delay, allowing to look for the delay with the
+  maximum correlation in a range of possible delays.
+* For negative values, invalid timedelta values wer displayed on the horizontal axes of the figures. This has been
+  corrected.
+* In order to gain space, hours on the horizontal axis are now shortened if the hour is equal to 0.
+
 2.16 (2025-03-05)
------------------
-*2.16 (2025-03-05)*
 -----------------
 * Downgraded the requirements for Numpy (from 1.25.0 to 1.16.0), Scipy (from 1.11.0 to 1.5) and Matplotlib (from 3.7 to
   3.2) in order to ensure compatibility with older environments. Note: working with deprecated versions of modules is
