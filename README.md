@@ -1,4 +1,4 @@
-# find_delay 2.17a
+# find_delay 2.17
 [![Documentation Status](https://readthedocs.org/projects/find-delay/badge/?version=latest)](https://find-delay.readthedocs.io/en/latest/?badge=latest)
 
 [PyPI page](https://pypi.org/project/find-delay/)
@@ -91,14 +91,15 @@ find_delay("i_have_a_dream_full_speech.wav", "i_have_a_dream_excerpt.wav",
 [Find more examples here!](https://find-delay.readthedocs.io/en/latest/examples/delay_audio_files.html)
 
 ### Latest version
-*2.17a (2025-04-08)*
+*2.17 (2025-04-10)*
 --------------------
 * The functions now accepts two new parameters, min_delay and max_delay, allowing to look for the delay with the
   maximum correlation in a range of possible delays.
 * For negative values, invalid timedelta values wer displayed on the horizontal axes of the figures. This has been
   corrected.
 * In order to gain space, hours on the horizontal axis are now shortened if the hour is equal to 0.
-* Note: this version might be unstable - feel free to open issues for any bug!
+* Timestamps in the figure now appear rounded down to the sixth decimal, if ``return_delay_format`` is set on ``"ms"``
+  or ``"s"``.
 
 [See version history](https://find-delay.readthedocs.io/en/latest/version_history.html)
 

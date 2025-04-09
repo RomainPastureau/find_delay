@@ -1,13 +1,15 @@
 Version history
 ===============
 
-2.17a (2025-04-??)
+2.17 (2025-04-10)
 ------------------
 * The functions now accepts two new parameters, min_delay and max_delay, allowing to look for the delay with the
   maximum correlation in a range of possible delays.
 * For negative values, invalid timedelta values wer displayed on the horizontal axes of the figures. This has been
   corrected.
 * In order to gain space, hours on the horizontal axis are now shortened if the hour is equal to 0.
+* Timestamps in the figure now appear rounded down to the sixth decimal, if ``return_delay_format`` is set on ``"ms"``
+  or ``"s"``.
 
 2.16 (2025-03-05)
 -----------------

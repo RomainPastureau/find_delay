@@ -711,10 +711,14 @@ def _convert_to_mono(audio_data, mono_channel=0, verbosity=1, add_tabs=0):
     return mono_array
 
 
-def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_format, verbosity=1, add_tabs=0):
+def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_format, min_delay, max_delay,
+                       verbosity=1, add_tabs=0):
     """Performs a normalized cross-correlation between two arrays.
 
     .. versionadded:: 2.12
+
+    .. versionchanged:: 2.17
+        Added the parameters `min_delay` and `max_delay`, allowing to limit the search to a specific range of delays.
 
     y1: `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
         The first array to cross-correlate.
@@ -748,6 +752,14 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
               `datetime.timedelta <https://docs.python.org/3/library/datetime.html#timedelta-objects>`_ object.
               Note that, in the case where the result is negative, the timedelta format may give unexpected display
               results (-1 second returns -1 days, 86399 seconds).
+
+    min_delay: int|float|None, optional
+        The lower limit of the sample or time range in which to look for the highest correlation value. This parameter
+        must be specified in the same unit as ``return_delay_format``.
+
+    max_delay: int|float|None, optional
+        The upper limit of the sample or time range in which to look for the highest correlation value. This parameter
+        must be specified in the same unit as ``return_delay_format``.
 
     verbosity: int, optional
         Sets how much feedback the code will provide in the console output:
@@ -789,15 +801,46 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
     diff = (y1_m2 - y1_m)
     diff_clipped = diff.clip(min=0)
 
-    cross_correlation = correlate(y1, y2_normalized, "full")
-    cross_correlation_normalized = np.divide(cross_correlation, np.sqrt(diff_clipped),
-                                             out=np.zeros_like(cross_correlation), where=diff_clipped != 0)
+    cross_corr = correlate(y1, y2_normalized, "full")
+    cross_corr_norm = np.divide(cross_corr, np.sqrt(diff_clipped), out=np.zeros_like(cross_corr), where=diff_clipped != 0)
 
-    max_correlation_value = np.nanmax(cross_correlation_normalized)
-    index_max_correlation_value = np.nanargmax(cross_correlation_normalized) - y2.size + 1
+    max_corr_value = np.nanmax(cross_corr_norm)
+    index_max_corr_value = np.nanargmax(cross_corr_norm) - y2.size + 1
 
-    index = int(np.round(index_max_correlation_value * freq_y1_original / rate, 0))
-    delay_in_seconds = index_max_correlation_value / rate
+    # Get the max correlation in the specified range
+    cross_corr_norm_segment = None
+    t_cross_corr_min_idx = None
+    is_segment = False
+    if min_delay is not None or max_delay is not None:
+        is_segment = True
+
+        # Get the timestamps of the cross-correlation array in the right format
+        t_cross_corr = np.arange(0, len(cross_corr_norm)) - y2.size + 1
+        if return_delay_format != "index":
+            t_cross_corr = t_cross_corr / rate
+            if return_delay_format == "timedelta":
+                t_cross_corr = np.array(t_cross_corr * 1000000, dtype="datetime64[us]")
+            if return_delay_format == "ms":
+                t_cross_corr = t_cross_corr * 1000
+
+        # Define min/max delay if one is not user-set
+        if min_delay is None:
+            min_delay = t_cross_corr[0]
+        if max_delay is None:
+            max_delay = t_cross_corr[-1]
+
+        # Get the closest indices to min_delay and max_delay
+        t_cross_corr_min_idx = np.argmin(np.abs(t_cross_corr - min_delay))
+        t_cross_corr_max_idx = np.argmin(np.abs(t_cross_corr - max_delay))
+
+        # Get the highest correlation
+        cross_corr_norm_segment = cross_corr_norm[t_cross_corr_min_idx:t_cross_corr_max_idx + 1]
+        max_corr_value = np.nanmax(cross_corr_norm_segment)
+        index_max_corr_value_segment = np.nanargmax(cross_corr_norm_segment)
+        index_max_corr_value = t_cross_corr[t_cross_corr_min_idx + index_max_corr_value_segment]
+
+    index = int(np.round(index_max_corr_value * (freq_y1_original / rate), 0))
+    delay_in_seconds = index_max_corr_value / rate
     if delay_in_seconds >= 0:
         sign = ""
         time = dt.timedelta(days=delay_in_seconds // 86400, seconds=int(delay_in_seconds % 86400),
@@ -811,13 +854,18 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
         print("Done.")
         print(f"{t}\tCross-correlation calculated in: {dt.datetime.now() - time_before_cross_correlation}")
 
-        if max_correlation_value >= threshold:
-            print(f"{t}\tMaximum correlation ({np.round(max_correlation_value, 3)}) found at sample {index} " +
-                  f"(timestamp {sign}{time}).")
+        if max_corr_value >= threshold:
+            if is_segment:
+                print(f"{t}\tMaximum correlation ({np.round(max_corr_value, 3)}) in segment [{min_delay}; "
+                      f"{max_delay}] found at sample {index} (timestamp {sign}{time}).")
+            else:
+                print(f"{t}\tMaximum correlation ({np.round(max_corr_value, 3)}) found at sample {index} " +
+                      f"(timestamp {sign}{time}).")
 
         else:
-            print(f"{t}\tNo correlation over threshold found (max correlation: {np.round(max_correlation_value, 3)}" +
-                  f") found at sample {index} (timestamp {sign}{time}).")
+            print(f"{t}\tNo correlation over threshold found in the segment [{min_delay}; {max_delay}] (max "
+                  f"correlation: {np.round(max_corr_value, 3)}) found at sample {index} (timestamp "
+                  f"{sign}{time}).")
 
     # Return values: None if below threshold
     if return_delay_format == "index":
@@ -832,69 +880,8 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
         raise Exception(f"Wrong value for the parameter return_delay_format: {return_delay_format}. The value should " +
                         f"be either \"index\", \"ms\", \"s\" or \"timedelta\".")
 
-    return cross_correlation_normalized, return_value, max_correlation_value, index_max_correlation_value
-
-
-def _cross_correlation_segment(array_2, freq_array_1, resampling_rate, cross_correlation_normalized, min_delay,
-                               max_delay, return_delay_format, threshold, verbosity, add_tabs):
-
-    t = add_tabs * "\t"
-    if verbosity > 0:
-        print(f"{t}Getting the max correlation in the defined delay bounds...", end=" ")
-
-    # Get timestamps cross-correlation
-    original_t_cc = (np.arange(0, len(cross_correlation_normalized)) - array_2.size + 1)
-    t_cc = np.copy(original_t_cc)
-
-    if resampling_rate is not None:
-        rate = resampling_rate
-    else:
-        rate = freq_array_1
-
-    if return_delay_format != "index":
-        t_cc = original_t_cc / rate
-        if return_delay_format == "timedelta":
-            t_cc = np.array(t_cc * 1000000, dtype="datetime64[us]")
-        if return_delay_format == "ms":
-            t_cc = t_cc * 1000
-
-    if min_delay is None:
-        min_delay = t_cc[0]
-
-    if max_delay is None:
-        max_delay = t_cc[-1]
-
-    # Get the closest indices to min_delay and max_delay
-    t_cc_min_idx = np.argmin(np.abs(t_cc - min_delay))
-    t_cc_max_idx = np.argmin(np.abs(t_cc - max_delay))
-
-    segment_delay = np.argmax(cross_correlation_normalized[t_cc_min_idx:t_cc_max_idx + 1])
-    segment_delay_corr = np.max(cross_correlation_normalized[t_cc_min_idx:t_cc_max_idx + 1])
-    segment_delay_arg = t_cc[t_cc_min_idx + segment_delay]
-
-    delay_in_seconds = segment_delay_arg / rate
-    if delay_in_seconds >= 0:
-        sign = ""
-        time = dt.timedelta(days=delay_in_seconds // 86400, seconds=int(delay_in_seconds % 86400),
-                         microseconds=(delay_in_seconds % 1) * 1000000)
-    else:
-        sign = "-"
-        time = dt.timedelta(days=-delay_in_seconds // 86400, seconds=int(-delay_in_seconds % 86400),
-                         microseconds=(-delay_in_seconds % 1) * 1000000)
-
-    if verbosity > 0:
-        print("Done.")
-
-        if segment_delay_corr >= threshold:
-            print(f"{t}\tMaximum correlation ({np.round(segment_delay_corr, 3)}) in the range "
-                  f"{min_delay} - {max_delay} found at sample {segment_delay_arg} (timestamp {sign}{time}).")
-
-        else:
-            print(f"{t}\tNo correlation over threshold found (max correlation: {np.round(segment_delay_corr, 3)}" +
-                  f") found at sample {segment_delay_arg} (timestamp {sign}{time}).")
-
-    return (cross_correlation_normalized[t_cc_min_idx:t_cc_max_idx], segment_delay, segment_delay_corr,
-            segment_delay_arg, t_cc_min_idx)
+    return (cross_corr_norm, cross_corr_norm_segment, return_value, max_corr_value, index_max_corr_value,
+            t_cross_corr_min_idx)
 
 
 def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, name_array_2, envelope_1, envelope_2,
@@ -927,6 +914,12 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     .. versionchanged:: 2.4
         Added the new parameter `x_format_figure`, allowing to have HH:MM:SS times on the x-axis.
         Modified the scaling of the aligned arrays figure to be more accurate.
+
+    .. versionchanged:: 2.17
+        For negative values, invalid timedelta values wer displayed on the horizontal axes of the figures. This has been
+        corrected. In order to gain space, hours on the horizontal axis are now shortened if the hour is equal to 0.
+        Timestamps in the figure now appear rounded down to the sixth decimal, if ``return_delay_format`` is set on
+        ``"ms"`` or ``"s"``.
 
     Parameters
     ----------
@@ -1215,7 +1208,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     title = "Cross-correlation"
 
     if cross_correlation_segment is not None:
-        color_cc = "grey"
+        color_cc = "#aaaaaa"
     else:
         color_cc = "green"
 
@@ -1239,18 +1232,21 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     text = ""
     if return_delay_format == "index":
         text = "Sample "
-    text += str(return_value)
+
     if return_delay_format in ["ms", "s"]:
+        text += str(np.round(return_value, 6))
         text += return_delay_format
+    else:
+        text += str(return_value)
 
     if max_correlation_value >= threshold:
-        text += " · Correlation value: " + str(round(max_correlation_value, 3))
+        text += " · Correlation value: " + str(np.round(max_correlation_value, 3))
         if dark_mode:
             bbox_props = dict(boxstyle="square,pad=0.3", fc="green", ec="k", lw=0.72)
         else:
             bbox_props = dict(boxstyle="square,pad=0.3", fc="#99cc00", ec="k", lw=0.72)
     else:
-        text += " · Correlation value (below threshold): " + str(round(max_correlation_value, 3))
+        text += " · Correlation value (below threshold): " + str(np.round(max_correlation_value, 3))
         bbox_props = dict(boxstyle="square,pad=0.3", fc="#ff0000", ec="k", lw=0.72)
     arrow_props = dict(arrowstyle="->", connectionstyle="angle,angleA=90")
     kw = dict(xycoords='data', textcoords="data",

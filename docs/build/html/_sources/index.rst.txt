@@ -46,16 +46,16 @@ You can then use :doc:`find_delay.find_delay() <find_delay>` or :doc:`find_delay
 
 How do I use find_delay?
 ------------------------
-To find when an excerpt starts in an array, use the `find_delay` function and fill only the first five parameters:
+To find when an excerpt starts in an array, use the ``find_delay`` function and fill only the first five parameters:
 
    * ``array_1``: An array of numbers or the path to a WAV file
-   * ``array_2``: An excerpt of array_1, or the path to a WAV file contained in array_1
-   * ``freq_array_1``: The frequency of the array (if it's important, otherwise set it at 1). If array_1 is a path to
-     a WAV file, you can ignore this parameter.
-   * ``freq_array_2``: The frequency of the excerpt (it it's important, otherwise set it at 1). If array_2 is a path to
-     a WAV file, you can ignore this parameter.
-   * ``compute_envelope``: If you are trying to find the delay between two audio files, set on `True`, otherwise
-     `False`.
+   * ``array_2``: An excerpt of ``array_1``, or the path to a WAV file contained in ``array_1``
+   * ``freq_array_1``: The frequency of the array (if it's important, otherwise set it at 1). If ``array_1`` is a path
+     to a WAV file, you can ignore this parameter.
+   * ``freq_array_2``: The frequency of the excerpt (it it's important, otherwise set it at 1). If ``array_2`` is a
+     path to a WAV file, you can ignore this parameter.
+   * ``compute_envelope``: If you are trying to find the delay between two audio files, set on ``True``, otherwise
+     ``False``.
 
 Leave the other parameters default (just set ``plot_figure = True`` if you want to visualize the output of the
 function). This should be enough for most cases, but you can fine tune other parameters of which you can find the
@@ -109,6 +109,7 @@ Example 3: audio files, different frequencies
 More examples
 ^^^^^^^^^^^^^
 :doc:`Find the delay between two audio files <examples/delay_audio_files>`
+
 :doc:`Find the delay of the audio on the MISC channel of an MEG recording <examples/delay_meg_misc>`
 
 How does it work?

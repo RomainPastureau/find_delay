@@ -3,15 +3,14 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.17a (2025-04-08)
+Current version: 2.17 (2025-04-10)
 """
 import datetime as dt
 import os
 import numpy as np
 from scipy.io import wavfile
 
-from .private_functions import _convert_to_mono, _get_envelope, _resample, _cross_correlation, _create_figure, \
-    _cross_correlation_segment
+from .private_functions import _convert_to_mono, _get_envelope, _resample, _cross_correlation, _create_figure
 
 
 def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelope=True, window_size_env=1e6,
@@ -62,9 +61,10 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
     Important
     ---------
-    Because it is easy to get confused: this function returns the timestamp in array_1 where array_2 begins. This means
-    that, if you want to align array_1 and array_2, you need to remove the delay to each timestamp of array_1: that way,
-    the value at timestamp 0 in array_1 will be aligned with the value at timestamp 0 in array_2.
+    Because it is easy to get confused: this function returns the timestamp in ``array_1`` where ``array_2`` begins.
+    This means that, if you want to align ``array_1`` and ``array_2``, you need to remove the delay to each timestamp
+    of ``array_1``: that way, the value at timestamp 0 in ``array_1`` will be aligned with the value at timestamp 0 in
+    ``array_2``.
 
     Note
     ----
@@ -72,7 +72,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     other words, if the excerpt starts 1 second before the onset of the original array, the function will return a delay
     of -1 sec. However, this should be avoided, as information missing from the original array will result in lower
     correlation - with a substantial amount of data missing from the original array, the function may return erroneous
-    results. This is why it is always preferable to use excerpts that are entirely contained in the original array.
+    results. This is why *it is always preferable to use excerpts that are entirely contained in the original array*.
 
     Parameters
     ----------
@@ -87,7 +87,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         An second array of samples, smaller than or of equal size to the first one, that is allegedly an excerpt
         from the first one. The amplitude, frequency or values do not have to match exactly the ones from the first
         array. The parameter can also be a string containing the path to a WAV file (see description of parameter
-        array_1).
+        ``array_1``).
 
         .. _numpyarray: https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html
         .. versionchanged:: 2.9
@@ -415,24 +415,14 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         y1 = envelope_1
         y2 = envelope_2
 
-    values = _cross_correlation(y1, y2, rate, freq_array_1, threshold, return_delay_format, verbosity, add_tabs)
-    cross_correlation_normalized = values[0]
-    return_value = values[1]
-    max_correlation_value = values[2]
-    index_max_correlation_value = values[3]
-
-    cross_correlation_segment = None
-    if min_delay is not None or max_delay is not None:
-        values = _cross_correlation_segment(array_2, freq_array_1, resampling_rate, cross_correlation_normalized,
-                                            min_delay, max_delay, return_delay_format, threshold, verbosity, add_tabs)
-        cross_correlation_segment = values[0]
-        return_value = values[1]
-        max_correlation_value = values[2]
-        index_max_correlation_value = values[3]
-        cross_correlation_start = values[4]
-    else:
-        cross_correlation_segment = None
-        cross_correlation_start = None
+    values = _cross_correlation(y1, y2, rate, freq_array_1, threshold, return_delay_format, min_delay, max_delay,
+                                verbosity, add_tabs)
+    cross_corr_norm = values[0]
+    cross_corr_norm_segment = values[1]
+    return_value = values[2]
+    max_corr_value = values[3]
+    index_max_corr_value = values[4]
+    t_cross_corr_min_idx = values[5]
 
     if verbosity > 0:
         print(f"\n{t}Complete delay finding function executed in: {dt.datetime.now() - time_before_function}")
@@ -441,16 +431,16 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     if plot_figure is not None or path_figure is not None:
         _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, name_array_2, envelope_1, envelope_2,
                        y1, y2, compute_envelope, window_size_env, overlap_ratio_env, filter_below, filter_over,
-                       resampling_rate, window_size_res, overlap_ratio_res, cross_correlation_normalized,
-                       cross_correlation_segment, cross_correlation_start, threshold, number_of_plots,
-                       return_delay_format, return_value, max_correlation_value, index_max_correlation_value,
+                       resampling_rate, window_size_res, overlap_ratio_res, cross_corr_norm,
+                       cross_corr_norm_segment, t_cross_corr_min_idx, threshold, number_of_plots,
+                       return_delay_format, return_value, max_corr_value, index_max_corr_value,
                        plot_figure, path_figure, None, plot_intermediate_steps, x_format_figure, dark_mode,
                        verbosity, add_tabs)
 
-    if max_correlation_value >= threshold:
+    if max_corr_value >= threshold:
 
         if return_correlation_value:
-            return return_value, max_correlation_value
+            return return_value, max_corr_value
         else:
             return return_value
 
@@ -925,27 +915,31 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
                                 f"cross-correlation.")
             y2 = envelope_excerpt
 
-        values = _cross_correlation(y1, y2, rate, freq_array, threshold, return_delay_format, verbosity, add_tabs + 1)
-        cross_correlation_normalized = values[0]
-        return_value = values[1]
-        max_correlation_value = values[2]
-        index_max_correlation_value = values[3]
+        values = _cross_correlation(y1, y2, rate, freq_array, threshold, return_delay_format, min_delay, max_delay,
+                                    verbosity, add_tabs)
+        cross_corr_norm = values[0]
+        cross_corr_norm_segment = values[1]
+        return_value = values[2]
+        max_corr_value = values[3]
+        index_max_corr_value = values[4]
+        t_cross_corr_min_idx = values[5]
 
         # Plot and/or save the figure
         if plot_figure is not None or path_figures is not None:
             _create_figure(array, excerpt, freq_array, freq_excerpt, name_array, name_excerpt, envelope_array,
                            envelope_excerpt, y1, y2, compute_envelope, window_size_env, overlap_ratio_env,
                            filter_below, filter_over, resampling_rate, window_size_res, overlap_ratio_res,
-                           cross_correlation_normalized, threshold, number_of_plots, return_delay_format, return_value,
-                           max_correlation_value, index_max_correlation_value, plot_figure, path_figures, name_figures
+                           cross_corr_norm, cross_corr_norm_segment, t_cross_corr_min_idx, threshold,
+                           number_of_plots, return_delay_format, return_value,
+                           max_corr_value, index_max_corr_value, plot_figure, path_figures, name_figures
                            + "_" + str(i + 1) + ".png", plot_intermediate_steps, x_format_figure, dark_mode, verbosity,
                            add_tabs+1)
 
-        if max_correlation_value >= threshold:
+        if max_corr_value >= threshold:
 
             if return_correlation_values:
                 delays.append(return_value)
-                correlation_values.append(max_correlation_value)
+                correlation_values.append(max_corr_value)
             else:
                 delays.append(return_value)
 

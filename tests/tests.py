@@ -204,7 +204,7 @@ class Tests(unittest.TestCase):
         delay = (find_delay("test_wav/test_full_2ch_48000Hz.wav",
                             "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
                             return_delay_format="timedelta",
-                            plot_figure=True, plot_intermediate_steps=True,
+                            plot_figure=False, plot_intermediate_steps=True,
                             verbosity=1))
 
         assert (delay.total_seconds() == 2.000042)
@@ -212,7 +212,7 @@ class Tests(unittest.TestCase):
         delay = find_delay("test_wav/test_full_2ch_48000Hz.wav",
                            "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
                            return_delay_format="timedelta",
-                           plot_figure=True,
+                           plot_figure=False,
                            plot_intermediate_steps=True,
                            path_figure="../docs/source/images/figure_example.png",
                            x_format_figure="time",
@@ -328,22 +328,62 @@ class Tests(unittest.TestCase):
         array = np.array([10, 6, 3, 4, 9, 8, 16, 23, 12, 1, 0, 9, 6, 3, 7, 6, 5, 1, 0, 4, 9, 24, 42])
         excerpt = array[5:12]
 
-        delay = find_delay(array, excerpt, compute_envelope=False, plot_figure=True)
+        delay = find_delay(array, excerpt, compute_envelope=False, plot_figure=False)
         assert delay == 5
 
-        delay = find_delay(array, excerpt, compute_envelope=False, plot_figure=True, min_delay=10, max_delay=20)
+        delay = find_delay(array, excerpt, compute_envelope=False, plot_figure=False, min_delay=10, max_delay=20)
 
         delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
                                  "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
-                                 return_correlation_value=True, plot_figure=True, plot_intermediate_steps=True)
+                                 return_correlation_value=True, plot_figure=False, plot_intermediate_steps=True)
         assert (delay == 96002)
         assert (round(corr, 3) == 0.984)
 
         delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
                                  "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
-                                 return_correlation_value=True, plot_figure=True, plot_intermediate_steps=True,
+                                 return_correlation_value=True, plot_figure=False, plot_intermediate_steps=True,
                                  min_delay=100000, max_delay=200000)
-        print(delay, corr)
+        assert delay is None
+        assert corr is None
+
+        array_1 = np.array([10,  98,  56, -39,  50, -96, -48, -13,  97, -59, -82,  16,  15,
+                            14,  65,  84, -32, -65,  52, -45,  98, -38, -50, -96,  38,  52,
+                            49, -33, -71,  34, -52,  99,  66, -92, -82,  90, -91,  77, -30,
+                           -24, -91,  83,   5, -57, -12,  62,  17,  46,  17, -64,  98, -38,
+                           -50, -96,  38,  52,  49,   7, -23,  42,   0,  88,  -9,  -9,  18])
+
+        array_2 = np.array([98, -38, -50, -96,  38,  52,  49])
+
+        delay, corr = find_delay(array_1, array_2, compute_envelope=False, return_correlation_value=True,
+                                 plot_figure=False, plot_intermediate_steps=True)
+
+        assert delay == 20
+        assert np.isclose(corr, 1.0)
+
+        delay, corr = find_delay(array_1, array_2, min_delay=25, compute_envelope=False,
+                                 return_correlation_value=True,
+                                 plot_figure=False, plot_intermediate_steps=True)
+
+        assert delay == 50
+        assert np.isclose(corr, 1.0)
+
+        array_1 = np.array([10,  98,  56, -39,  50, -96, -48, -13,  97, -59, -82,  16,  15,
+                            14,  65,  84, -32, -65,  52, -45,  98, -38, -48, -96,  38,  52,
+                            49, -33, -71,  34, -52,  99,  66, -92, -82,  90, -91,  77, -30,
+                           -24, -91,  83,   5, -57, -12,  62,  17,  46,  17, -64,  98, -38,
+                           -50, -96,  38,  52,  49,   7, -23,  42,   0,  88,  -9,  -9,  18])
+
+        delay, corr = find_delay(array_1, array_2, compute_envelope=False, return_correlation_value=True,
+                                 plot_figure=False, plot_intermediate_steps=True)
+        assert delay == 50
+        assert np.isclose(corr, 1.0)
+
+        delay, corr = find_delay(array_1, array_2, max_delay=25, compute_envelope=False,
+                                 return_correlation_value=True,
+                                 plot_figure=False, plot_intermediate_steps=True)
+        assert delay == 20
+        assert np.isclose(corr, 0.9999482290589539)
+
 
     def test_big_chunks(self):
         find_delay("../demos/i_have_a_dream_full_without_end.wav",

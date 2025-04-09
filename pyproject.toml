@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "find_delay"
-version = "2.17a"
+version = "2.17"
 authors = [
   {name = "Romain Pastureau", email = "find_delay@proton.me"},
 ]
