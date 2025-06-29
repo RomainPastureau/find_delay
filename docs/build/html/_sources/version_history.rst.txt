@@ -1,22 +1,35 @@
 Version history
 ===============
 
+2.18 (2025-06-29)
+-----------------
+* Corrected a bug where passing ``"average"`` for the parameter ``mono_channel`` would return an error if one of the
+  files was mono
+* Corrected a bug that did not display properly the cross-correlation peak when using ``min_delay`` or ``max_delay``
+* The parameter ``return_delay_format`` can now be set interchangeably between ``"index"`` or ``"sample"``
+* Added a new parameter ``return_none_if_below_threshold``
+* The parameter ``return_correlation_value`` can now be set on ``"array"``. In that case, an 2-dimensional array of all
+  the correlation values and their corresponding timestamps or indices is returned
+* Added new tests
+
 2.17 (2025-04-10)
 ------------------
-* The functions now accepts two new parameters, min_delay and max_delay, allowing to look for the delay with the
-  maximum correlation in a range of possible delays.
+*YANKED VERSION: This version can give erroneous results if ``min_delay`` or ``max_delay`` are set*
+
+* The functions now accepts two new parameters, ``min_delay`` and ``max_delay``, allowing to look for the delay with the
+  maximum correlation in a range of possible delays
 * For negative values, invalid timedelta values wer displayed on the horizontal axes of the figures. This has been
-  corrected.
+  corrected
 * In order to gain space, hours on the horizontal axis are now shortened if the hour is equal to 0.
 * Timestamps in the figure now appear rounded down to the sixth decimal, if ``return_delay_format`` is set on ``"ms"``
-  or ``"s"``.
+  or ``"s"``
 
 2.16 (2025-03-05)
 -----------------
 * Downgraded the requirements for Numpy (from 1.25.0 to 1.16.0), Scipy (from 1.11.0 to 1.5) and Matplotlib (from 3.7 to
   3.2) in order to ensure compatibility with older environments. Note: working with deprecated versions of modules is
-  not recommended as they can include security issues.
-* Removed the test files from the tar.gz, allowing to lower its size to 470 KB.
+  not recommended as they can include security issues
+* Removed the test files from the tar.gz, allowing to lower its size to 470 KB
 
 2.15 (2025-01-23)
 -----------------

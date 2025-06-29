@@ -674,8 +674,13 @@ def _convert_to_mono(audio_data, mono_channel=0, verbosity=1, add_tabs=0):
 
     t = add_tabs * "\t"
 
+    if np.size(audio_data[1]) == 1:
+        mono_array = audio_data
+        if verbosity > 0:
+            print(f"{t}\tThe audio data is already in mono, no conversion necessary.")
+
     # If mono_channel is a channel number
-    if isinstance(mono_channel, int):
+    elif isinstance(mono_channel, int):
 
         # If the channel number is negative or nonexistent
         if mono_channel >= np.size(audio_data[1]) or mono_channel < 0:
@@ -685,12 +690,6 @@ def _convert_to_mono(audio_data, mono_channel=0, verbosity=1, add_tabs=0):
             else:
                 raise Exception(f"""The channel chosen for the parameter "mono_channel" ({mono_channel}) is not valid.
                 Please choose a channel between 0 and {np.size(audio_data[1]) - 1}.""")
-
-        # If the audio data is already mono
-        elif np.size(audio_data[1]) == 1:
-            mono_array = audio_data
-            if verbosity > 0:
-                print(f"{t}\tThe audio data is already in mono, no conversion necessary.")
 
         # If the audio data is not mono
         else:
@@ -720,6 +719,9 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
     .. versionchanged:: 2.17
         Added the parameters `min_delay` and `max_delay`, allowing to limit the search to a specific range of delays.
 
+    .. versionchanged:: 2.18
+        The parameter `return_delay_format` can now also take the value ``"sample"``, which is an alias for ``"index"``.
+
     y1: `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
         The first array to cross-correlate.
 
@@ -741,8 +743,8 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
     return_delay_format: str, optional
         This parameter can be either ``"index"``, ``"ms"``, ``"s"``, or ``"timedelta"``:
 
-            • If ``"index"`` (default), the function will return the index in array_1 at which array_2 has the highest
-              cross-correlation value.
+            • If ``"index"`` (default) or ``"sample"``, the function will return the index in array_1 at which array_2
+              has the highest cross-correlation value.
             • If ``"ms"``, the function will return the timestamp in array_1, in milliseconds, at which array_2 has the
               highest cross-correlation value.
             • If ``"s"``, the function will return the timestamp in array_1, in seconds, at which array_2 has the
@@ -807,21 +809,21 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
     max_corr_value = np.nanmax(cross_corr_norm)
     index_max_corr_value = np.nanargmax(cross_corr_norm) - y2.size + 1
 
+    # Get the timestamps of the cross-correlation array in the right format
+    t_cross_corr = np.arange(0, len(cross_corr_norm)) - y2.size + 1
+    if return_delay_format not in ["index", "sample"]:
+        t_cross_corr = t_cross_corr / rate
+        if return_delay_format == "timedelta":
+            t_cross_corr = np.array(t_cross_corr * 1000000, dtype="datetime64[us]")
+        if return_delay_format == "ms":
+            t_cross_corr = t_cross_corr * 1000
+
     # Get the max correlation in the specified range
     cross_corr_norm_segment = None
     t_cross_corr_min_idx = None
     is_segment = False
     if min_delay is not None or max_delay is not None:
         is_segment = True
-
-        # Get the timestamps of the cross-correlation array in the right format
-        t_cross_corr = np.arange(0, len(cross_corr_norm)) - y2.size + 1
-        if return_delay_format != "index":
-            t_cross_corr = t_cross_corr / rate
-            if return_delay_format == "timedelta":
-                t_cross_corr = np.array(t_cross_corr * 1000000, dtype="datetime64[us]")
-            if return_delay_format == "ms":
-                t_cross_corr = t_cross_corr * 1000
 
         # Define min/max delay if one is not user-set
         if min_delay is None:
@@ -837,7 +839,7 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
         cross_corr_norm_segment = cross_corr_norm[t_cross_corr_min_idx:t_cross_corr_max_idx + 1]
         max_corr_value = np.nanmax(cross_corr_norm_segment)
         index_max_corr_value_segment = np.nanargmax(cross_corr_norm_segment)
-        index_max_corr_value = t_cross_corr[t_cross_corr_min_idx + index_max_corr_value_segment]
+        index_max_corr_value = t_cross_corr_min_idx + index_max_corr_value_segment  - y2.size + 1
 
     index = int(np.round(index_max_corr_value * (freq_y1_original / rate), 0))
     delay_in_seconds = index_max_corr_value / rate
@@ -863,12 +865,16 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
                       f"(timestamp {sign}{time}).")
 
         else:
-            print(f"{t}\tNo correlation over threshold found in the segment [{min_delay}; {max_delay}] (max "
-                  f"correlation: {np.round(max_corr_value, 3)}) found at sample {index} (timestamp "
-                  f"{sign}{time}).")
+            if is_segment:
+                print(f"{t}\tNo correlation over threshold found in the segment [{min_delay}; {max_delay}] (max "
+                      f"correlation: {np.round(max_corr_value, 3)}) found at sample {index} (timestamp "
+                      f"{sign}{time}).")
+            else:
+                print(f"{t}\tNo correlation over threshold found (max correlation: "
+                      f"{np.round(max_corr_value, 3)} found at sample {index}, timestamp {sign}{time}).")
 
     # Return values: None if below threshold
-    if return_delay_format == "index":
+    if return_delay_format in ["index", "sample"]:
         return_value = index
     elif return_delay_format == "ms":
         return_value = delay_in_seconds * 1000
@@ -878,10 +884,10 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
         return_value = time
     else:
         raise Exception(f"Wrong value for the parameter return_delay_format: {return_delay_format}. The value should " +
-                        f"be either \"index\", \"ms\", \"s\" or \"timedelta\".")
+                        f"be either \"index\", \"sample\", \"ms\", \"s\" or \"timedelta\".")
 
     return (cross_corr_norm, cross_corr_norm_segment, return_value, max_corr_value, index_max_corr_value,
-            t_cross_corr_min_idx)
+            t_cross_corr, t_cross_corr_min_idx)
 
 
 def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, name_array_2, envelope_1, envelope_2,
@@ -986,7 +992,8 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         correlation value between the excerpt and itself.
 
     return_delay_format: str
-        Indicates the format of the displayed delay, either ``"index"``, ``"ms"``, ``"s"``, or ``"timedelta"``.
+        Indicates the format of the displayed delay, either ``"index"``, ``"sample"``, ``"ms"``, ``"s"``,
+        or ``"timedelta"``.
 
     return_value: int|float|timedelta
         The value of the delay in the format specified by the previous parameter.
@@ -1230,7 +1237,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
                 cross_correlation_segment)], cross_correlation_segment, color="green")
 
     text = ""
-    if return_delay_format == "index":
+    if return_delay_format in ["index", "sample"]:
         text = "Sample "
 
     if return_delay_format in ["ms", "s"]:
@@ -1252,6 +1259,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     kw = dict(xycoords='data', textcoords="data",
               arrowprops=arrow_props, bbox=bbox_props, ha="center", va="center")
     if plot_intermediate_steps:
+        print(index_max_correlation_value)
         ax[i // 2][i % 2].annotate(text, xy=(t_cc[index_max_correlation_value + y2.size - 1], max_correlation_value),
                                    xytext=(t_cc[index_max_correlation_value + y2.size - 1], 1.4), **kw)
     else:

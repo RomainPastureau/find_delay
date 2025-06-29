@@ -3,7 +3,7 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.17 (2025-04-10)
+Current version: 2.18 (2025-06-29)
 """
 import datetime as dt
 import os
@@ -16,7 +16,8 @@ from .private_functions import _convert_to_mono, _get_envelope, _resample, _cros
 def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelope=True, window_size_env=1e6,
                overlap_ratio_env=0.5, filter_below=None, filter_over=50, resampling_rate="auto", window_size_res=1e7,
                overlap_ratio_res=0.5, resampling_mode="cubic", remove_average_array_1=False,
-               remove_average_array_2=False, return_delay_format="index", return_correlation_value=False, threshold=0.9,
+               remove_average_array_2=False, return_delay_format="index",
+               return_none_if_below_threshold=True, return_correlation_value=False, threshold=0.9,
                min_delay=None, max_delay=None, plot_figure=False, plot_intermediate_steps=False,
                x_format_figure="auto", path_figure=None, mono_channel=0, name_array_1="Array 1", name_array_2="Array 2",
                dark_mode=False, verbosity=1, add_tabs=0):
@@ -58,6 +59,11 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
     .. versionchanged:: 2.17
         Added the parameters `min_delay` and `max_delay`, allowing to limit the search to a specific range of delays.
+
+    .. versionchanged:: 2.18
+        The parameter `return_delay_format` can now also take the value ``"sample"``, which is an alias for ``"index"``.
+        The parameter `return_correlation_value` can now accept the value ``"array"``.
+        Added the parameter `return_none_if_below_threshold`.
 
     Important
     ---------
@@ -197,8 +203,8 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     return_delay_format: str, optional
         This parameter can be either ``"index"``, ``"ms"``, ``"s"``, or ``"timedelta"``:
 
-            • If ``"index"`` (default), the function will return the index in array_1 at which array_2 has the highest
-              cross-correlation value.
+            • If ``"index"`` (default) or ``"sample"``, the function will return the index in array_1 at which array_2
+              has the highest cross-correlation value.
             • If ``"ms"``, the function will return the timestamp in array_1, in milliseconds, at which array_2 has the
               highest cross-correlation value.
             • If ``"s"``, the function will return the timestamp in array_1, in seconds, at which array_2 has the
@@ -209,9 +215,21 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
               Note that, in the case where the result is negative, the timedelta format may give unexpected display
               results (-1 second returns -1 days, 86399 seconds).
 
-    return_correlation_value: bool, optional
+    return_none_if_below_threshold: bool, optional
+        If `True` (default), the function will return the value `None` if the correlation is below threshold (if
+        the parameter `return_correlation_value` is set on `True` or ``"array"``, the two return values will be `None`).
+        If set on `False`, values are returned even if the correlation is below threshold.
+
+        .. versionadded:: 2.18
+
+    return_correlation_value: bool|str optional
         If `True`, the function returns a second value: the correlation value at the returned delay. This value will
-        be None if it is below the specified threshold.
+        be None if it is below the specified threshold. If set on ``"array"``, the second returned value will be a
+        two-dimensional array, where the first sub-array is the list of correlation values, and the second is their
+        corresponding timestamps or indices, depending on the value of `return_delay_format`.
+
+        .. versionchanged:: 2.18
+            This parameter can now accept the value ``"array"``.
 
     threshold: float, optional
         The threshold of the minimum correlation value between the two arrays to accept a delay as a solution. If
@@ -422,7 +440,8 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     return_value = values[2]
     max_corr_value = values[3]
     index_max_corr_value = values[4]
-    t_cross_corr_min_idx = values[5]
+    t_cross_corr = values[5]
+    t_cross_corr_min_idx = values[6]
 
     if verbosity > 0:
         print(f"\n{t}Complete delay finding function executed in: {dt.datetime.now() - time_before_function}")
@@ -437,16 +456,24 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
                        plot_figure, path_figure, None, plot_intermediate_steps, x_format_figure, dark_mode,
                        verbosity, add_tabs)
 
-    if max_corr_value >= threshold:
+    if max_corr_value >= threshold or not return_none_if_below_threshold:
 
-        if return_correlation_value:
+        if return_correlation_value == "array":
+            if min_delay is not None or max_delay is not None:
+                t_cross_corr_segment = t_cross_corr[t_cross_corr_min_idx:t_cross_corr_min_idx +
+                                                                         len(cross_corr_norm_segment)]
+                return return_value, np.array((cross_corr_norm_segment, t_cross_corr_segment))
+            else:
+                return return_value, np.array((cross_corr_norm, t_cross_corr))
+        elif return_correlation_value:
             return return_value, max_corr_value
         else:
             return return_value
 
     else:
-
-        if return_correlation_value:
+        if return_correlation_value == "array":
+            return None, None
+        elif return_correlation_value:
             return None, None
         else:
             return None
@@ -456,7 +483,9 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
                 window_size_env=1e6, overlap_ratio_env=0.5, filter_below=None, filter_over=50,
                 resampling_rate="auto", window_size_res=1e7, overlap_ratio_res=0.5, resampling_mode="cubic",
                 remove_average_array=False, remove_average_excerpts=False, return_delay_format="index",
-                return_correlation_values=False, threshold=0.9, min_delay=None, max_delay=None, plot_figure=False,
+                return_none_if_below_threshold=True, return_correlation_values=False, threshold=0.9, min_delay=None,
+                max_delay=None,
+                plot_figure=False,
                 plot_intermediate_steps=False, x_format_figure="auto", path_figures=None, name_figures="figure",
                 mono_channel=0, name_array="Array", name_excerpts="Excerpt", dark_mode=False, verbosity=1, add_tabs=0):
     """This function tries to find the timestamp at which multiple excerpts begins in an array.
@@ -496,6 +525,14 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         Added the parameters `remove_average_array` and `remove_average_excerpts`, allowing to remove the average for
         the corresponding arrays.
         Added the parameter `dark_mode`.
+
+    .. versionchanged:: 2.17
+        Added the parameters `min_delay` and `max_delay`, allowing to limit the search to a specific range of delays.
+
+    .. versionchanged:: 2.18
+        The parameter `return_delay_format` can now also take the value ``"sample"``, which is an alias for ``"index"``.
+        The parameter `return_correlation_value` can now accept the value ``"array"``.
+        Added the parameter `return_none_if_below_threshold`.
 
     Important
     ---------
@@ -637,8 +674,8 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
     return_delay_format: str, optional
         This parameter can be either ``"index"``, ``"ms"``, ``"s"``, or ``"timedelta"``:
 
-            • If ``"index"`` (default), the function will return the index in array_1 at which array_2 has the highest
-              cross-correlation value.
+            • If ``"index"`` (default) or ``"sample"``, the function will return the index in array_1 at which array_2
+              has the highest cross-correlation value.
             • If ``"ms"``, the function will return the timestamp in array_1, in milliseconds, at which array_2 has the
               highest cross-correlation value.
             • If ``"s"``, the function will return the timestamp in array_1, in seconds, at which array_2 has the
@@ -649,9 +686,21 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
               Note that, in the case where the result is negative, the timedelta format may give unexpected display
               results (-1 second returns -1 days, 86399 seconds).
 
-    return_correlation_values: bool, optional
-        If `True`, the function returns a second value: the correlation value at the returned delay. This value will
-        be None if it is below the specified threshold.
+    return_none_if_below_threshold: bool, optional
+        If `True` (default), the function will return the value `None` if the correlation is below threshold (if
+        the parameter `return_correlation_value` is set on `True` or ``"array"``, the two return values will be `None`).
+        If set on `False`, values are returned even if the correlation is below threshold.
+
+        .. versionadded:: 2.18
+
+    return_correlation_values: bool|str optional
+        If `True`, the function returns a second value: the correlation values at the returned delays. This value will
+        be None if it is below the specified threshold. If set on ``"array"``, the second returned value will be a list
+        of two-dimensional array, where the first sub-array is the list of correlation values, and the second is their
+        corresponding timestamps or indices, depending on the value of `return_delay_format`.
+
+        .. versionchanged:: 2.18
+            This parameter can now accept the value ``"array"``.
 
     threshold: float, optional
         The threshold of the minimum correlation value between the two arrays to accept a delay as a solution. If
@@ -922,7 +971,8 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         return_value = values[2]
         max_corr_value = values[3]
         index_max_corr_value = values[4]
-        t_cross_corr_min_idx = values[5]
+        t_cross_corr = values[5]
+        t_cross_corr_min_idx = values[6]
 
         # Plot and/or save the figure
         if plot_figure is not None or path_figures is not None:
@@ -935,21 +985,28 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
                            + "_" + str(i + 1) + ".png", plot_intermediate_steps, x_format_figure, dark_mode, verbosity,
                            add_tabs+1)
 
-        if max_corr_value >= threshold:
+        if max_corr_value >= threshold or not return_none_if_below_threshold:
 
-            if return_correlation_values:
-                delays.append(return_value)
+            delays.append(return_value)
+
+            if return_correlation_values == "array":
+                if min_delay is not None or max_delay is not None:
+                    t_cross_corr_segment = t_cross_corr[t_cross_corr_min_idx:t_cross_corr_min_idx +
+                                                                             len(cross_corr_norm_segment)]
+                    correlation_values.append(np.array((cross_corr_norm_segment, t_cross_corr_segment)))
+                else:
+                    correlation_values.append(np.array((cross_corr_norm, t_cross_corr)))
+            elif return_correlation_values:
                 correlation_values.append(max_corr_value)
-            else:
-                delays.append(return_value)
 
         else:
 
-            if return_correlation_values:
-                delays.append(None)
+            delays.append(None)
+
+            if return_correlation_values == "array":
                 correlation_values.append(None)
-            else:
-                delays.append(None)
+            elif return_correlation_values:
+                correlation_values.append(None)
 
     if verbosity > 0:
         print(f"\n{t}Complete delay finding function executed in: {dt.datetime.now() - time_before_function}")

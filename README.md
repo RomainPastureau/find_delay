@@ -1,4 +1,4 @@
-# find_delay 2.17
+# find_delay 2.18
 [![Documentation Status](https://readthedocs.org/projects/find-delay/badge/?version=latest)](https://find-delay.readthedocs.io/en/latest/?badge=latest)
 
 [PyPI page](https://pypi.org/project/find-delay/)
@@ -41,8 +41,8 @@ The results can be then plotted if the corresponding parameters are activated, a
 which to find the second array in the first by selecting the delay with the maximum correlation value (optionally, the 
 function can also return this correlation value).
 
-## Dependencies
-̀̀* **Python >= 3.8** (>= 2019-10-14)
+## Dependencies 
+* **Python >= 3.8** (>= 2019-10-14)
 * **Numpy >= 1.16** (>= 2019-01-14) for handling the numerical arrays
 * **Scipy >= 1.5** (>= 2020-19-21) for loading the WAV files, performing the resampling, calculating the envelope, and 
   applying a band-pass filter.
@@ -91,15 +91,16 @@ find_delay("i_have_a_dream_full_speech.wav", "i_have_a_dream_excerpt.wav",
 [Find more examples here!](https://find-delay.readthedocs.io/en/latest/examples/delay_audio_files.html)
 
 ### Latest version
-*2.17 (2025-04-10)*
---------------------
-* The functions now accepts two new parameters, min_delay and max_delay, allowing to look for the delay with the
-  maximum correlation in a range of possible delays.
-* For negative values, invalid timedelta values wer displayed on the horizontal axes of the figures. This has been
-  corrected.
-* In order to gain space, hours on the horizontal axis are now shortened if the hour is equal to 0.
-* Timestamps in the figure now appear rounded down to the sixth decimal, if ``return_delay_format`` is set on ``"ms"``
-  or ``"s"``.
+*2.18 (2025-06-29)*
+-------------------
+* Corrected a bug where passing ``"average"`` for the parameter ``mono_channel`` would return an error if one of the
+  files was mono.
+̀̀* Corrected a bug that did not display properly the cross-correlation peak when using ``min_delay`` or ``max_delay``.
+* The parameter ``return_delay_format`` can now be set interchangeably between ``"index"`` or ``"sample"``.
+* Added a new parameter ``return_none_if_below_threshold``.
+* The parameter ``return_correlation_value`` can now be set on ``"array"``. In that case, an 2-dimensional array of all 
+  the correlation values and their corresponding timestamps or indices is returned.
+* Added new tests.
 
 [See version history](https://find-delay.readthedocs.io/en/latest/version_history.html)
 
