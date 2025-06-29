@@ -1259,7 +1259,6 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     kw = dict(xycoords='data', textcoords="data",
               arrowprops=arrow_props, bbox=bbox_props, ha="center", va="center")
     if plot_intermediate_steps:
-        print(index_max_correlation_value)
         ax[i // 2][i % 2].annotate(text, xy=(t_cc[index_max_correlation_value + y2.size - 1], max_correlation_value),
                                    xytext=(t_cc[index_max_correlation_value + y2.size - 1], 1.4), **kw)
     else:
