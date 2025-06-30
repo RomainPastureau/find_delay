@@ -26,7 +26,10 @@ extensions = [
     'sphinx_rtd_dark_mode',
     'sphinx_tabs.tabs',
     'sphinx_copybutton',
+    'sphinx.ext.intersphinx'
 ]
+
+intersphinx_mapping = {'numpy': ('https://numpy.org/doc/stable/', None)}
 
 templates_path = ['_templates']
 exclude_patterns = []

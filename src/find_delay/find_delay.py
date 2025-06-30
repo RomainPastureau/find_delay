@@ -22,7 +22,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
                x_format_figure="auto", path_figure=None, mono_channel=0, name_array_1="Array 1", name_array_2="Array 2",
                dark_mode=False, verbosity=1, add_tabs=0):
     """This function tries to find the timestamp at which an excerpt (array_2) begins in a time series (array_1).
-    The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
+    The computation is performed through cross-correlation. Beforehand, the envelopes of both arrays can first be
     calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
     arrays is unequal). The function returns the timestamp of the maximal correlation value, or `None` if this value is
     below threshold. Optionally, it can also return a second element, the maximal correlation value.
@@ -82,57 +82,56 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
     Parameters
     ----------
-    array_1: numpy.ndarray|list|str
+    array_1: :class:`numpy.ndarray` | list | str
         A first array of samples, or a string containing the path to a WAV file. In this case, the parameter
         `freq_array_1` will be ignored and extracted from the WAV file. Note that if the WAV file contains more than one
         channel, the function will turn the WAV to mono, using the method described by the parameter `mono_channel`.
 
         .. versionchanged:: 2.9
 
-    array_2: numpy.ndarray|list|str
+    array_2: :class:`numpy.ndarray` | list | str
         An second array of samples, smaller than or of equal size to the first one, that is allegedly an excerpt
         from the first one. The amplitude, frequency or values do not have to match exactly the ones from the first
         array. The parameter can also be a string containing the path to a WAV file (see description of parameter
         ``array_1``).
 
-        .. _numpyarray: https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html
         .. versionchanged:: 2.9
 
-    freq_array_1: int|float, optional
+    freq_array_1: int | float (optional)
         The sampling frequency of the first array, in Hz (default: 1). This parameter is ignored if array_1 is a path to
         a WAV file.
 
-    freq_array_2: int|float, optional
+    freq_array_2: int | float (optional)
         The sampling frequency of the second array, in Hz (default: 1). This parameter is ignore is array_2 is a path to
         a WAV file.
 
-    compute_envelope: bool, optional
+    compute_envelope: bool (optional)
         If `True` (default), calculates the envelope of the array values before performing the cross-correlation.
 
-    window_size_env: int|None, optional
+    window_size_env: int | None (optional)
         The size of the windows in which to cut the arrays to calculate the envelope. Cutting long arrays
-        in windows allows to speed up the computation. If this parameter is set on `None`, the window size will be set
+        in windows allows speeding up the computation. If this parameter is set on `None`, the window size will be set
         on the number of samples. A good value for this parameter is generally 1 million.
 
         .. versionadded:: 2.0
 
-    overlap_ratio_env: float|None, optional
+    overlap_ratio_env: float | None (optional)
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
-        overlap with the previous (and, logically, the next) for an amount of samples equal to the number of samples in
+        overlap with the previous (and, logically, the next) for a number of samples equal to the number of samples in
         a window times the overlap ratio. Then, only the central values of each window will be preserved and
-        concatenated; this allows to discard any "edge" effect due to the windowing. If the parameter is set on `None`
+        concatenated; this allows discarding any "edge" effect due to the windowing. If the parameter is set on `None`
         or 0, the windows will not overlap. By default, this parameter is set on 0.5, meaning that each
         window will overlap for half of their values with the previous, and half of their values with the next.
 
-    filter_below: int|None, optional
+    filter_below: int | None (optional)
         If set, a high-pass filter will be applied on the envelopes before performing the cross-correlation (default:
         0 Hz).
 
-    filter_over: int|None, optional
+    filter_over: int | None (optional)
         If set, a low-pass filter will be applied on the envelopes before performing the cross-correlation (default:
         50 Hz).
 
-    resampling_rate: int|float|str|None, optional
+    resampling_rate: int | float | str | None (optional)
         The sampling rate at which to downsample the arrays for the cross-correlation. A larger value will result in
         longer computation times.
 
@@ -146,8 +145,8 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
         .. versionchanged:: 2.12
 
-    window_size_res: int|None, optional
-        The size of the windows in which to cut the arrays. Cutting lo,g arrays in windows allows to speed up the
+    window_size_res: int | None (optional)
+        The size of the windows in which to cut the arrays. Cutting long arrays in windows allows speeding up the
         computation. If this parameter is set on `None`, the window size will be set on the number of samples. A good
         value for this parameter is generally 1e7.
 
@@ -156,15 +155,15 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         .. versionchanged:: 2.1
             Decreased default `window_size_res` value from 1e8 to 1e7.
 
-    overlap_ratio_res: float|None, optional
+    overlap_ratio_res: float | None (optional)
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
-        overlap with the previous (and, logically, the next) for an amount of samples equal to the number of samples in
+        overlap with the previous (and, logically, the next) for a number of samples equal to the number of samples in
         a window times the overlap ratio. Then, only the central values of each window will be preserved and
-        concatenated; this allows to discard any "edge" effect due to the windowing. If the parameter is set on `None`
+        concatenated; this allows discarding any "edge" effect due to the windowing. If the parameter is set on `None`
         or 0, the windows will not overlap. By default, this parameter is set on 0.5, meaning that each window will
         overlap for half of their values with the previous, and half of their values with the next.
 
-    resampling_mode: str, optional
+    resampling_mode: str (optional)
         This parameter allows for various values:
 
         • ``"linear"`` performs a linear
@@ -188,19 +187,19 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
           ``"quadratic"``, ``"cubic"``, ``"previous"``, and ``"next"`` (see the documentation of this function for
           specifics).
 
-    remove_average_array_1: bool, optional
+    remove_average_array_1: bool (optional)
         If set on `True`, removes the average value from all the values in `array_1`. A typical use-case for this
         parameter is if an audio array is not centered around 0. Default: `False`.
 
         .. versionadded:: 2.15
 
-    remove_average_array_2: bool, optional
+    remove_average_array_2: bool (optional)
         If set on `True`, removes the average value from all the values in `array_2`. A typical use-case for this
         parameter is if an audio array is not centered around 0. Default: `False`.
 
         .. versionadded:: 2.15
 
-    return_delay_format: str, optional
+    return_delay_format: str (optional)
         This parameter can be either ``"index"``, ``"ms"``, ``"s"``, or ``"timedelta"``:
 
             • If ``"index"`` (default) or ``"sample"``, the function will return the index in array_1 at which array_2
@@ -215,45 +214,45 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
               Note that, in the case where the result is negative, the timedelta format may give unexpected display
               results (-1 second returns -1 days, 86399 seconds).
 
-    return_none_if_below_threshold: bool, optional
+    return_none_if_below_threshold: bool (optional)
         If `True` (default), the function will return the value `None` if the correlation is below threshold (if
         the parameter `return_correlation_value` is set on `True` or ``"array"``, the two return values will be `None`).
         If set on `False`, values are returned even if the correlation is below threshold.
 
         .. versionadded:: 2.18
 
-    return_correlation_value: bool|str optional
+    return_correlation_value: bool | str (optional)
         If `True`, the function returns a second value: the correlation value at the returned delay. This value will
         be None if it is below the specified threshold. If set on ``"array"``, the second returned value will be a
-        two-dimensional array, where the first sub-array is the list of correlation values, and the second is their
+        two-dimensional array, where the first subarray is the list of correlation values, and the second is their
         corresponding timestamps or indices, depending on the value of `return_delay_format`.
 
         .. versionchanged:: 2.18
             This parameter can now accept the value ``"array"``.
 
-    threshold: float, optional
+    threshold: float (optional)
         The threshold of the minimum correlation value between the two arrays to accept a delay as a solution. If
         multiple delays are over threshold, the delay with the maximum correlation value will be returned. This value
         should be between 0 and 1; if the maximum found value is below the threshold, the function will return `None`
         instead of a timestamp.
 
-    min_delay: int|float|None, optional
+    min_delay: int | float | None (optional)
         The lower limit of the sample or time range in which to look for the highest correlation value. This parameter
         must be specified in the same unit as ``return_delay_format``.
 
-    max_delay: int|float|None, optional
+    max_delay: int | float | None (optional)
         The upper limit of the sample or time range in which to look for the highest correlation value. This parameter
         must be specified in the same unit as ``return_delay_format``.
 
-    plot_figure: bool, optional
+    plot_figure: bool (optional)
         If set on `True`, plots a graph showing the result of the cross-correlation using Matplotlib. Note that plotting
         the figure causes an interruption of the code execution.
 
-    plot_intermediate_steps: bool, optional
+    plot_intermediate_steps: bool (optional)
         If set on `True`, plots the original arrays, the envelopes (if calculated) and the resampled arrays (if
         calculated) besides the cross-correlation.
 
-    x_format_figure: str, optional
+    x_format_figure: str (optional)
         If set on `"time"`, the values on the x axes of the output will take the HH:MM:SS format (or MM:SS if the time
         series are less than one hour long). If set on `"float"`, the values on the x axes will be displayed as float
         (unit: second). If set on `"auto"` (default), the format of the values on the x axes will be defined depending
@@ -261,14 +260,14 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
          .. versionadded:: 2.4
 
-    path_figure: str|None, optional
+    path_figure: str | None (optional)
         If set, saves the figure at the given path.
 
-    mono_channel: int|str, optional
+    mono_channel: int | str (optional)
         Defines the method to use to convert multiple-channel WAV files to mono, if one of the parameters `array1` or
         `array2` is a path pointing to a WAV file. By default, this parameter value is ``0``: the channel with index 0
         in the WAV file is used as the array, while all the other channels are discarded. This value can be any
-        of the channels indices (using ``1`` will preserve the channel with index 1, etc.). This parameter can also
+        of the channel indices (using ``1`` will preserve the channel with index 1, etc.). This parameter can also
         take the value ``"average"``: in that case, a new channel is created by averaging the values of all the
         channels of the WAV file. Note that this parameter applies to both arrays: in the case where you need to select
         different channels for each WAV file, open the files before calling the function and pass the samples and
@@ -276,23 +275,23 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
         .. versionadded:: 2.9
 
-    name_array_1: str, optional
+    name_array_1: str (optional)
         The name of the first array, as it will appear on the figure (default: "Array 1").
 
         .. versionadded:: 2.13
 
-    name_array_2: str, optional
+    name_array_2: str (optional)
         The name of the second array, as it will appear on the figure (default: "Array 2").
 
         .. versionadded:: 2.13
 
-    dark_mode: bool, optional
+    dark_mode: bool (optional)
         If set on `True`, uses the `dark_background theme from matplotlib <https://matplotlib.org/stable/gallery/style_sheets/dark_background.html>`_
         (default: `False`).
 
         .. versionadded:: 2.15
 
-    verbosity: int, optional
+    verbosity: int (optional)
         Sets how much feedback the code will provide in the console output:
 
         • *0: Silent mode.* The code won’t provide any feedback, apart from error messages.
@@ -301,7 +300,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         • *2: Chatty mode.* The code will provide all possible information on the events happening. Note that this
           may clutter the output and slow down the execution.
 
-    add_tabs: int, optional
+    add_tabs: int (optional)
         Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
         other functions to encapsulate the verbosity outputs by indenting them.
 
@@ -309,12 +308,15 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
     Returns
     -------
-    int|float|timedelta|None
+    int | float | timedelta | None
         The sample index, timestamp or timedelta of array_1 at which array_2 can be found (defined by the parameter
         return_delay_format), or `None` if array1 is not contained in array_2.
 
-    float|None, optional
-        Optionally, if return_correlation_value is `True`, the correlation value at the corresponding index/timestamp.
+    float | :class:`numpy.ndarray` | None (optional)
+        If ``return_correlation_value`` is `True`, the correlation value at the corresponding index/timestamp.
+        If ``return_correlation_value`` is set on ``"array"``, a two-dimensional array containing the correlation
+        values between the two arrays, and the corresponding timestamps or indices, depending on the value of
+        ``return_delay_format``.
     """
 
     time_before_function = dt.datetime.now()
@@ -488,8 +490,8 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
                 plot_figure=False,
                 plot_intermediate_steps=False, x_format_figure="auto", path_figures=None, name_figures="figure",
                 mono_channel=0, name_array="Array", name_excerpts="Excerpt", dark_mode=False, verbosity=1, add_tabs=0):
-    """This function tries to find the timestamp at which multiple excerpts begins in an array.
-    The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
+    """This function tries to find the timestamp at which multiple excerpts begin in an array.
+    The computation is performed through cross-correlation. Beforehand, the envelopes of both arrays can first be
     calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
     arrays is unequal). The function returns the timestamp of the maximal correlation value, or `None` if this value is
     below threshold. Optionally, it can also return a second element, the maximal correlation value.
@@ -536,7 +538,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
     Important
     ---------
-    Because it is easy to get confused: this function returns the timestamp in array where each excerpt begins. This
+    Because it is easy to get confused: this function returns the timestamp in ``array`` where each excerpt begins. This
     means that, if you want to align the array and an excerpt, you need to remove the delay to each timestamp of the
     array: that way, the value at timestamp 0 in the array will be aligned with the value at timestamp 0 in the excerpt.
 
@@ -550,61 +552,61 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
     Note
     ----
-    Compared to find_delay (without an "s"), this function allows to compute only once the envelope of the first array,
+    Compared to find_delay (without an "s"), this function allows computing the envelope of the first array only once,
     allowing to gain computation time.
 
     Parameters
     ----------
-    array: numpy.ndarray|list|str
+    array: :class:`numpy.ndarray` | list | str
         An array of samples, or a string containing the path to a WAV file. In this case, the parameter
         `freq_array` will be ignored and extracted from the WAV file. Note that if the WAV file contains more than one
         channel, the function will turn the WAV to mono, using the method described by the parameter `mono_channel`.
 
         .. versionchanged:: 2.9
 
-    excerpts: list of numpy.ndarray|list|str
+    excerpts: list of :class:`numpy.ndarray` | list | str
         A list of excerpts, each being an array of samples, a path to a WAV file, or a mix of both. Each excerpt should
         be smaller than or of equal size to the array in which to locate it. The amplitude, frequency or values do not
         have to match exactly the ones from the first array.
 
         .. versionchanged:: 2.9
 
-    freq_array: int|float, optional
+    freq_array: int | float (optional)
         The sampling frequency of the array, in Hz (default: 1). This parameter can be ignored if the parameter `array`
         is the path to a WAV file.
 
-    freq_excerpts: int|float|list(int|float), optional
+    freq_excerpts: int | float | list (optional)
         The sampling frequency of the excerpts, in Hz (default: 1). This parameter accepts a single value that will be
         applied for each excerpt, or a list of values that has to be the same length as the number of excerpts, with
         each value corresponding to the frequency of the corresponding excerpt. This parameter can be ignored if all
         the values in the parameter `excerpts` are paths to a WAV file.
 
-    compute_envelope: bool, optional
+    compute_envelope: bool (optional)
         If `True` (default), calculates the envelope of the array values before performing the cross-correlation.
 
-    window_size_env: int|None, optional
+    window_size_env: int | None (optional)
         The size of the windows in which to cut the arrays to calculate the envelope. Cutting long arrays
-        in windows allows to speed up the computation. If this parameter is set on `None`, the window size will be set
+        in windows allows speeding up the computation. If this parameter is set on `None`, the window size will be set
         on the number of samples. A good value for this parameter is generally 1 million.
 
         .. versionadded:: 2.0
 
-    overlap_ratio_env: float|None, optional
+    overlap_ratio_env: float | None (optional)
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
-        overlap with the previous (and, logically, the next) for an amount of samples equal to the number of samples in
+        overlap with the previous (and, logically, the next) for a number of samples equal to the number of samples in
         a window times the overlap ratio. Then, only the central values of each window will be preserved and
-        concatenated; this allows to discard any "edge" effect due to the windowing. If the parameter is set on `None`
+        concatenated; this allows discarding any "edge" effect due to the windowing. If the parameter is set on `None`
         or 0, the windows will not overlap.
 
-    filter_below: int|None, optional
+    filter_below: int | None (optional)
         If set, a high-pass filter will be applied on the envelopes before performing the cross-correlation (default:
         0 Hz).
 
-    filter_over: int|None, optional
+    filter_over: int | None (optional)
         If set, a low-pass filter will be applied on the envelopes before performing the cross-correlation (default:
         50 Hz).
 
-    resampling_rate: int|float|str|None, optional
+    resampling_rate: int | float | str | None (optional)
         The sampling rate at which to downsample the arrays for the cross-correlation. A larger value will result in
         longer computation times.
 
@@ -618,8 +620,8 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
         .. versionchanged:: 2.12
 
-    window_size_res: int|None, optional
-        The size of the windows in which to cut the arrays. Cutting lo,g arrays in windows allows to speed up the
+    window_size_res: int | None (optional)
+        The size of the windows in which to cut the arrays. Cutting long arrays in windows allows speeding up the
         computation. If this parameter is set on `None`, the window size will be set on the number of samples. A good
         value for this parameter is generally 1e7.
 
@@ -628,14 +630,14 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         .. versionchanged:: 2.1
             Decreased default `window_size_res` value from 1e8 to 1e7.
 
-    overlap_ratio_res: float|None, optional
+    overlap_ratio_res: float | None (optional)
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
-        overlap with the previous (and, logically, the next) for an amount of samples equal to the number of samples in
+        overlap with the previous (and, logically, the next) for a number of samples equal to the number of samples in
         a window times the overlap ratio. Then, only the central values of each window will be preserved and
-        concatenated; this allows to discard any "edge" effect due to the windowing. If the parameter is set on `None`
+        concatenated; this allows discarding any "edge" effect due to the windowing. If the parameter is set on `None`
         or 0, the windows will not overlap.
 
-    resampling_mode: str, optional
+    resampling_mode: str (optional)
         This parameter allows for various values:
 
         • ``"linear"`` performs a linear
@@ -659,72 +661,72 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
           ``"quadratic"``, ``"cubic"``, ``"previous"``, and ``"next"`` (see the documentation of this function for
           specifics).
 
-    remove_average_array: bool, optional
+    remove_average_array: bool (optional)
         If set on `True`, removes the average value from all the values in `array`. A typical use-case for this
         parameter is if an audio array is not centered around 0. Default: `False`.
 
         .. versionadded:: 2.15
 
-    remove_average_excerpts: bool, optional
+    remove_average_excerpts: bool (optional)
         If set on `True`, removes the average value from all the values in all the excerpts. A typical use-case for this
         parameter is if an audio array is not centered around 0. Default: `False`.
 
         .. versionadded:: 2.15
 
-    return_delay_format: str, optional
+    return_delay_format: str (optional)
         This parameter can be either ``"index"``, ``"ms"``, ``"s"``, or ``"timedelta"``:
 
-            • If ``"index"`` (default) or ``"sample"``, the function will return the index in array_1 at which array_2
+            • If ``"index"`` (default) or ``"sample"``, the function will return the index in ``array_1`` at which
+              ``array_2`` has the highest cross-correlation value.
+            • If ``"ms"``, the function will return the timestamp in ``array_1``, in milliseconds, at which ``array_2``
               has the highest cross-correlation value.
-            • If ``"ms"``, the function will return the timestamp in array_1, in milliseconds, at which array_2 has the
-              highest cross-correlation value.
-            • If ``"s"``, the function will return the timestamp in array_1, in seconds, at which array_2 has the
-              highest cross-correlation value.
-            • If ``"timedelta"``, the function will return the timestamp in array_1 at which array_2 has the
+            • If ``"s"``, the function will return the timestamp in ``array_1``, in seconds, at which ``array_2`` has
+              the highest cross-correlation value.
+            • If ``"timedelta"``, the function will return the timestamp in `array_1`` at which ``array_2`` has the
               highest cross-correlation value as a
               `datetime.timedelta <https://docs.python.org/3/library/datetime.html#timedelta-objects>`_ object.
               Note that, in the case where the result is negative, the timedelta format may give unexpected display
-              results (-1 second returns -1 days, 86399 seconds).
+              results (``-1 second`` returns ``-1 days, 86399 seconds``).
 
-    return_none_if_below_threshold: bool, optional
+    return_none_if_below_threshold: bool (optional)
         If `True` (default), the function will return the value `None` if the correlation is below threshold (if
         the parameter `return_correlation_value` is set on `True` or ``"array"``, the two return values will be `None`).
         If set on `False`, values are returned even if the correlation is below threshold.
 
         .. versionadded:: 2.18
 
-    return_correlation_values: bool|str optional
+    return_correlation_values: bool | str (optional)
         If `True`, the function returns a second value: the correlation values at the returned delays. This value will
         be None if it is below the specified threshold. If set on ``"array"``, the second returned value will be a list
-        of two-dimensional array, where the first sub-array is the list of correlation values, and the second is their
+        of two-dimensional arrays, where the first subarray is the list of correlation values, and the second is their
         corresponding timestamps or indices, depending on the value of `return_delay_format`.
 
         .. versionchanged:: 2.18
             This parameter can now accept the value ``"array"``.
 
-    threshold: float, optional
+    threshold: float (optional)
         The threshold of the minimum correlation value between the two arrays to accept a delay as a solution. If
         multiple delays are over threshold, the delay with the maximum correlation value will be returned. This value
         should be between 0 and 1; if the maximum found value is below the threshold, the function will return `None`
         instead of a timestamp.
 
-    min_delay: int|float|None, optional
+    min_delay: int | float | None (optional)
         The lower limit of the sample or time range in which to look for the highest correlation value. This parameter
         must be specified in the same unit as ``return_delay_format``.
 
-    max_delay: int|float|None, optional
+    max_delay: int | float | None (optional)
         The upper limit of the sample or time range in which to look for the highest correlation value. This parameter
         must be specified in the same unit as ``return_delay_format``.
 
-    plot_figure: bool, optional
+    plot_figure: bool (optional)
         If set on `True`, plots a graph showing the result of the cross-correlation using Matplotlib. Note that plotting
         the figure causes an interruption of the code execution.
 
-    plot_intermediate_steps: bool, optional
+    plot_intermediate_steps: bool (optional)
         If set on `True`, plots the original arrays, the envelopes (if calculated) and the resampled arrays (if
         calculated) besides the cross-correlation.
 
-    path_figures: str|None, optional
+    path_figures: str | None (optional)
         If set, saves the figures in the given directory.
 
     x_format_figure: str
@@ -735,15 +737,15 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
         .. versionadded:: 2.4
 
-    name_figures: str, optional
+    name_figures: str (optional)
         The name to give to each figure in the directory set by `path_figures`. The figures will be found in
         `path_figures/name_figures_n.png`, where n is the index of the excerpt in `excerpts`, starting at 1.
 
-    mono_channel: int|str, optional
+    mono_channel: int | str (optional)
         Defines the method to use to convert multiple-channel WAV files to mono, if one of the parameters `array` or
         `excerpts` contains a path pointing to a WAV file. By default, this parameter value is ``0``: the channel with
         index 0 in the WAV file is used as the array, while all the other channels are discarded. This value can be any
-        of the channels indices (using ``1`` will preserve the channel with index 1, etc.). This parameter can also
+        of the channel indices (using ``1`` will preserve the channel with index 1, etc.). This parameter can also
         take the value ``"average"``: in that case, a new channel is created by averaging the values of all the
         channels of the WAV file. Note that this parameter applies to all arrays: in the case where you need to select
         different channels for each WAV file, open the files before calling the function and pass the samples and
@@ -751,25 +753,25 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
         .. versionadded:: 2.9
 
-    name_array: str, optional
+    name_array: str (optional)
         The name of the array, as it will appear on the figure (default: "Array").
 
         .. versionadded:: 2.13
 
-    name_excerpts: list(str)|str, optional
+    name_excerpts: list | str (optional)
         The name of the excerpts, as it will appear on the figure. If it is a string (default: "Excerpt"), the same
         name will be applied to all the excerpts, followed by the excerpt index (plus one). If it is a list,
         each element of the list should name each excerpt.
 
         .. versionadded:: 2.13
 
-    dark_mode: bool, optional
+    dark_mode: bool (optional)
         If set on `True`, uses the `dark_background theme from matplotlib <https://matplotlib.org/stable/gallery/style_sheets/dark_background.html>`_
         (default: `False`).
 
         .. versionadded:: 2.15
 
-    verbosity: int, optional
+    verbosity: int (optional)
         Sets how much feedback the code will provide in the console output:
 
         • *0: Silent mode.* The code won’t provide any feedback, apart from error messages.
@@ -778,7 +780,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         • *2: Chatty mode.* The code will provide all possible information on the events happening. Note that this
           may clutter the output and slow down the execution.
 
-    add_tabs: int, optional
+    add_tabs: int (optional)
         Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
         other functions to encapsulate the verbosity outputs by indenting them.
 
@@ -786,12 +788,15 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
     Returns
     -------
-    list(int|float|timedelta|None)
+    list (int | float | timedelta | None)
         A list of the sample index, timestamp or timedelta of array1 at which array2 can be found (defined by the
         parameter return_delay_format), or `None` if array1 is not contained in array2.
-    list(float|None, optional)
-        Optionally, if return_correlation_value is `True`, a list of the correlation values at the corresponding
-        index/timestamp.
+    list (float | :class:`numpy.ndarray` | None) (optional)
+        If ``return_correlation_value`` is `True`, a list of the correlation values at the corresponding
+        indices/timestamps.
+        If ``return_correlation_value`` is set on ``"array"``, a list of two-dimensional arrays containing the
+        correlation values between each excerpt and the array, and the corresponding timestamps or indices,
+        depending on the value of ``return_delay_format``.
     """
 
     time_before_function = dt.datetime.now()

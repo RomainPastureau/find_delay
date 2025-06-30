@@ -169,7 +169,7 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array</strong> (list|`np.ndarray &lt;<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html">https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html</a>&gt;`_) – An array of samples.</p></li>
+<li><p><strong>array</strong> (list | <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – An array of samples.</p></li>
 <li><p><strong>frequency</strong> (<em>int</em><em>|</em><em>float</em>) – The sampling frequency of the array, in Hz.</p></li>
 <li><p><strong>filter_below</strong> (<em>float</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – The value below which you want to filter the data. If set on None or 0, this parameter will be ignored.
 If this parameter is the only one provided, a high-pass filter will be applied to the samples; if
@@ -223,7 +223,7 @@ without overlap.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array_length_or_array</strong> (<em>numpy.ndarray</em><em>|</em><em>list</em><em>|</em><em>int</em>) – An array of numerical values, or its length.</p></li>
+<li><p><strong>array_length_or_array</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>numpy.ndarray</em></a><em>|</em><em>list</em><em>|</em><em>int</em>) – An array of numerical values, or its length.</p></li>
 <li><p><strong>window_size</strong> (<em>int</em>) – The number of array elements in each window.</p></li>
 <li><p><strong>overlap_ratio</strong> (<em>float</em><em>, </em><em>optional</em>) – The ratio, between 0 (inclusive, default) and 1 (exclusive), of array elements overlapping between each window
 and the next.</p></li>
@@ -266,7 +266,7 @@ of each window of the envelope.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array</strong> (<em>numpy.ndarray</em><em>|</em><em>list</em>) – An array of samples.</p></li>
+<li><p><strong>array</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>numpy.ndarray</em></a><em>|</em><em>list</em>) – An array of samples.</p></li>
 <li><p><strong>frequency</strong> (<em>int</em><em>|</em><em>float</em>) – The sampling frequency of the array, in Hz.</p></li>
 <li><p><strong>window_size</strong> (<em>int</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – <p>The size of the windows (in samples) in which to cut the array to calculate the envelope. Cutting large arrays
 into windows allows to speed up the computation. If this parameter is set on <cite>None</cite>, the window size will be set
@@ -325,9 +325,9 @@ other functions to encapsulate the verbosity outputs by indenting them.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array</strong> (<em>numpy.ndarray</em><em>|</em><em>list</em>) – An array of samples.</p></li>
-<li><p><strong>original_timestamps</strong> (<em>numpy.ndarray</em><em>|</em><em>list</em>) – An array containing the timestamps for each sample of the original array.</p></li>
-<li><p><strong>resampled_timestamps</strong> (<em>numpy.ndarray</em><em>|</em><em>list</em>) – An array containing the timestamps for each desired sample in the resampled array.</p></li>
+<li><p><strong>array</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>numpy.ndarray</em></a><em>|</em><em>list</em>) – An array of samples.</p></li>
+<li><p><strong>original_timestamps</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>numpy.ndarray</em></a><em>|</em><em>list</em>) – An array containing the timestamps for each sample of the original array.</p></li>
+<li><p><strong>resampled_timestamps</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>numpy.ndarray</em></a><em>|</em><em>list</em>) – An array containing the timestamps for each desired sample in the resampled array.</p></li>
 <li><p><strong>index_start_original</strong> (<em>int</em>) – The index in the array where the window starts.</p></li>
 <li><p><strong>index_end_original</strong> (<em>int</em>) – The index in the array where the window ends.</p></li>
 <li><p><strong>index_start_resampled</strong> (<em>int</em>) – The index in the resampled array where the window starts.</p></li>
@@ -402,7 +402,7 @@ desired frequency, and then interpolates the original data to the new timestamps
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array</strong> (<em>numpy.ndarray</em><em>|</em><em>list</em>) – An array of samples.</p></li>
+<li><p><strong>array</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>numpy.ndarray</em></a><em>|</em><em>list</em>) – An array of samples.</p></li>
 <li><p><strong>original_frequency</strong> (<em>int</em><em>|</em><em>float</em>) – The sampling frequency of the array, in Hz.</p></li>
 <li><p><strong>resampling_frequency</strong> (<em>int</em><em>|</em><em>float</em>) – The frequency at which you want to resample the array, in Hz. A frequency of 4 will return samples
 at 0.25 s intervals.</p></li>

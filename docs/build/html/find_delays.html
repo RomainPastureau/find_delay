@@ -227,14 +227,14 @@ allowing to gain computation time.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array</strong> (<em>numpy.ndarray</em><em>|</em><em>list</em><em>|</em><em>str</em>) – <p>An array of samples, or a string containing the path to a WAV file. In this case, the parameter
+<li><p><strong>array</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>numpy.ndarray</em></a><em>|</em><em>list</em><em>|</em><em>str</em>) – <p>An array of samples, or a string containing the path to a WAV file. In this case, the parameter
 <cite>freq_array</cite> will be ignored and extracted from the WAV file. Note that if the WAV file contains more than one
 channel, the function will turn the WAV to mono, using the method described by the parameter <cite>mono_channel</cite>.</p>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 2.9.</span></p>
 </div>
 </p></li>
-<li><p><strong>excerpts</strong> (<em>list</em><em> of </em><em>numpy.ndarray</em><em>|</em><em>list</em><em>|</em><em>str</em>) – <p>A list of excerpts, each being an array of samples, a path to a WAV file, or a mix of both. Each excerpt should
+<li><p><strong>excerpts</strong> (<em>list</em><em> of </em><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>numpy.ndarray</em></a><em>|</em><em>list</em><em>|</em><em>str</em>) – <p>A list of excerpts, each being an array of samples, a path to a WAV file, or a mix of both. Each excerpt should
 be smaller than or of equal size to the array in which to locate it. The amplitude, frequency or values do not
 have to match exactly the ones from the first array.</p>
 <div class="versionchanged">

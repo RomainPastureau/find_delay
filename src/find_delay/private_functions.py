@@ -17,23 +17,23 @@ def _filter_frequencies(array, frequency, filter_below=None, filter_over=None, v
 
     Parameters
     ----------
-    array: list|`np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    array: list | :class:`numpy.ndarray`
         An array of samples.
 
-    frequency: int|float
+    frequency: int | float
         The sampling frequency of the array, in Hz.
 
-    filter_below: float|None, optional
+    filter_below: float | None (optional)
         The value below which you want to filter the data. If set on None or 0, this parameter will be ignored.
         If this parameter is the only one provided, a high-pass filter will be applied to the samples; if
         ``filter_over`` is also provided, a band-pass filter will be applied to the samples.
 
-    filter_over: float|None, optional
+    filter_over: float | None (optional)
         The value over which you want to filter the data. If set on None or 0, this parameter will be ignored.
         If this parameter is the only one provided, a low-pass filter will be applied to the samples; if
         ``filter_below`` is also provided, a band-pass filter will be applied to the samples.
 
-    verbosity: int, optional
+    verbosity: int (optional)
         Sets how much feedback the code will provide in the console output:
 
         • *0: Silent mode.* The code won’t provide any feedback, apart from error messages.
@@ -42,7 +42,7 @@ def _filter_frequencies(array, frequency, filter_below=None, filter_over=None, v
         • *2: Chatty mode.* The code will provide all possible information on the events happening. Note that this
           may clutter the output and slow down the execution.
 
-    add_tabs: int, optional
+    add_tabs: int (optional)
         Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
         other functions to encapsulate the verbosity outputs by indenting them.
 
@@ -50,7 +50,7 @@ def _filter_frequencies(array, frequency, filter_below=None, filter_over=None, v
 
     Returns
     -------
-    `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    :class:`numpy.ndarray`
         The array with filtered values.
     """
     t = add_tabs * "\t"
@@ -99,17 +99,17 @@ def _get_number_of_windows(array_length_or_array, window_size, overlap_ratio=0, 
 
     Parameters
     ----------
-    array_length_or_array: numpy.ndarray|list|int
+    array_length_or_array: :class:`numpy.ndarray` | list | int
         An array of numerical values, or its length.
 
     window_size: int
         The number of array elements in each window.
 
-    overlap_ratio: float, optional
+    overlap_ratio: float (optional)
         The ratio, between 0 (inclusive, default) and 1 (exclusive), of array elements overlapping between each window
         and the next.
 
-    add_incomplete_window: bool, optional
+    add_incomplete_window: bool (optional)
         If set on ``True`` (default), the last window will be included even if its size is smaller than ``window_size``.
         Otherwise, it will be ignored.
 
@@ -164,36 +164,36 @@ def _get_envelope(array, frequency, window_size=1e6, overlap_ratio=0.5, filter_b
 
     Parameters
     ----------
-    array: numpy.ndarray|list
+    array: :class:`numpy.ndarray` | list
         An array of samples.
 
-    frequency: int|float
+    frequency: int | float
         The sampling frequency of the array, in Hz.
 
-    window_size: int|None, optional
+    window_size: int | None (optional)
         The size of the windows (in samples) in which to cut the array to calculate the envelope. Cutting large arrays
-        into windows allows to speed up the computation. If this parameter is set on `None`, the window size will be set
+        into windows allows speeding up the computation. If this parameter is set on `None`, the window size will be set
         on the number of samples. A good value for this parameter is generally 1 million (default). If this parameter is
-        set on 0, on `None` or on a number of samples bigger than the amount of elements in the array, the window size
+        set on 0, on `None` or on a number of samples bigger than the number of elements in the array, the window size
         is set on the length of the samples.
 
         .. versionadded:: 2.1
 
-    overlap_ratio: float|None, optional
+    overlap_ratio: float | None (optional)
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
-        overlap with the previous (and, logically, the next) for an amount of samples equal to the number of samples in
+        overlap with the previous (and, logically, the next) for a number of samples equal to the number of samples in
         a window times the overlap ratio. Then, only the central values of each window will be preserved and
-        concatenated; this allows to discard any "edge" effect due to the windowing. If the parameter is set on `None`
+        concatenated; this allows discarding any "edge" effect due to the windowing. If the parameter is set on `None`
         or 0, the windows will not overlap. Default value: 0.5 (each window will overlap at 50% with the previous and
         the next).
 
-    filter_below: int|float|None, optional
+    filter_below: int | float | None (optional)
         If not `None` (default) nor 0, this value will be provided as the lowest frequency of the band-pass filter.
 
-    filter_over: int|float|None, optional
+    filter_over: int | float | None (optional)
         If not `None` (default) nor 0, this value will be provided as the highest frequency of the band-pass filter.
 
-    verbosity: int, optional
+    verbosity: int (optional)
         Sets how much feedback the code will provide in the console output:
 
         • *0: Silent mode.* The code won’t provide any feedback, apart from error messages.
@@ -202,7 +202,7 @@ def _get_envelope(array, frequency, window_size=1e6, overlap_ratio=0.5, filter_b
         • *2: Chatty mode.* The code will provide all possible information on the events happening. Note that this
           may clutter the output and slow down the execution.
 
-    add_tabs: int, optional
+    add_tabs: int (optional)
         Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
         other functions to encapsulate the verbosity outputs by indenting them.
 
@@ -210,7 +210,7 @@ def _get_envelope(array, frequency, window_size=1e6, overlap_ratio=0.5, filter_b
 
     Returns
     -------
-    `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    :class:`numpy.ndarray`
         The envelope of the original array.
     """
 
@@ -306,13 +306,13 @@ def _resample_window(array, original_timestamps, resampled_timestamps, index_sta
 
     Parameters
     ----------
-    array: numpy.ndarray|list
+    array: :class:`numpy.ndarray` | list
         An array of samples.
 
-    original_timestamps: numpy.ndarray|list
+    original_timestamps: :class:`numpy.ndarray` | list
         An array containing the timestamps for each sample of the original array.
 
-    resampled_timestamps: numpy.ndarray|list
+    resampled_timestamps: :class:`numpy.ndarray` | list
         An array containing the timestamps for each desired sample in the resampled array.
 
     index_start_original: int
@@ -327,7 +327,7 @@ def _resample_window(array, original_timestamps, resampled_timestamps, index_sta
     index_end_resampled: int
         The index in the resampled array where the window ends.
 
-    method: str, optional
+    method: str (optional)
         This parameter allows for various values:
 
         • ``"linear"`` performs a linear
@@ -351,7 +351,7 @@ def _resample_window(array, original_timestamps, resampled_timestamps, index_sta
           ``"quadratic"``, ``"cubic"``, ``"previous"``, and ``"next"`` (see the documentation of this function for
           specifics).
 
-    verbosity: int, optional
+    verbosity: int (optional)
         Sets how much feedback the code will provide in the console output:
 
         • *0: Silent mode.* The code won’t provide any feedback, apart from error messages.
@@ -360,7 +360,7 @@ def _resample_window(array, original_timestamps, resampled_timestamps, index_sta
         • *2: Chatty mode.* The code will provide all possible information on the events happening. Note that this
           may clutter the output and slow down the execution.
 
-    add_tabs: int, optional
+    add_tabs: int (optional)
         Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
         other functions to encapsulate the verbosity outputs by indenting them.
 
@@ -368,7 +368,7 @@ def _resample_window(array, original_timestamps, resampled_timestamps, index_sta
 
     Returns
     -------
-    `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    :class:`numpy.ndarray`
         The envelope of the original array.
     """
 
@@ -429,30 +429,30 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
 
     Parameters
     ----------
-    array: numpy.ndarray|list
+    array: :class:`numpy.ndarray` | list
         An array of samples.
 
-    original_frequency: int|float
+    original_frequency: int | float
         The sampling frequency of the array, in Hz.
 
-    resampling_frequency: int|float
+    resampling_frequency: int | float
         The frequency at which you want to resample the array, in Hz. A frequency of 4 will return samples
         at 0.25 s intervals.
 
-    window_size: int|None, optional
+    window_size: int | None (optional)
         The size of the windows (in samples) in which to cut the array before resampling. Cutting large arrays
-        into windows allows to speed up the computation. If this parameter is set on `None`, the window size will be set
+        into windows allows speeding up the computation. If this parameter is set on `None`, the window size will be set
         on the number of samples. A good value for this parameter is generally 10 million (default). If this parameter
-        is set on 0, on None or on a number of samples bigger than the amount of elements in the array, the window size
+        is set on 0, on None or on a number of samples bigger than the number of elements in the array, the window size
         is set on the length of the samples.
 
         .. versionadded:: 2.1
 
-    overlap_ratio: float|None, optional
+    overlap_ratio: float | None (optional)
         The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
-        overlap with the previous (and, logically, the next) for an amount of samples equal to the number of samples in
+        overlap with the previous (and, logically, the next) for a number of samples equal to the number of samples in
         a window times the overlap ratio. Then, only the central values of each window will be preserved and
-        concatenated; this allows to discard any "edge" effect due to the windowing. If the parameter is set on `None`
+        concatenated; this allows discarding any "edge" effect due to the windowing. If the parameter is set on `None`
         or 0, the windows will not overlap. Default value: 0.5 (each window will overlap at 50% with the previous and
         the next).
 
@@ -480,7 +480,7 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
           ``"quadratic"``, ``"cubic"``, ``"previous"``, and ``"next"`` (see the documentation of this function for
           specifics).
 
-    verbosity: int, optional
+    verbosity: int (optional)
         Sets how much feedback the code will provide in the console output:
 
         • *0: Silent mode.* The code won’t provide any feedback, apart from error messages.
@@ -497,7 +497,7 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
 
     Returns
     -------
-    `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    :class:`numpy.ndarray`
         The resampled array.
 
     Warning
@@ -637,21 +637,21 @@ def _convert_to_mono(audio_data, mono_channel=0, verbosity=1, add_tabs=0):
 
     Parameters
     ----------
-    audio_data: `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_ (1D or 2D)
+    audio_data: :class:`numpy.ndarray` (1D or 2D)
         The parameter data resulting from reading a WAV file with
         `scipy.io.wavfile.read <https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.wavfile.read.html>`_.
 
-    mono_channel: int|str, optional
+    mono_channel: int | str (optional)
         Defines the method to use to convert multiple-channel WAV files to mono, if one of the parameters `array1` or
         `array2` is a path pointing to a WAV file. By default, this parameter value is ``0``: the channel with index 0
         in the WAV file is used as the array, while all the other channels are discarded. This value can be any
-        of the channels indices (using ``1`` will preserve the channel with index 1, etc.). This parameter can also
+        of the channel indices (using ``1`` will preserve the channel with index 1, etc.). This parameter can also
         take the value ``"average"``: in that case, a new channel is created by averaging the values of all the
         channels of the WAV file. Note that this parameter applies to both arrays: in the case where you need to select
         different channels for each WAV file, open the files before calling the function and pass the samples and
         frequencies as parameters.
 
-    verbosity: int, optional
+    verbosity: int (optional)
         Sets how much feedback the code will provide in the console output:
 
         • *0: Silent mode.* The code won’t provide any feedback, apart from error messages.
@@ -660,7 +660,7 @@ def _convert_to_mono(audio_data, mono_channel=0, verbosity=1, add_tabs=0):
         • *2: Chatty mode.* The code will provide all possible information on the events happening. Note that this
           may clutter the output and slow down the execution.
 
-    add_tabs: int, optional
+    add_tabs: int (optional)
         Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
         other functions to encapsulate the verbosity outputs by indenting them.
 
@@ -668,7 +668,7 @@ def _convert_to_mono(audio_data, mono_channel=0, verbosity=1, add_tabs=0):
 
     Returns
     -------
-    np.array
+    :class:`numpy.ndarray`
         A 1D numpy array containing the audio converted to mono.
     """
 
@@ -722,16 +722,16 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
     .. versionchanged:: 2.18
         The parameter `return_delay_format` can now also take the value ``"sample"``, which is an alias for ``"index"``.
 
-    y1: `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    y1: :class:`numpy.ndarray`
         The first array to cross-correlate.
 
-    y2: `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    y2: :class:`numpy.ndarray`
         The second array to cross-correlate.
 
-    rate: int|float
+    rate: int | float
         The frequency rate of the two arrays.
 
-    freq_y1_original: int|float
+    freq_y1_original: int | float
         The original frequency rate of y1, before resampling.
 
     threshold: float
@@ -740,7 +740,7 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
         should be between 0 and 1; if the maximum found value is below the threshold, the function will return `None`
         instead of a timestamp.
 
-    return_delay_format: str, optional
+    return_delay_format: str (optional)
         This parameter can be either ``"index"``, ``"ms"``, ``"s"``, or ``"timedelta"``:
 
             • If ``"index"`` (default) or ``"sample"``, the function will return the index in array_1 at which array_2
@@ -755,15 +755,15 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
               Note that, in the case where the result is negative, the timedelta format may give unexpected display
               results (-1 second returns -1 days, 86399 seconds).
 
-    min_delay: int|float|None, optional
+    min_delay: int | float | None (optional)
         The lower limit of the sample or time range in which to look for the highest correlation value. This parameter
         must be specified in the same unit as ``return_delay_format``.
 
-    max_delay: int|float|None, optional
+    max_delay: int | float | None (optional)
         The upper limit of the sample or time range in which to look for the highest correlation value. This parameter
         must be specified in the same unit as ``return_delay_format``.
 
-    verbosity: int, optional
+    verbosity: int (optional)
         Sets how much feedback the code will provide in the console output:
 
         • *0: Silent mode.* The code won’t provide any feedback, apart from error messages.
@@ -772,7 +772,7 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
         • *2: Chatty mode.* The code will provide all possible information on the events happening. Note that this
           may clutter the output and slow down the execution.
 
-    add_tabs: int, optional
+    add_tabs: int (optional)
         Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
         other functions to encapsulate the verbosity outputs by indenting them.
 
@@ -780,9 +780,9 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
 
     Returns
     -------
-    `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    :class:`numpy.ndarray`
         The normalized cross-correlation array.
-    int|float|timedelta|None
+    int | float | timedelta | None
         The sample index, timestamp or timedelta of y1 at which y2 can be found (defined by the parameter
         return_delay_format), or `None` if y1 is not contained in y2.
     float
@@ -929,16 +929,16 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
 
     Parameters
     ----------
-    array_1: `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    array_1: :class:`numpy.ndarray`
         The first array involved in the cross-correlation.
 
-    array_2: `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    array_2: :class:`numpy.ndarray`
         The second array involved in the cross-correlation, being allegedly an excerpt from the first.
 
-    freq_array_1: int|float
+    freq_array_1: int | float
         The sampling rate of `array_1`.
 
-    freq_array_2: in|float
+    freq_array_2: int | float
         The sampling rate of `array_2`.
 
     name_array_1: str
@@ -948,16 +948,16 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         The name of the second array; will be "Array 2" for `find_delay` and "Excerpt n" for `find_delays`, with n
         being the index of the excerpt in the folder.
 
-    envelope_1: `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    envelope_1: :class:`numpy.ndarray`
         The envelope of `array_1` (if calculated).
 
-    envelope_2: `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    envelope_2: :class:`numpy.ndarray`
         The envelope of `array_2` (if calculated).
 
-    y1: `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    y1: :class:`numpy.ndarray`
         The resampled `array_1` or `envelope_1` (if calculated).
 
-    y2: `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    y2: :class:`numpy.ndarray`
         The resampled `array_2` or `envelope_2` (if calculated).
 
     compute_envelope: bool
@@ -969,13 +969,13 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     overlap_ratio_env: float
         The ratio of overlapping between each envelope window with the previous and the next windows.
 
-    filter_below: int|float|None
+    filter_below: int | float | None
         The lower limit of the bandpass filter applied to the envelopes.
 
-    filter_over: int|float|None
+    filter_over: int | float | None
         The upper limit of the bandpass filter applied to the envelopes.
 
-    resampling_rate: int|float|None
+    resampling_rate: int | float | None
         The rate at which the arrays or the envelopes have been resampled.
 
     window_size_res: int
@@ -984,7 +984,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     overlap_ratio_res: float
         The ratio of overlapping between each resampling window with the previous and the next windows.
 
-    cross-correlation: `np.ndarray <https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html>`_
+    cross-correlation: :class:`numpy.ndarray`
         The array containing the correlation values for each lag between the two arrays.
 
     threshold: float
@@ -1007,10 +1007,10 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
     plot_figure: bool
         If set on `True`, plots the figure in a Matplotlib window.
 
-    path_figure: str|None
+    path_figure: str | None
         If set, saves the figure at the given path.
 
-    name_figure: str|None
+    name_figure: str | None
         If set, considers that `path_figure` is the directory where to save the figure, and `name_figure` is the name
         of the file.
 
@@ -1024,7 +1024,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         (unit: second). If set on `"auto"` (default), the format of the values on the x axes will be defined depending
         on the value of `return_delay_format`.
 
-    dark_mode: bool, optional
+    dark_mode: bool
         If set on `True`, uses the `dark_background theme from matplotlib <https://matplotlib.org/stable/gallery/style_sheets/dark_background.html>`_
         (default: `False`).
 
@@ -1037,7 +1037,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         • *2: Chatty mode.* The code will provide all possible information on the events happening. Note that this
           may clutter the output and slow down the execution.
 
-    add_tabs: int, optional
+    add_tabs: int
         Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
         other functions to encapsulate the verbosity outputs by indenting them.
 
@@ -1134,7 +1134,7 @@ def _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, n
         return get_label(value, True, True)
 
     def set_label_time_figure(ax):
-        """Sets the time formatted labels on the x axes."""
+        """Sets the time-formatted labels on the x axes."""
         if x_format_figure == "time":
             formatter = mdates.AutoDateFormatter(ax.xaxis.get_major_locator())
             formatter.scaled[1 / mdates.MUSECONDS_PER_DAY] = get_label_hh_mm_ss
