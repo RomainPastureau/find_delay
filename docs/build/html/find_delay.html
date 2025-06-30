@@ -160,7 +160,7 @@
 <dt class="sig sig-object py" id="find_delay.find_delay">
 <span class="sig-prename descclassname"><span class="pre">find_delay.</span></span><span class="sig-name descname"><span class="pre">find_delay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">array_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_array_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq_array_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_envelope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_env</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_below</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_over</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_size_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlap_ratio_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_average_array_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_average_array_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_delay_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'index'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_none_if_below_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_correlation_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_intermediate_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_format_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mono_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_array_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Array</span> <span class="pre">1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name_array_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Array</span> <span class="pre">2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dark_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_tabs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#find_delay.find_delay" title="Link to this definition"></a></dt>
 <dd><p>This function tries to find the timestamp at which an excerpt (array_2) begins in a time series (array_1).
-The computation is performed through cross-correlation. Before so, the envelopes of both arrays can first be
+The computation is performed through cross-correlation. Beforehand, the envelopes of both arrays can first be
 calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
 arrays is unequal). The function returns the timestamp of the maximal correlation value, or <cite>None</cite> if this value is
 below threshold. Optionally, it can also return a second element, the maximal correlation value.</p>
@@ -216,19 +216,20 @@ of <code class="docutils literal notranslate"><span class="pre">array_1</span></
 other words, if the excerpt starts 1 second before the onset of the original array, the function will return a delay
 of -1 sec. However, this should be avoided, as information missing from the original array will result in lower
 correlation - with a substantial amount of data missing from the original array, the function may return erroneous
-results. This is why <em>it is always preferable to use excerpts that are entirely contained in the original array</em>.</p>
+results. This is why <strong>it is always preferable to use excerpts that are entirely contained in the original array</strong>.</p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>array_1</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>numpy.ndarray</em></a><em>|</em><em>list</em><em>|</em><em>str</em>) – <p>A first array of samples, or a string containing the path to a WAV file. In this case, the parameter
-<cite>freq_array_1</cite> will be ignored and extracted from the WAV file. Note that if the WAV file contains more than one
-channel, the function will turn the WAV to mono, using the method described by the parameter <cite>mono_channel</cite>.</p>
+<li><p><strong>array_1</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> | list | str) – <p>A first array of samples, or a string containing the path to a WAV file. In this case, the parameter
+<code class="docutils literal notranslate"><span class="pre">freq_array_1</span></code> will be ignored and extracted from the WAV file. Note that if the WAV file contains more than
+one channel, the function will turn the WAV to mono, using the method described by the parameter
+<code class="docutils literal notranslate"><span class="pre">mono_channel</span></code>.</p>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 2.9.</span></p>
 </div>
 </p></li>
-<li><p><strong>array_2</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><em>numpy.ndarray</em></a><em>|</em><em>list</em><em>|</em><em>str</em>) – <p>An second array of samples, smaller than or of equal size to the first one, that is allegedly an excerpt
+<li><p><strong>array_2</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> | list | str) – <p>An second array of samples, smaller than or of equal size to the first one, that is allegedly an excerpt
 from the first one. The amplitude, frequency or values do not have to match exactly the ones from the first
 array. The parameter can also be a string containing the path to a WAV file (see description of parameter
 <code class="docutils literal notranslate"><span class="pre">array_1</span></code>).</p>
@@ -236,60 +237,60 @@ array. The parameter can also be a string containing the path to a WAV file (see
 <p><span class="versionmodified changed">Changed in version 2.9.</span></p>
 </div>
 </p></li>
-<li><p><strong>freq_array_1</strong> (<em>int</em><em>|</em><em>float</em><em>, </em><em>optional</em>) – The sampling frequency of the first array, in Hz (default: 1). This parameter is ignored if array_1 is a path to
-a WAV file.</p></li>
-<li><p><strong>freq_array_2</strong> (<em>int</em><em>|</em><em>float</em><em>, </em><em>optional</em>) – The sampling frequency of the second array, in Hz (default: 1). This parameter is ignore is array_2 is a path to
-a WAV file.</p></li>
-<li><p><strong>compute_envelope</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <cite>True</cite> (default), calculates the envelope of the array values before performing the cross-correlation.</p></li>
-<li><p><strong>window_size_env</strong> (<em>int</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – <p>The size of the windows in which to cut the arrays to calculate the envelope. Cutting long arrays
-in windows allows to speed up the computation. If this parameter is set on <cite>None</cite>, the window size will be set
-on the number of samples. A good value for this parameter is generally 1 million.</p>
+<li><p><strong>freq_array_1</strong> (<em>int</em><em> | </em><em>float</em><em> (</em><em>optional</em><em>)</em>) – The sampling frequency of <code class="docutils literal notranslate"><span class="pre">array_1</span></code>, in Hz (default: 1). This parameter is ignored if <code class="docutils literal notranslate"><span class="pre">array_1</span></code> is a
+path to a WAV file.</p></li>
+<li><p><strong>freq_array_2</strong> (<em>int</em><em> | </em><em>float</em><em> (</em><em>optional</em><em>)</em>) – The sampling frequency of <cite>array_2`</cite>, in Hz (default: 1). This parameter is ignored if <code class="docutils literal notranslate"><span class="pre">array_2</span></code> is a
+path to a WAV file.</p></li>
+<li><p><strong>compute_envelope</strong> (<em>bool</em><em> (</em><em>optional</em><em>)</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), calculates the envelope of the array values before performing the cross-correlation.</p></li>
+<li><p><strong>window_size_env</strong> (<em>int</em><em> | </em><em>None</em><em> (</em><em>optional</em><em>)</em>) – <p>The size of the windows in which to cut the arrays to calculate the envelope. Cutting long arrays
+in windows allows speeding up the computation. If this parameter is set on <code class="docutils literal notranslate"><span class="pre">None</span></code>, the window size will be set
+on the number of samples. A good value for this parameter is generally 1 million (default).</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 2.0.</span></p>
 </div>
 </p></li>
-<li><p><strong>overlap_ratio_env</strong> (<em>float</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – The ratio of samples overlapping between each window. If this parameter is not <cite>None</cite>, each window will
-overlap with the previous (and, logically, the next) for an amount of samples equal to the number of samples in
+<li><p><strong>overlap_ratio_env</strong> (<em>float</em><em> | </em><em>None</em><em> (</em><em>optional</em><em>)</em>) – The ratio of samples overlapping between each window. If this parameter is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, each window will
+overlap with the previous (and, logically, the next) for a number of samples equal to the number of samples in
 a window times the overlap ratio. Then, only the central values of each window will be preserved and
-concatenated; this allows to discard any “edge” effect due to the windowing. If the parameter is set on <cite>None</cite>
+concatenated; this allows discarding any “edge” effect due to the windowing. If the parameter is set on <code class="docutils literal notranslate"><span class="pre">None</span></code>
 or 0, the windows will not overlap. By default, this parameter is set on 0.5, meaning that each
 window will overlap for half of their values with the previous, and half of their values with the next.</p></li>
-<li><p><strong>filter_below</strong> (<em>int</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – If set, a high-pass filter will be applied on the envelopes before performing the cross-correlation (default:
+<li><p><strong>filter_below</strong> (<em>int</em><em> | </em><em>None</em><em> (</em><em>optional</em><em>)</em>) – If set, a high-pass filter will be applied on the envelopes before performing the cross-correlation (default:
 0 Hz).</p></li>
-<li><p><strong>filter_over</strong> (<em>int</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – If set, a low-pass filter will be applied on the envelopes before performing the cross-correlation (default:
+<li><p><strong>filter_over</strong> (<em>int</em><em> | </em><em>None</em><em> (</em><em>optional</em><em>)</em>) – If set, a low-pass filter will be applied on the envelopes before performing the cross-correlation (default:
 50 Hz).</p></li>
-<li><p><strong>resampling_rate</strong> (<em>int</em><em>|</em><em>float</em><em>|</em><em>str</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – <p>The sampling rate at which to downsample the arrays for the cross-correlation. A larger value will result in
+<li><p><strong>resampling_rate</strong> (<em>int</em><em> | </em><em>float</em><em> | </em><em>str</em><em> | </em><em>None</em><em> (</em><em>optional</em><em>)</em>) – <p>The sampling rate at which to downsample the arrays for the cross-correlation. A larger value will result in
 longer computation times.</p>
 <ul>
-<li><p>A recommended value for this parameter when working with audio files is 1000, as it will speed up the
+<li><p>A recommended value for this parameter when working with audio files is <code class="docutils literal notranslate"><span class="pre">1000</span></code>, as it will speed up the
 computation of the cross-correlation while still giving a millisecond-precision delay.</p></li>
 <li><p>Setting the parameter on <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> (default) will automatically downsample the array of higher frequency to
 the frequency of the other.</p></li>
-<li><p>Setting the parameter on <cite>None</cite> will not downsample the arrays, which will result in an error if the two
-arrays are not the same frequency. If this parameter is <cite>None</cite>, the next parameters related to resampling can
-be ignored.</p></li>
+<li><p>Setting the parameter on <code class="docutils literal notranslate"><span class="pre">None</span></code> will not downsample the arrays, which will result in an error if the two
+arrays are not the same frequency. If this parameter is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the next parameters related to resampling
+can be ignored.</p></li>
 </ul>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 2.12.</span></p>
 </div>
 </p></li>
-<li><p><strong>window_size_res</strong> (<em>int</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – <p>The size of the windows in which to cut the arrays. Cutting lo,g arrays in windows allows to speed up the
-computation. If this parameter is set on <cite>None</cite>, the window size will be set on the number of samples. A good
-value for this parameter is generally 1e7.</p>
+<li><p><strong>window_size_res</strong> (<em>int</em><em> | </em><em>None</em><em> (</em><em>optional</em><em>)</em>) – <p>The size of the windows in which to cut the arrays. Cutting long arrays in windows allows speeding up the
+computation. If this parameter is set on <code class="docutils literal notranslate"><span class="pre">None</span></code>, the window size will be set on the number of samples. A good
+value for this parameter is generally 1e7 (default).</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 2.0.</span></p>
 </div>
 <div class="versionchanged">
-<p><span class="versionmodified changed">Changed in version 2.1: </span>Decreased default <cite>window_size_res</cite> value from 1e8 to 1e7.</p>
+<p><span class="versionmodified changed">Changed in version 2.1: </span>Decreased default <code class="docutils literal notranslate"><span class="pre">window_size_res</span></code> value from 1e8 to 1e7.</p>
 </div>
 </p></li>
-<li><p><strong>overlap_ratio_res</strong> (<em>float</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – The ratio of samples overlapping between each window. If this parameter is not <cite>None</cite>, each window will
-overlap with the previous (and, logically, the next) for an amount of samples equal to the number of samples in
+<li><p><strong>overlap_ratio_res</strong> (<em>float</em><em> | </em><em>None</em><em> (</em><em>optional</em><em>)</em>) – The ratio of samples overlapping between each window. If this parameter is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, each window will
+overlap with the previous (and, logically, the next) for a number of samples equal to the number of samples in
 a window times the overlap ratio. Then, only the central values of each window will be preserved and
-concatenated; this allows to discard any “edge” effect due to the windowing. If the parameter is set on <cite>None</cite>
+concatenated; this allows discarding any “edge” effect due to the windowing. If the parameter is set on <code class="docutils literal notranslate"><span class="pre">None</span></code>
 or 0, the windows will not overlap. By default, this parameter is set on 0.5, meaning that each window will
 overlap for half of their values with the previous, and half of their values with the next.</p></li>
-<li><p><strong>resampling_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>This parameter allows for various values:</p>
+<li><p><strong>resampling_mode</strong> (<em>str</em><em> (</em><em>optional</em><em>)</em>) – <p>This parameter allows for various values:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">&quot;linear&quot;</span></code> performs a linear
 <a class="reference external" href="https://numpy.org/devdocs/reference/generated/numpy.interp.html">numpy.interp</a> interpolation. This method,
@@ -309,19 +310,19 @@ parameter can be replaced by <code class="docutils literal notranslate"><span cl
 specifics).</p></li>
 </ul>
 </p></li>
-<li><p><strong>remove_average_array_1</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>If set on <cite>True</cite>, removes the average value from all the values in <cite>array_1</cite>. A typical use-case for this
+<li><p><strong>remove_average_array_1</strong> (<em>bool</em><em> (</em><em>optional</em><em>)</em>) – <p>If set on <cite>True</cite>, removes the average value from all the values in <cite>array_1</cite>. A typical use-case for this
 parameter is if an audio array is not centered around 0. Default: <cite>False</cite>.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 2.15.</span></p>
 </div>
 </p></li>
-<li><p><strong>remove_average_array_2</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>If set on <cite>True</cite>, removes the average value from all the values in <cite>array_2</cite>. A typical use-case for this
+<li><p><strong>remove_average_array_2</strong> (<em>bool</em><em> (</em><em>optional</em><em>)</em>) – <p>If set on <cite>True</cite>, removes the average value from all the values in <cite>array_2</cite>. A typical use-case for this
 parameter is if an audio array is not centered around 0. Default: <cite>False</cite>.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 2.15.</span></p>
 </div>
 </p></li>
-<li><p><strong>return_delay_format</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>This parameter can be either <code class="docutils literal notranslate"><span class="pre">&quot;index&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ms&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;s&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;timedelta&quot;</span></code>:</p>
+<li><p><strong>return_delay_format</strong> (<em>str</em><em> (</em><em>optional</em><em>)</em>) – <p>This parameter can be either <code class="docutils literal notranslate"><span class="pre">&quot;index&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;ms&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;s&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;timedelta&quot;</span></code>:</p>
 <blockquote>
 <div><ul>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">&quot;index&quot;</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">&quot;sample&quot;</span></code>, the function will return the index in array_1 at which array_2
@@ -338,34 +339,34 @@ results (-1 second returns -1 days, 86399 seconds).</p></li>
 </ul>
 </div></blockquote>
 </p></li>
-<li><p><strong>return_none_if_below_threshold</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>If <cite>True</cite> (default), the function will return the value <cite>None</cite> if the correlation is below threshold (if
+<li><p><strong>return_none_if_below_threshold</strong> (<em>bool</em><em> (</em><em>optional</em><em>)</em>) – <p>If <cite>True</cite> (default), the function will return the value <cite>None</cite> if the correlation is below threshold (if
 the parameter <cite>return_correlation_value</cite> is set on <cite>True</cite> or <code class="docutils literal notranslate"><span class="pre">&quot;array&quot;</span></code>, the two return values will be <cite>None</cite>).
 If set on <cite>False</cite>, values are returned even if the correlation is below threshold.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 2.18.</span></p>
 </div>
 </p></li>
-<li><p><strong>return_correlation_value</strong> (<em>bool</em><em>|</em><em>str optional</em>) – <p>If <cite>True</cite>, the function returns a second value: the correlation value at the returned delay. This value will
+<li><p><strong>return_correlation_value</strong> (<em>bool</em><em> | </em><em>str</em><em> (</em><em>optional</em><em>)</em>) – <p>If <cite>True</cite>, the function returns a second value: the correlation value at the returned delay. This value will
 be None if it is below the specified threshold. If set on <code class="docutils literal notranslate"><span class="pre">&quot;array&quot;</span></code>, the second returned value will be a
-two-dimensional array, where the first sub-array is the list of correlation values, and the second is their
+two-dimensional array, where the first subarray is the list of correlation values, and the second is their
 corresponding timestamps or indices, depending on the value of <cite>return_delay_format</cite>.</p>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 2.18: </span>This parameter can now accept the value <code class="docutils literal notranslate"><span class="pre">&quot;array&quot;</span></code>.</p>
 </div>
 </p></li>
-<li><p><strong>threshold</strong> (<em>float</em><em>, </em><em>optional</em>) – The threshold of the minimum correlation value between the two arrays to accept a delay as a solution. If
+<li><p><strong>threshold</strong> (<em>float</em><em> (</em><em>optional</em><em>)</em>) – The threshold of the minimum correlation value between the two arrays to accept a delay as a solution. If
 multiple delays are over threshold, the delay with the maximum correlation value will be returned. This value
 should be between 0 and 1; if the maximum found value is below the threshold, the function will return <cite>None</cite>
 instead of a timestamp.</p></li>
-<li><p><strong>min_delay</strong> (<em>int</em><em>|</em><em>float</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – The lower limit of the sample or time range in which to look for the highest correlation value. This parameter
+<li><p><strong>min_delay</strong> (<em>int</em><em> | </em><em>float</em><em> | </em><em>None</em><em> (</em><em>optional</em><em>)</em>) – The lower limit of the sample or time range in which to look for the highest correlation value. This parameter
 must be specified in the same unit as <code class="docutils literal notranslate"><span class="pre">return_delay_format</span></code>.</p></li>
-<li><p><strong>max_delay</strong> (<em>int</em><em>|</em><em>float</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – The upper limit of the sample or time range in which to look for the highest correlation value. This parameter
+<li><p><strong>max_delay</strong> (<em>int</em><em> | </em><em>float</em><em> | </em><em>None</em><em> (</em><em>optional</em><em>)</em>) – The upper limit of the sample or time range in which to look for the highest correlation value. This parameter
 must be specified in the same unit as <code class="docutils literal notranslate"><span class="pre">return_delay_format</span></code>.</p></li>
-<li><p><strong>plot_figure</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set on <cite>True</cite>, plots a graph showing the result of the cross-correlation using Matplotlib. Note that plotting
+<li><p><strong>plot_figure</strong> (<em>bool</em><em> (</em><em>optional</em><em>)</em>) – If set on <cite>True</cite>, plots a graph showing the result of the cross-correlation using Matplotlib. Note that plotting
 the figure causes an interruption of the code execution.</p></li>
-<li><p><strong>plot_intermediate_steps</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set on <cite>True</cite>, plots the original arrays, the envelopes (if calculated) and the resampled arrays (if
+<li><p><strong>plot_intermediate_steps</strong> (<em>bool</em><em> (</em><em>optional</em><em>)</em>) – If set on <cite>True</cite>, plots the original arrays, the envelopes (if calculated) and the resampled arrays (if
 calculated) besides the cross-correlation.</p></li>
-<li><p><strong>x_format_figure</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>If set on <cite>“time”</cite>, the values on the x axes of the output will take the HH:MM:SS format (or MM:SS if the time
+<li><p><strong>x_format_figure</strong> (<em>str</em><em> (</em><em>optional</em><em>)</em>) – <p>If set on <cite>“time”</cite>, the values on the x axes of the output will take the HH:MM:SS format (or MM:SS if the time
 series are less than one hour long). If set on <cite>“float”</cite>, the values on the x axes will be displayed as float
 (unit: second). If set on <cite>“auto”</cite> (default), the format of the values on the x axes will be defined depending
 on the value of <cite>return_delay_format</cite>.</p>
@@ -375,11 +376,11 @@ on the value of <cite>return_delay_format</cite>.</p>
 </div>
 </div></blockquote>
 </p></li>
-<li><p><strong>path_figure</strong> (<em>str</em><em>|</em><em>None</em><em>, </em><em>optional</em>) – If set, saves the figure at the given path.</p></li>
-<li><p><strong>mono_channel</strong> (<em>int</em><em>|</em><em>str</em><em>, </em><em>optional</em>) – <p>Defines the method to use to convert multiple-channel WAV files to mono, if one of the parameters <cite>array1</cite> or
+<li><p><strong>path_figure</strong> (<em>str</em><em> | </em><em>None</em><em> (</em><em>optional</em><em>)</em>) – If set, saves the figure at the given path.</p></li>
+<li><p><strong>mono_channel</strong> (<em>int</em><em> | </em><em>str</em><em> (</em><em>optional</em><em>)</em>) – <p>Defines the method to use to convert multiple-channel WAV files to mono, if one of the parameters <cite>array1</cite> or
 <cite>array2</cite> is a path pointing to a WAV file. By default, this parameter value is <code class="docutils literal notranslate"><span class="pre">0</span></code>: the channel with index 0
 in the WAV file is used as the array, while all the other channels are discarded. This value can be any
-of the channels indices (using <code class="docutils literal notranslate"><span class="pre">1</span></code> will preserve the channel with index 1, etc.). This parameter can also
+of the channel indices (using <code class="docutils literal notranslate"><span class="pre">1</span></code> will preserve the channel with index 1, etc.). This parameter can also
 take the value <code class="docutils literal notranslate"><span class="pre">&quot;average&quot;</span></code>: in that case, a new channel is created by averaging the values of all the
 channels of the WAV file. Note that this parameter applies to both arrays: in the case where you need to select
 different channels for each WAV file, open the files before calling the function and pass the samples and
@@ -388,23 +389,23 @@ frequencies as parameters.</p>
 <p><span class="versionmodified added">Added in version 2.9.</span></p>
 </div>
 </p></li>
-<li><p><strong>name_array_1</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The name of the first array, as it will appear on the figure (default: “Array 1”).</p>
+<li><p><strong>name_array_1</strong> (<em>str</em><em> (</em><em>optional</em><em>)</em>) – <p>The name of the first array, as it will appear on the figure (default: “Array 1”).</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 2.13.</span></p>
 </div>
 </p></li>
-<li><p><strong>name_array_2</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The name of the second array, as it will appear on the figure (default: “Array 2”).</p>
+<li><p><strong>name_array_2</strong> (<em>str</em><em> (</em><em>optional</em><em>)</em>) – <p>The name of the second array, as it will appear on the figure (default: “Array 2”).</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 2.13.</span></p>
 </div>
 </p></li>
-<li><p><strong>dark_mode</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>If set on <cite>True</cite>, uses the <a class="reference external" href="https://matplotlib.org/stable/gallery/style_sheets/dark_background.html">dark_background theme from matplotlib</a>
+<li><p><strong>dark_mode</strong> (<em>bool</em><em> (</em><em>optional</em><em>)</em>) – <p>If set on <cite>True</cite>, uses the <a class="reference external" href="https://matplotlib.org/stable/gallery/style_sheets/dark_background.html">dark_background theme from matplotlib</a>
 (default: <cite>False</cite>).</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 2.15.</span></p>
 </div>
 </p></li>
-<li><p><strong>verbosity</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Sets how much feedback the code will provide in the console output:</p>
+<li><p><strong>verbosity</strong> (<em>int</em><em> (</em><em>optional</em><em>)</em>) – <p>Sets how much feedback the code will provide in the console output:</p>
 <ul>
 <li><p><em>0: Silent mode.</em> The code won’t provide any feedback, apart from error messages.</p></li>
 <li><p><em>1: Normal mode</em> (default). The code will provide essential feedback such as progression markers and
@@ -413,7 +414,7 @@ current steps.</p></li>
 may clutter the output and slow down the execution.</p></li>
 </ul>
 </p></li>
-<li><p><strong>add_tabs</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
+<li><p><strong>add_tabs</strong> (<em>int</em><em> (</em><em>optional</em><em>)</em>) – <p>Adds the specified amount of tabulations to the verbosity outputs (default: 0). This parameter may be used by
 other functions to encapsulate the verbosity outputs by indenting them.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">Added in version 2.12.</span></p>
@@ -423,9 +424,12 @@ other functions to encapsulate the verbosity outputs by indenting them.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><em>int|float|timedelta|None</em> – The sample index, timestamp or timedelta of array_1 at which array_2 can be found (defined by the parameter
+<li><p><em>int | float | timedelta | None</em> – The sample index, timestamp or timedelta of array_1 at which array_2 can be found (defined by the parameter
 return_delay_format), or <cite>None</cite> if array1 is not contained in array_2.</p></li>
-<li><p><em>float|None, optional</em> – Optionally, if return_correlation_value is <cite>True</cite>, the correlation value at the corresponding index/timestamp.</p></li>
+<li><p>float | <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a> | None (optional) – If <code class="docutils literal notranslate"><span class="pre">return_correlation_value</span></code> is <cite>True</cite>, the correlation value at the corresponding index/timestamp.
+If <code class="docutils literal notranslate"><span class="pre">return_correlation_value</span></code> is set on <code class="docutils literal notranslate"><span class="pre">&quot;array&quot;</span></code>, a two-dimensional array containing the correlation
+values between the two arrays, and the corresponding timestamps or indices, depending on the value of
+<code class="docutils literal notranslate"><span class="pre">return_delay_format</span></code>.</p></li>
 </ul>
 </p>
 </dd>

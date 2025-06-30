@@ -78,14 +78,15 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     other words, if the excerpt starts 1 second before the onset of the original array, the function will return a delay
     of -1 sec. However, this should be avoided, as information missing from the original array will result in lower
     correlation - with a substantial amount of data missing from the original array, the function may return erroneous
-    results. This is why *it is always preferable to use excerpts that are entirely contained in the original array*.
+    results. This is why **it is always preferable to use excerpts that are entirely contained in the original array**.
 
     Parameters
     ----------
     array_1: :class:`numpy.ndarray` | list | str
         A first array of samples, or a string containing the path to a WAV file. In this case, the parameter
-        `freq_array_1` will be ignored and extracted from the WAV file. Note that if the WAV file contains more than one
-        channel, the function will turn the WAV to mono, using the method described by the parameter `mono_channel`.
+        ``freq_array_1`` will be ignored and extracted from the WAV file. Note that if the WAV file contains more than
+        one channel, the function will turn the WAV to mono, using the method described by the parameter
+        ``mono_channel``.
 
         .. versionchanged:: 2.9
 
@@ -98,28 +99,28 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         .. versionchanged:: 2.9
 
     freq_array_1: int | float (optional)
-        The sampling frequency of the first array, in Hz (default: 1). This parameter is ignored if array_1 is a path to
-        a WAV file.
+        The sampling frequency of ``array_1``, in Hz (default: 1). This parameter is ignored if ``array_1`` is a
+        path to a WAV file.
 
     freq_array_2: int | float (optional)
-        The sampling frequency of the second array, in Hz (default: 1). This parameter is ignore is array_2 is a path to
-        a WAV file.
+        The sampling frequency of `array_2``, in Hz (default: 1). This parameter is ignored if ``array_2`` is a
+        path to a WAV file.
 
     compute_envelope: bool (optional)
-        If `True` (default), calculates the envelope of the array values before performing the cross-correlation.
+        If ``True`` (default), calculates the envelope of the array values before performing the cross-correlation.
 
     window_size_env: int | None (optional)
         The size of the windows in which to cut the arrays to calculate the envelope. Cutting long arrays
-        in windows allows speeding up the computation. If this parameter is set on `None`, the window size will be set
-        on the number of samples. A good value for this parameter is generally 1 million.
+        in windows allows speeding up the computation. If this parameter is set on ``None``, the window size will be set
+        on the number of samples. A good value for this parameter is generally 1 million (default).
 
         .. versionadded:: 2.0
 
     overlap_ratio_env: float | None (optional)
-        The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
+        The ratio of samples overlapping between each window. If this parameter is not ``None``, each window will
         overlap with the previous (and, logically, the next) for a number of samples equal to the number of samples in
         a window times the overlap ratio. Then, only the central values of each window will be preserved and
-        concatenated; this allows discarding any "edge" effect due to the windowing. If the parameter is set on `None`
+        concatenated; this allows discarding any "edge" effect due to the windowing. If the parameter is set on ``None``
         or 0, the windows will not overlap. By default, this parameter is set on 0.5, meaning that each
         window will overlap for half of their values with the previous, and half of their values with the next.
 
@@ -135,31 +136,31 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         The sampling rate at which to downsample the arrays for the cross-correlation. A larger value will result in
         longer computation times.
 
-        • A recommended value for this parameter when working with audio files is 1000, as it will speed up the
+        • A recommended value for this parameter when working with audio files is ``1000``, as it will speed up the
           computation of the cross-correlation while still giving a millisecond-precision delay.
         • Setting the parameter on ``"auto"`` (default) will automatically downsample the array of higher frequency to
           the frequency of the other.
-        • Setting the parameter on `None` will not downsample the arrays, which will result in an error if the two
-          arrays are not the same frequency. If this parameter is `None`, the next parameters related to resampling can
-          be ignored.
+        • Setting the parameter on ``None`` will not downsample the arrays, which will result in an error if the two
+          arrays are not the same frequency. If this parameter is ``None``, the next parameters related to resampling
+          can be ignored.
 
         .. versionchanged:: 2.12
 
     window_size_res: int | None (optional)
         The size of the windows in which to cut the arrays. Cutting long arrays in windows allows speeding up the
-        computation. If this parameter is set on `None`, the window size will be set on the number of samples. A good
-        value for this parameter is generally 1e7.
+        computation. If this parameter is set on ``None``, the window size will be set on the number of samples. A good
+        value for this parameter is generally 1e7 (default).
 
         .. versionadded:: 2.0
 
         .. versionchanged:: 2.1
-            Decreased default `window_size_res` value from 1e8 to 1e7.
+            Decreased default ``window_size_res`` value from 1e8 to 1e7.
 
     overlap_ratio_res: float | None (optional)
-        The ratio of samples overlapping between each window. If this parameter is not `None`, each window will
+        The ratio of samples overlapping between each window. If this parameter is not ``None``, each window will
         overlap with the previous (and, logically, the next) for a number of samples equal to the number of samples in
         a window times the overlap ratio. Then, only the central values of each window will be preserved and
-        concatenated; this allows discarding any "edge" effect due to the windowing. If the parameter is set on `None`
+        concatenated; this allows discarding any "edge" effect due to the windowing. If the parameter is set on ``None``
         or 0, the windows will not overlap. By default, this parameter is set on 0.5, meaning that each window will
         overlap for half of their values with the previous, and half of their values with the next.
 
