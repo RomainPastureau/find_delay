@@ -137,7 +137,9 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         longer computation times.
 
         • A recommended value for this parameter when working with audio files is ``1000``, as it will speed up the
-          computation of the cross-correlation while still giving a millisecond-precision delay.
+          computation of the cross-correlation while still giving a millisecond-precision delay. Note that
+          as the cross-correlation relies on the envelopes, downsampling to a very low frequency may lead to
+          inconclusive results.
         • Setting the parameter on ``"auto"`` (default) will automatically downsample the array of higher frequency to
           the frequency of the other.
         • Setting the parameter on ``None`` will not downsample the arrays, which will result in an error if the two
@@ -611,8 +613,10 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         The sampling rate at which to downsample the arrays for the cross-correlation. A larger value will result in
         longer computation times.
 
-        • A recommended value for this parameter when working with audio files is 1000, as it will speed up the
-          computation of the cross-correlation while still giving a millisecond-precision delay.
+        • A recommended value for this parameter when working with audio files is ``1000``, as it will speed up the
+          computation of the cross-correlation while still giving a millisecond-precision delay. Note that
+          as the cross-correlation relies on the envelopes, downsampling to a very low frequency may lead to
+          inconclusive results.
         • Setting the parameter on ``"auto"`` (default) will automatically downsample all the arrays to the lowest
           provided frequency, among the frequencies of the array and the excerpts.
         • Setting the parameter on `None` will not downsample the arrays, which will result in an error if the two

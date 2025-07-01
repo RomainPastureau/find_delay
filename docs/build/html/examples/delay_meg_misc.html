@@ -211,6 +211,8 @@ audio actually starts.</p>
 </section>
 <section id="isolate-the-audio-on-the-misc-channel">
 <h3>Isolate the audio on the MISC channel<a class="headerlink" href="#isolate-the-audio-on-the-misc-channel" title="Link to this heading"></a></h3>
+<p>For this step, be sure to work with the original, non-downsampled MEG data. If the sampling rate of your
+stimulus channel is too low (&lt; 1000 Hz), the function might not be able to detect the delays properly.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mne</span>
 
 <span class="c1"># Load the MEG data</span>

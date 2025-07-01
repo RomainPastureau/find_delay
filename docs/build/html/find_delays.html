@@ -267,8 +267,10 @@ or 0, the windows will not overlap.</p></li>
 <li><p><strong>resampling_rate</strong> (<em>int</em><em> | </em><em>float</em><em> | </em><em>str</em><em> | </em><em>None</em><em> (</em><em>optional</em><em>)</em>) – <p>The sampling rate at which to downsample the arrays for the cross-correlation. A larger value will result in
 longer computation times.</p>
 <ul>
-<li><p>A recommended value for this parameter when working with audio files is 1000, as it will speed up the
-computation of the cross-correlation while still giving a millisecond-precision delay.</p></li>
+<li><p>A recommended value for this parameter when working with audio files is <code class="docutils literal notranslate"><span class="pre">1000</span></code>, as it will speed up the
+computation of the cross-correlation while still giving a millisecond-precision delay. Note that
+as the cross-correlation relies on the envelopes, downsampling to a very low frequency may lead to
+inconclusive results.</p></li>
 <li><p>Setting the parameter on <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> (default) will automatically downsample all the arrays to the lowest
 provided frequency, among the frequencies of the array and the excerpts.</p></li>
 <li><p>Setting the parameter on <cite>None</cite> will not downsample the arrays, which will result in an error if the two

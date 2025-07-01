@@ -263,7 +263,9 @@ window will overlap for half of their values with the previous, and half of thei
 longer computation times.</p>
 <ul>
 <li><p>A recommended value for this parameter when working with audio files is <code class="docutils literal notranslate"><span class="pre">1000</span></code>, as it will speed up the
-computation of the cross-correlation while still giving a millisecond-precision delay.</p></li>
+computation of the cross-correlation while still giving a millisecond-precision delay. Note that
+as the cross-correlation relies on the envelopes, downsampling to a very low frequency may lead to
+inconclusive results.</p></li>
 <li><p>Setting the parameter on <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> (default) will automatically downsample the array of higher frequency to
 the frequency of the other.</p></li>
 <li><p>Setting the parameter on <code class="docutils literal notranslate"><span class="pre">None</span></code> will not downsample the arrays, which will result in an error if the two

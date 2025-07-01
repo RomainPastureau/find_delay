@@ -52,7 +52,8 @@ delay will be converted to return the appropriate sample value at the original s
     delay = find_delay("audio_file.wav", "excerpt.wav", resampling_rate="auto")
 
 It is also possible to manually set the resampling rate to a lower value, such as 10000 Hz. Note that the lower the
-resampling rate, the lesser accurate the result will be.
+resampling rate, the lesser accurate the result will be. As the cross-correlation relies on the envelopes of the audio
+files, setting a resampling rate to a value lower than 1000 Hz may not allow to detect any correlation.
 
 .. code-block:: python
 

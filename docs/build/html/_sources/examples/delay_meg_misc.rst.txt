@@ -64,6 +64,9 @@ Other formats may work with other modules, or might need to be converted beforeh
 Isolate the audio on the MISC channel
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+For this step, be sure to work with the original, non-downsampled MEG data. If the sampling rate of your
+stimulus channel is too low (< 1000 Hz), the function might not be able to detect the delays properly.
+
 .. code-block:: python
 
     import mne
