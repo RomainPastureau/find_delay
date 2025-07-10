@@ -19,8 +19,8 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
                remove_average_array_2=False, return_delay_format="index",
                return_none_if_below_threshold=True, return_correlation_value=False, threshold=0.9,
                min_delay=None, max_delay=None, plot_figure=False, plot_intermediate_steps=False,
-               x_format_figure="auto", path_figure=None, mono_channel=0, name_array_1="Array 1", name_array_2="Array 2",
-               dark_mode=False, verbosity=1, add_tabs=0):
+               x_format_figure="auto", path_figure=None, mono_channel=None, name_array_1="Array 1",
+               name_array_2="Array 2", dark_mode=False, verbosity=1, add_tabs=0):
     """This function tries to find the timestamp at which an excerpt (array_2) begins in a time series (array_1).
     The computation is performed through cross-correlation. Beforehand, the envelopes of both arrays can first be
     calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
@@ -64,6 +64,11 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         The parameter `return_delay_format` can now also take the value ``"sample"``, which is an alias for ``"index"``.
         The parameter `return_correlation_value` can now accept the value ``"array"``.
         Added the parameter `return_none_if_below_threshold`.
+
+    .. versionchanged:: 2.19
+        The default value for the parameter ``mono_channel`` has been changed from ``0`` to ``None``: this parameter
+        should now be explicitly set. On another hand, if set, this parameter will be used to convert multidimensional
+        arrays passed as parameters.
 
     Important
     ---------
@@ -266,17 +271,21 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     path_figure: str | None (optional)
         If set, saves the figure at the given path.
 
-    mono_channel: int | str (optional)
-        Defines the method to use to convert multiple-channel WAV files to mono, if one of the parameters `array1` or
-        `array2` is a path pointing to a WAV file. By default, this parameter value is ``0``: the channel with index 0
-        in the WAV file is used as the array, while all the other channels are discarded. This value can be any
-        of the channel indices (using ``1`` will preserve the channel with index 1, etc.). This parameter can also
-        take the value ``"average"``: in that case, a new channel is created by averaging the values of all the
-        channels of the WAV file. Note that this parameter applies to both arrays: in the case where you need to select
-        different channels for each WAV file, open the files before calling the function and pass the samples and
-        frequencies as parameters.
+    mono_channel: int | str | None (optional)
+        Defines the method to use to convert multiple-channel WAV files or arrays to mono, if one of the parameters
+        `array1` or `array2` is a path pointing to a WAV file, or if one of the arrays is multidimensional. By default,
+        this parameter value is ``0``: the channel with index 0 in the WAV file is used as the array, while all the
+        other channels are discarded. This value can be any of the channel indices (using ``1`` will preserve the
+        channel with index 1, etc.). This parameter can also take the value ``"average"``: in that case, a new channel
+        is created by averaging the values of all the channels of the WAV file. Note that this parameter applies to both
+        arrays: in the case where you need to select different channels for each WAV file, open the files before calling
+        the function and pass the samples and frequencies as parameters.
 
         .. versionadded:: 2.9
+
+        .. versionchanged:: 2.19
+            The parameter is now set on `None` by default, in order to explicitly declare how to handle multiple
+            channel arrays. If set, this parameter will also handle conversion of multidimensional arrays.
 
     name_array_1: str (optional)
         The name of the first array, as it will appear on the figure (default: "Array 1").
@@ -325,6 +334,9 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
     time_before_function = dt.datetime.now()
     t = add_tabs * "\t"
 
+    if return_delay_format not in ("index", "sample", "ms", "s", "timedelta"):
+        raise ValueError(f"Invalid return_delay_format: {return_delay_format}")
+
     # Tries to open WAV files if they are paths
     if isinstance(array_1, str):
         if verbosity > 0:
@@ -334,7 +346,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
         audio_wav = wavfile.read(array_1)
         freq_array_1 = audio_wav[0]
-        array_1 = _convert_to_mono(audio_wav[1], mono_channel, verbosity)
+        array_1 = audio_wav[1]
 
     if isinstance(array_2, str):
         if verbosity > 0:
@@ -344,13 +356,18 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
         audio_wav = wavfile.read(array_2)
         freq_array_2 = audio_wav[0]
-        array_2 = _convert_to_mono(audio_wav[1], mono_channel, verbosity, add_tabs)
+        array_2 = audio_wav[1]
 
     # Turn lists into ndarray
     if isinstance(array_1, list):
         array_1 = np.array(array_1)
     if isinstance(array_2, list):
         array_2 = np.array(array_2)
+
+    # Convert to mono
+    if mono_channel is not None:
+        array_1 = _convert_to_mono(array_1, mono_channel, verbosity, add_tabs)
+        array_2 = _convert_to_mono(array_2, mono_channel, verbosity, add_tabs)
 
     # Introduction
     if verbosity > 0:
@@ -378,14 +395,12 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
 
     if len(array_1.shape) > 1:
         raise Exception(f"{name_array_1} has more than one dimension: its shape is {array_1.shape}. To perform the " +
-                        f"find_delay function, each array must be 1-dimensional. If you are trying to find the " +
-                        f"delay between two audio files, make sure that your files are in mono, or select one of " +
-                        f"the channels.")
+                        f"find_delay function, each array must be 1-dimensional. If you are trying to find the delay "
+                        f"between audio files, try to set the parameter `mono_channel` to \"0\" or \"average\".")
     if len(array_2.shape) > 1:
         raise Exception(f"{name_array_2} has more than one dimension: its shape is {array_2.shape}. To perform the " +
-                        f"find_delay function, each array must be 1-dimensional. If you are trying to find the " +
-                        f"delay between two audio files, make sure that your files are in mono, or select one of " +
-                        f"the channels.")
+                        f"find_delay function, each array must be 1-dimensional. If you are trying to find the delay "
+                        f"between audio files, try to set the parameter `mono_channel` to \"0\" or \"average\".")
 
     # Envelope
     if compute_envelope:
@@ -431,7 +446,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
             print(f"{t}Resampling done.\n")
     else:
         rate = freq_array_1
-        if freq_array_1 != freq_array_2:
+        if not np.isclose(freq_array_1, freq_array_2):
             raise Exception(f"The rate of the two arrays you are trying to correlate are different ({freq_array_1} Hz" +
                             f" and {freq_array_2} Hz). You must indicate a resampling rate to perform the " +
                             f"cross-correlation.")
@@ -489,10 +504,9 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
                 resampling_rate="auto", window_size_res=1e7, overlap_ratio_res=0.5, resampling_mode="cubic",
                 remove_average_array=False, remove_average_excerpts=False, return_delay_format="index",
                 return_none_if_below_threshold=True, return_correlation_values=False, threshold=0.9, min_delay=None,
-                max_delay=None,
-                plot_figure=False,
-                plot_intermediate_steps=False, x_format_figure="auto", path_figures=None, name_figures="figure",
-                mono_channel=0, name_array="Array", name_excerpts="Excerpt", dark_mode=False, verbosity=1, add_tabs=0):
+                max_delay=None, plot_figure=False, plot_intermediate_steps=False, x_format_figure="auto",
+                path_figures=None, name_figures="figure", mono_channel=None, name_array="Array",
+                name_excerpts="Excerpt", dark_mode=False, verbosity=1, add_tabs=0):
     """This function tries to find the timestamp at which multiple excerpts begin in an array.
     The computation is performed through cross-correlation. Beforehand, the envelopes of both arrays can first be
     calculated and filtered (recommended for audio files), and resampled (necessary when the sampling rate of the two
@@ -538,6 +552,11 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         The parameter `return_delay_format` can now also take the value ``"sample"``, which is an alias for ``"index"``.
         The parameter `return_correlation_value` can now accept the value ``"array"``.
         Added the parameter `return_none_if_below_threshold`.
+
+    .. versionchanged:: 2.19
+        The default value for the parameter ``mono_channel`` has been changed from ``0`` to ``None``: this parameter
+        should now be explicitly set. On another hand, if set, this parameter will be used to convert multidimensional
+        arrays passed as parameters.
 
     Important
     ---------
@@ -746,17 +765,21 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         The name to give to each figure in the directory set by `path_figures`. The figures will be found in
         `path_figures/name_figures_n.png`, where n is the index of the excerpt in `excerpts`, starting at 1.
 
-    mono_channel: int | str (optional)
-        Defines the method to use to convert multiple-channel WAV files to mono, if one of the parameters `array` or
-        `excerpts` contains a path pointing to a WAV file. By default, this parameter value is ``0``: the channel with
-        index 0 in the WAV file is used as the array, while all the other channels are discarded. This value can be any
-        of the channel indices (using ``1`` will preserve the channel with index 1, etc.). This parameter can also
-        take the value ``"average"``: in that case, a new channel is created by averaging the values of all the
-        channels of the WAV file. Note that this parameter applies to all arrays: in the case where you need to select
-        different channels for each WAV file, open the files before calling the function and pass the samples and
-        frequencies as parameters.
+    mono_channel: int | str | None (optional)
+        Defines the method to use to convert multiple-channel WAV files or arrays to mono, if one of the parameters
+        `array1` or `array2` is a path pointing to a WAV file, or if one of the arrays is multidimensional. By default,
+        this parameter value is ``0``: the channel with index 0 in the WAV file is used as the array, while all the
+        other channels are discarded. This value can be any of the channel indices (using ``1`` will preserve the
+        channel with index 1, etc.). This parameter can also take the value ``"average"``: in that case, a new channel
+        is created by averaging the values of all the channels of the WAV file. Note that this parameter applies to both
+        arrays: in the case where you need to select different channels for each WAV file, open the files before calling
+        the function and pass the samples and frequencies as parameters.
 
         .. versionadded:: 2.9
+
+        .. versionchanged:: 2.19
+            The parameter is now set on `None` by default, in order to explicitly declare how to handle multiple
+            channel arrays. If set, this parameter will also handle conversion of multidimensional arrays.
 
     name_array: str (optional)
         The name of the array, as it will appear on the figure (default: "Array").
@@ -819,11 +842,14 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
         audio_wav = wavfile.read(array)
         freq_array = audio_wav[0]
-        array = _convert_to_mono(audio_wav[1], mono_channel, verbosity, add_tabs)
+        array = audio_wav[1]
 
     # Turn list into ndarray
     if isinstance(array, list):
         array = np.array(array)
+
+    if mono_channel is not None:
+        array = _convert_to_mono(array, mono_channel, verbosity, add_tabs)
 
     # name_excerpts size check
     if isinstance(name_excerpts, list):
@@ -855,10 +881,10 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         number_of_plots += 2
 
     if len(array.shape) > 1:
-        raise Exception(f"The provided array has more than one dimension: its shape is {array.shape}. To perform the " +
-                        f"find_delay function, each array must be 1-dimensional. If you are trying to find the " +
-                        f"delay between two audio files, make sure that your files are in mono, or select one of " +
-                        f"the channels.")
+        raise Exception(f"The provided array {name_array} has more than one dimension: its shape is {array.shape}. To "
+                        f"perform the find_delay function, each array must be 1-dimensional. If you are trying to find "
+                        f"the delay between audio files, try to set the parameter `mono_channel` to \"0\" or "
+                        f"\"average\".")
 
     # Envelope
     if compute_envelope:
@@ -931,17 +957,20 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
 
             audio_wav = wavfile.read(excerpt)
             freq_excerpt = audio_wav[0]
-            excerpt = _convert_to_mono(audio_wav[1], mono_channel, verbosity, add_tabs + 1)
+            excerpt = audio_wav[1]
 
         # Turn list into ndarray
         if isinstance(excerpt, list):
             excerpt = np.array(excerpt)
 
+        if mono_channel is not None:
+            excerpt = _convert_to_mono(excerpt, mono_channel, verbosity, add_tabs + 1)
+
         if len(excerpt.shape) > 1:
-            raise Exception(f"The excerpt has more than one dimension: its shape is {excerpt.shape}. To perform the " +
-                            f"find_delay function, each array must be 1-dimensional. If you are trying to find the " +
-                            f"delay between two audio files, make sure that your files are in mono, or select one of " +
-                            f"the channels.")
+            raise Exception(f"The provided excerpt {name_excerpts[i]} has more than one dimension: its shape is "
+                            f"{array.shape}. To perform the find_delay function, each array must be 1-dimensional. "
+                            f"If you are trying to find the delay between audio files, try to set the parameter "
+                            f"`mono_channel` to \"0\" or \"average\".")
 
         if verbosity > 0:
             print(f"{t}\tThe excerpt {name_excerpt} contains {np.size(excerpt)} samples, at a rate of "
@@ -968,7 +997,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
             if verbosity > 0:
                 print(f"\t{t}Resampling done.\n")
         else:
-            if freq_array != freq_excerpt:
+            if not np.isclose(freq_array, freq_excerpt):
                 raise Exception(f"The rate of the two arrays you are trying to correlate are different ({freq_array} " +
                                 f"Hz and {freq_excerpt} Hz). You must indicate a resampling rate to perform the " +
                                 f"cross-correlation.")

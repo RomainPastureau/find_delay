@@ -1,6 +1,15 @@
 Version history
 ===============
 
+2.19 (early version)
+--------------------
+* The default value for the parameter ``mono_channel`` is now ``None`` instead of 0: the mono channel now has to be
+  explicitly declared
+* The previous change now allows ``mono_channel`` to also convert multi-dimensional arrays to 1D arrays, rather than
+  just WAV files
+* The functions should now be more lenient towards float rounding errors of the frequencies of the arrays if they do
+  not match exactly
+
 2.18 (2025-06-29)
 -----------------
 * Corrected a bug where passing ``"average"`` for the parameter ``mono_channel`` would return an error if one of the

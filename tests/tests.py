@@ -135,7 +135,7 @@ class Tests(unittest.TestCase):
 
         # Excerpt at 2000 ms
         delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
-                                 "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                                 "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav", mono_channel=0,
                                  return_correlation_value=True, path_figure="figures/wav/figure_1.png")
         assert (delay == 96002)
         assert (round(corr, 3) == 0.984)
@@ -150,7 +150,7 @@ class Tests(unittest.TestCase):
 
         # Excerpt at 2000 ms, 44100 Hz
         delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
-                                 "test_wav/test_excerpt_2000ms_inside_2ch_44100Hz.wav",
+                                 "test_wav/test_excerpt_2000ms_inside_2ch_44100Hz.wav", mono_channel=0,
                                  resampling_rate=1000, return_correlation_value=True,
                                  path_figure="figures/wav/figure_3.png")
         assert (delay == 96000)
@@ -158,21 +158,21 @@ class Tests(unittest.TestCase):
 
         # Excerpt starting 500 ms before the onset
         delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
-                                 "test_wav/test_excerpt_2000ms_onset_-500_2ch_48000Hz.wav",
+                                 "test_wav/test_excerpt_2000ms_onset_-500_2ch_48000Hz.wav", mono_channel=0,
                                  return_correlation_value=True, path_figure="figures/wav/figure_4.png")
         assert (delay == -24001)
         assert (round(corr, 3) == 0.977)
 
         # Excerpt ending 500 ms before the offset, mono
         delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
-                                 "test_wav/test_excerpt_2000ms_onset_-500_1ch_48000Hz.wav",
+                                 "test_wav/test_excerpt_2000ms_onset_-500_1ch_48000Hz.wav", mono_channel=0,
                                  return_correlation_value=True, path_figure="figures/wav/figure_5.png")
         assert (delay == -24001)
         assert (round(corr, 3) == 0.977)
 
         # Excerpt ending 500 ms after the offset
         delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
-                                 "test_wav/test_excerpt_2000ms_offset_+500_2ch_48000Hz.wav",
+                                 "test_wav/test_excerpt_2000ms_offset_+500_2ch_48000Hz.wav", mono_channel=0,
                                  return_correlation_value=True, path_figure="figures/wav/figure_6.png")
         assert (delay == 216002)
         assert (round(corr, 3) == 0.966)
@@ -184,7 +184,7 @@ class Tests(unittest.TestCase):
                                      "test_wav/test_excerpt_2000ms_inside_2ch_44100Hz.wav",
                                      "test_wav/test_excerpt_2000ms_onset_-500_2ch_48000Hz.wav",
                                      "test_wav/test_excerpt_2000ms_onset_-500_1ch_48000Hz.wav",
-                                     "test_wav/test_excerpt_2000ms_offset_+500_2ch_48000Hz.wav"],
+                                     "test_wav/test_excerpt_2000ms_offset_+500_2ch_48000Hz.wav"], mono_channel=0,
                                     resampling_rate=1000, return_correlation_values=True,
                                     path_figures="figures/wav/", name_figures="figure_delays", verbosity=2)
 
@@ -194,7 +194,7 @@ class Tests(unittest.TestCase):
     def test_wav_paths_examples(self):
         """Tests the examples from the documentation."""
         delay = find_delay("test_wav/test_full_2ch_48000Hz.wav",
-                           "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav")
+                           "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav", mono_channel=0)
         assert (delay == 96002)
 
         delay = find_delay("test_wav/test_full_2ch_48000Hz.wav",
@@ -202,7 +202,7 @@ class Tests(unittest.TestCase):
         assert (delay == 96002)
 
         delay = (find_delay("test_wav/test_full_2ch_48000Hz.wav",
-                            "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                            "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav", mono_channel=0,
                             return_delay_format="timedelta",
                             plot_figure=False, plot_intermediate_steps=True,
                             verbosity=1))
@@ -211,6 +211,7 @@ class Tests(unittest.TestCase):
 
         delay = find_delay("test_wav/test_full_2ch_48000Hz.wav",
                            "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                           mono_channel=0,
                            return_delay_format="timedelta",
                            plot_figure=False,
                            plot_intermediate_steps=True,
@@ -238,7 +239,7 @@ class Tests(unittest.TestCase):
 
         # Excerpt at 2000 ms
         delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
-                                 "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                                 "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav", mono_channel=0,
                                  resampling_rate=1000, window_size_res=None, return_correlation_value=True,
                                  path_figure="figures/wav/figure_1.png", verbosity=0)
         assert (delay == 96000)
@@ -273,7 +274,7 @@ class Tests(unittest.TestCase):
         # Excerpt at 2000 ms
         delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
                                  "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
-                                 return_correlation_value=True, plot_figure=True, dark_mode=True)
+                                 mono_channel=0, return_correlation_value=True, plot_figure=True, dark_mode=True)
         assert (delay == 96002)
         assert (round(corr, 3) == 0.984)
 
@@ -328,13 +329,13 @@ class Tests(unittest.TestCase):
         delay = find_delay(array, excerpt, compute_envelope=False, plot_figure=True, min_delay=10, max_delay=20)
 
         delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
-                                 "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                                 "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav", mono_channel=0,
                                  return_correlation_value=True, plot_figure=True, plot_intermediate_steps=True)
         assert (delay == 96002)
         assert (round(corr, 3) == 0.984)
 
         delay, corr = find_delay("test_wav/test_full_2ch_48000Hz.wav",
-                                 "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                                 "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav", mono_channel=0,
                                  return_correlation_value=True, plot_figure=True, plot_intermediate_steps=True,
                                  min_delay=100000, max_delay=200000)
         assert delay is None
@@ -382,13 +383,14 @@ class Tests(unittest.TestCase):
     def test_big_chunks(self):
         find_delay("../demos/i_have_a_dream_full_without_end.wav",
                    "../demos/i_have_a_dream_full_without_end_+800ms.wav",
-                   plot_figure=True, return_delay_format="ms")
+                   mono_channel=0, plot_figure=True, return_delay_format="ms")
 
     def test_sample(self):
         delay_index = find_delay("test_wav/test_full_2ch_48000Hz.wav",
-                           "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav")
+                           "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav", mono_channel=0)
         delay_sample = find_delay("test_wav/test_full_2ch_48000Hz.wav",
-                           "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav", return_delay_format="sample")
+                           "test_wav/test_excerpt_2000ms_inside_2ch_48000Hz.wav",
+                                  mono_channel=0, return_delay_format="sample")
         assert (delay_index == delay_sample)
 
     def test_return_none_if_below_threshold(self):

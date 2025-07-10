@@ -630,15 +630,21 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
     return resampled_array
 
 
-def _convert_to_mono(audio_data, mono_channel=0, verbosity=1, add_tabs=0):
-    """Converts an audio array to mono.
+def _convert_to_mono(array, mono_channel=0, verbosity=1, add_tabs=0):
+    """Converts an array to mono.
 
     .. versionadded:: 2.9
 
+    .. versionchanged:: 2.12
+        Added the parameter ``add_tabs``.
+
+    .. versionchanged:: 2.19
+        The function now returns an error if the dimension of the array is more than 2.
+
     Parameters
     ----------
-    audio_data: :class:`numpy.ndarray` (1D or 2D)
-        The parameter data resulting from reading a WAV file with
+    array: :class:`numpy.ndarray` (1D or 2D)
+        Any array, or the parameter data resulting from reading a WAV file with
         `scipy.io.wavfile.read <https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.wavfile.read.html>`_.
 
     mono_channel: int | str (optional)
@@ -674,33 +680,39 @@ def _convert_to_mono(audio_data, mono_channel=0, verbosity=1, add_tabs=0):
 
     t = add_tabs * "\t"
 
-    if np.size(audio_data[1]) == 1:
-        mono_array = audio_data
+    print(array)
+    print(array.ndim)
+
+    if array.ndim == 1:
+        mono_array = array
         if verbosity > 0:
             print(f"{t}\tThe audio data is already in mono, no conversion necessary.")
+
+    elif array.ndim > 2:
+        raise Exception(f"The dimension of the array is {array.ndim}, but it should be 1 or 2.")
 
     # If mono_channel is a channel number
     elif isinstance(mono_channel, int):
 
         # If the channel number is negative or nonexistent
-        if mono_channel >= np.size(audio_data[1]) or mono_channel < 0:
-            if np.size(audio_data[1] == 0):
+        if mono_channel >= array.shape[1] or mono_channel < 0:
+            if np.size(array[1] == 0):
                 raise Exception(f"""The channel chosen for the parameter "mono_channel" ({mono_channel}) is not valid.
                 As the audio data is mono, the channel chosen should be 0.""")
             else:
                 raise Exception(f"""The channel chosen for the parameter "mono_channel" ({mono_channel}) is not valid.
-                Please choose a channel between 0 and {np.size(audio_data[1]) - 1}.""")
+                Please choose a channel between 0 and {np.size(array[1]) - 1}.""")
 
         # If the audio data is not mono
         else:
-            mono_array = audio_data[:, mono_channel]  # Turn to mono
+            mono_array = array[:, mono_channel]  # Turn to mono
             if verbosity > 0:
                 print(f"{t}\tFile converted to mono by keeping channel with index {mono_channel}. The original file"
-                      f" contains {np.size(audio_data[1])} channels.")
+                      f" contains {np.size(array[1])} channels.")
 
     # If mono_channel is "average"
     elif mono_channel == "average":
-        mono_array = np.mean(audio_data, 1)
+        mono_array = np.mean(array, 1)
 
     # Any other case
     else:

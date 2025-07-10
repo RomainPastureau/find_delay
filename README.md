@@ -72,18 +72,15 @@ array_2 = np.sin(timestamps_2)
 
 find_delay(array_1, array_2, 100000 / np.pi, 6000 / (np.pi / 4),
            compute_envelope=False, resampling_rate=1000, window_size_res=20000, overlap_ratio_res=0.5,
-           resampling_mode="cubic", plot_figure=True, path_figure="figure_2.png", plot_intermediate_steps=True,
-           verbosity=1)
+           resampling_mode="cubic", plot_figure=True, path_figure="figure_2.png", plot_intermediate_steps=True)
 ```
 
 ![Delay between a sine function and a portion of it, different frequencies](https://raw.githubusercontent.com/RomainPastureau/find_delay/package/demos/figure_2.png)
 
 ### Delay between an audio file and an excerpt from it
 ```
-find_delay("i_have_a_dream_full_speech.wav", "i_have_a_dream_excerpt.wav",
-           return_delay_format="timedelta",
-           plot_figure=True, path_figure="figure_3.png", plot_intermediate_steps=True,
-           verbosity=1)
+find_delay("i_have_a_dream_full_speech.wav", "i_have_a_dream_excerpt.wav", return_delay_format="timedelta",
+           mono_channel=0, plot_figure=True, path_figure="figure_3.png", plot_intermediate_steps=True)
 ```
 
 ![Delay between an audio file and an excerpt from it](https://raw.githubusercontent.com/RomainPastureau/find_delay/package/demos/figure_3.png)
