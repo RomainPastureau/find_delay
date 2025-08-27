@@ -3,7 +3,7 @@
 * find_delays does the same, but for multiple excerpts from one big time series.
 
 Author: Romain Pastureau, BCBL (Basque Center on Cognition, Brain and Language)
-Current version: 2.18 (2025-06-29)
+Current version: 2.19 (2025-06-29)
 """
 import datetime as dt
 import os
@@ -449,7 +449,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         if not np.isclose(freq_array_1, freq_array_2):
             raise Exception(f"The rate of the two arrays you are trying to correlate are different ({freq_array_1} Hz" +
                             f" and {freq_array_2} Hz). You must indicate a resampling rate to perform the " +
-                            f"cross-correlation.")
+                            f"cross-correlation, or set resampling_rate to \"auto\".")
         y1 = envelope_1
         y2 = envelope_2
 
@@ -467,7 +467,7 @@ def find_delay(array_1, array_2, freq_array_1=1, freq_array_2=1, compute_envelop
         print(f"\n{t}Complete delay finding function executed in: {dt.datetime.now() - time_before_function}")
 
     # Plot and/or save the figure
-    if plot_figure is not None or path_figure is not None:
+    if plot_figure or path_figure is not None:
         _create_figure(array_1, array_2, freq_array_1, freq_array_2, name_array_1, name_array_2, envelope_1, envelope_2,
                        y1, y2, compute_envelope, window_size_env, overlap_ratio_env, filter_below, filter_over,
                        resampling_rate, window_size_res, overlap_ratio_res, cross_corr_norm,
@@ -903,7 +903,27 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
     if resampling_rate is not None:
 
         if resampling_rate == "auto":
-            all_frequencies = np.append(freq_array, freq_excerpts)
+            freq_excerpts_inferred = []
+
+            for e in range(len(excerpts)):
+                excerpt = excerpts[e]
+
+                # Get frequency from wav
+                if isinstance(excerpt, str):
+                    excerpt_wav = wavfile.read(excerpt)
+                    freq_excerpts_inferred.append(excerpt_wav[0])
+
+                # Get frequency from freq_excerpts
+                else:
+                    if isinstance(freq_excerpts, (int, float)):
+                        freq_excerpts_inferred.append(freq_excerpts)
+                    elif isinstance(freq_excerpts, (list, tuple)):
+                        freq_excerpts_inferred.append(freq_excerpts[e])
+                    else:
+                        raise ValueError("resampling_rate='auto' requires freq_excerpts when excerpts are arrays.")
+
+            all_frequencies = np.append(freq_array, freq_excerpts_inferred)
+
             resampling_rate = np.min(all_frequencies)
 
         if plot_intermediate_steps:
@@ -1000,7 +1020,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
             if not np.isclose(freq_array, freq_excerpt):
                 raise Exception(f"The rate of the two arrays you are trying to correlate are different ({freq_array} " +
                                 f"Hz and {freq_excerpt} Hz). You must indicate a resampling rate to perform the " +
-                                f"cross-correlation.")
+                                f"cross-correlation, or set resampling_rate to \"auto\".")
             y2 = envelope_excerpt
 
         values = _cross_correlation(y1, y2, rate, freq_array, threshold, return_delay_format, min_delay, max_delay,
@@ -1014,7 +1034,7 @@ def find_delays(array, excerpts, freq_array=1, freq_excerpts=1, compute_envelope
         t_cross_corr_min_idx = values[6]
 
         # Plot and/or save the figure
-        if plot_figure is not None or path_figures is not None:
+        if plot_figure or path_figures is not None:
             _create_figure(array, excerpt, freq_array, freq_excerpt, name_array, name_excerpt, envelope_array,
                            envelope_excerpt, y1, y2, compute_envelope, window_size_env, overlap_ratio_env,
                            filter_below, filter_over, resampling_rate, window_size_res, overlap_ratio_res,

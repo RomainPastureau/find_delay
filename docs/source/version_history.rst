@@ -9,6 +9,18 @@ Version history
   just WAV files
 * The functions should now be more lenient towards float rounding errors of the frequencies of the arrays if they do
   not match exactly
+* Prevented entering the figure creation function when ``plot_figure`` is set on ``False`` (instead of just ``None``
+  previously) and ``path_figure`` or ``path_figures`` is set on ``None``
+* Corrected the method ``interp1d`` for the resampling as it was passing the full array instead of the window
+* Added validations in ``_filter_frequencies`` checking that ``filter_over`` is superior to ``filter_below`` and to
+  the Nyquist frequency
+* Changed ``from .private_functions import *`` in ``__init__.py`` to imports of the individual functions, in order
+  to prevent redundant import of scipy functions
+* The error message when two arrays have different sampling rates now suggests to set the value of ``resampling_rate``
+  to ``"auto"``
+* Modified the behaviour of ``find_delay`` if ``resampling_rate`` is set on ``auto``: if the excerpts are paths, the
+  function now reads each wav file a first time to get their sampling rate
+* Removed legacy ``setup.py``
 
 2.18 (2025-06-29)
 -----------------

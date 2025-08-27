@@ -55,6 +55,15 @@ def _filter_frequencies(array, frequency, filter_below=None, filter_over=None, v
     """
     t = add_tabs * "\t"
 
+    if filter_over is not None and filter_below is not None and filter_over < filter_below:
+        raise ValueError(f"The frequency of the high-pass filter ({filter_over} Hz) must be higher than the "
+                         f"frequency of the low-pass filter ({filter_below} Hz).")
+
+    if filter_over is not None and filter_over >= frequency / 2:
+        raise ValueError(f"The frequency of the high-pass filter ({filter_over} Hz) must be lower than half of the "
+                         f"frequency of the array ({frequency} Hz).")
+
+
     # Band-pass filter
     if filter_below not in [None, 0] and filter_over not in [None, 0]:
         if verbosity > 0:
@@ -343,8 +352,6 @@ def _resample_window(array, original_timestamps, resampled_timestamps, index_sta
         • ``"akima"`` performs another type of monotonic cubic spline interpolation, using
           `scipy.interpolate.Akima1DInterpolator
           <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.Akima1DInterpolator.html>`_.
-        • ``"take"`` keeps one out of n samples from the original array. While being the fastest computation, it will
-          be prone to imprecision if the downsampling factor is not an integer divider of the original frequency.
         • ``"interp1d_XXX"`` uses the function `scipy.interpolate.interp1d
           <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.interp1d.html>`_. The XXX part of the
           parameter can be replaced by ``"linear"``, ``"nearest"``, ``"nearest-up"``, ``"zero"``, "slinear"``,
@@ -402,7 +409,7 @@ def _resample_window(array, original_timestamps, resampled_timestamps, index_sta
         interp = Akima1DInterpolator(original_timestamps_window, array_window)
         return interp(resampled_timestamps_window)
     elif method.startswith("interp1d"):
-        interp = interp1d(original_timestamps, array, kind=method.split("_")[1])
+        interp = interp1d(original_timestamps_window, array_window, kind=method.split("_")[1])
         return interp(resampled_timestamps_window)
     else:
         raise Exception(f"Invalid resampling method: {method}.")
@@ -529,7 +536,6 @@ def _resample(array, original_frequency, resampling_frequency, window_size=1e7, 
             raise Exception(f"The mode \"take\" does not allow for upsampling of the data. Please input a resampling " +
                             f"frequency inferior to the original ({original_frequency}).")
         factor_resampling = original_frequency / resampling_frequency
-        print(factor_resampling)
         if factor_resampling != int(factor_resampling):
             print(f"{t}Warning: The downsampling factor is not an integer ({factor_resampling}), meaning that the " +
                   f"downsampling may not be accurate. To ensure an accurate resampling with the \"take\" mode, use" +
@@ -680,9 +686,6 @@ def _convert_to_mono(array, mono_channel=0, verbosity=1, add_tabs=0):
 
     t = add_tabs * "\t"
 
-    print(array)
-    print(array.ndim)
-
     if array.ndim == 1:
         mono_array = array
         if verbosity > 0:
@@ -808,7 +811,7 @@ def _cross_correlation(y1, y2, rate, freq_y1_original, threshold, return_delay_f
     if verbosity > 0:
         print(f"{t}Computing the correlation...", end=" ")
 
-    y2_normalized = (y2 - y2.mean()) / y2.std() / np.sqrt(y2.size)
+    y2_normalized = ((y2 - y2.mean()) / y2.std() / np.sqrt(y2.size))
     y1_m = correlate(y1, np.ones(y2.size), "full") ** 2 / y2_normalized.size
     y1_m2 = correlate(y1 ** 2, np.ones(y2.size), "full")
 
