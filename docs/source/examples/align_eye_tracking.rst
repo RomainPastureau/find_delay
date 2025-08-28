@@ -22,6 +22,7 @@ Code
 ----
 
 .. code-block:: python
+
     # EOG-data
     eog_y = meg_data.copy().pick(picks='EOG061').get_data()[0, :]  # Get the vertical EOG where the blinks are most pronounced
     eog_fs = meg_data.info['sfreq']  # Get the sampling frequency of the EOG data
