@@ -6,3 +6,4 @@ Examples
 
    examples/delay_audio_files
    examples/delay_meg_misc
+   examples/align_eye_tracking
