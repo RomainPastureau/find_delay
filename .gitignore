@@ -11,3 +11,4 @@ tests/figures
 /tests/__pycache__
 /tests/figure_4.png
 /find_delay.zip
+/src/find_delay/__pycache__

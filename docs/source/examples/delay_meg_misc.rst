@@ -1,5 +1,5 @@
-Find the delay of the audio on the MISC channel of an MEG recording
-===================================================================
+Correct the delay of the audio on the MISC channel of an MEG recording
+======================================================================
 
 Introduction
 ------------
