@@ -11,6 +11,9 @@ What is find_delay?
 **find_delay** is a **Python package** that tries to find the delay where a time series appear in another via
 cross-correlation. It can theoretically work with any time series, but was created to try to align **audio files**.
 
+**`PyPI page <https://pypi.org/project/find-delay/>`_**
+**`GitHub repository <https://github.com/RomainPastureau/find_delay>`_**
+
 How do I install find_delay?
 ----------------------------
 You can install find_delay using:
