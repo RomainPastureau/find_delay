@@ -1,5 +1,7 @@
 Find the delay between two audio files
 ======================================
+*Author: Romain Pastureau*
+
 Since version 2.11, it is possible to directly find the delay between audio files by just setting the path
 to the audio files as parameters to the find_delay function:
 

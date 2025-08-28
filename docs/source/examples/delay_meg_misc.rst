@@ -1,5 +1,6 @@
 Correct the delay of the audio on the MISC channel of an MEG recording
 ======================================================================
+*Author: Romain Pastureau*
 
 Introduction
 ------------

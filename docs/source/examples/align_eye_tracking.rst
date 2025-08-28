@@ -1,6 +1,6 @@
 Align eye-tracking data with EOG data
 =====================================
-*Author: Kaja Lücker*
+*Author: Kaja Benz*
 
 Introduction
 ------------
