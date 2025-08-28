@@ -1,19 +1,20 @@
 Align eye-tracking data with EOG data
 =====================================
+*Author: Kaja Lücker*
 
 Introduction
 ------------
 This package is not limited to comparing two separate audio files. In neuroscientific research, it can also be used to
 determine the delay or timing differences between two different signals.
 
-In this example, we use cross-correlation to estimate the delay between an Eye-tracker signal and an EOG
-(Electrooculogram) signal, both recorded simultaneously in the MEG (Magnetoencephalography). If you do not have
+In this example, we use cross-correlation to estimate the delay between an eye-tracker signal and an EOG
+(electrooculogram) signal, both recorded simultaneously in the MEG (magnetoencephalography). If you do not have
 recorded EOG, you can also use the ICA-component of your MEG or EEG data reflecting the blinks.
 
 Eye-tracker data often contains NaN values during blinks. To address this, you can either interpolate the missing
 values or use an alternative signal such as pupil size. In this example, we use the pupil data.
 
-Before beginning the analysis, we recommend visually inspecting the data for both the Eye-tracker and the EOG
+Before beginning the analysis, we recommend visually inspecting the data for both the eye-tracker and the EOG
 channels to ensure quality and identify potential issues. It may also be useful to check whether there were any pauses
 in the two recordings. If pauses are present, consider cropping the data to exclude these segments before performing
 the cross-correlation.
@@ -42,3 +43,4 @@ Code
 The resulting figure:
 
 .. image:: ../images/figure_eye_tracking.png
+
